@@ -3,7 +3,7 @@
 import { useState, useEffect, ChangeEvent, FormEvent, useRef } from "react";
 import { useRouter } from "next/navigation";
 import useStore from "../../useStore/Store";
-import styles from "./Addsales.module.css";
+import styles from "./AddSales.module.css";
 import CurrencyFormatter from "../../utils/currency/Currency";
 import SalePreview from "../Model/ModelBox/SalePreview"; // Import the SalePreview component
 import SalesReceipt from "../../utils/receipt/SalesReceipt"; // Import the SalePreview component

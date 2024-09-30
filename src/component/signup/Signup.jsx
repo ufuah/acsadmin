@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import useStore from '../../useStore/Store';
 import { useRouter } from 'next/navigation';
-import styles from './Signup.module.css';
+import styles from './signup.module.css';
 
 const Signup = () => {
   const { signup } = useStore();
