@@ -1,0 +1,221 @@
+
+
+ 
+/*============== Scrollbar ================*/
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+background-color: rgba(255, 255, 255, 0.562);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient( to right bottom, 
+  rgba(255, 255, 255, 0.7)
+  rgba(255, 255, 255, 0.3)
+  );
+  border-radius: 45px;
+  border-top: 1px solid rgba(241, 241, 241, 0.288);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(1px);
+  box-shadow: 10px 10px 20px 20px rgba(0, 0, 0, 0.534);
+  cursor: pointer;
+  transition: 0.3s ease-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ef233c;
+  backdrop-filter: blur(7px);
+  border-radius: 45px;
+}
+
+
+::selection {
+  color: #e0e0e0;
+  padding: 4px;
+  background-color: var(--main-brand-color);
+}
+
+
+
+
+:root {
+  /* colors
+  */
+
+  --isPopular: true;
+  /*============ Light Theme ==================*/
+
+   /*brand color*/
+   --main-brand-color: #ff5555;
+   --main-brand-light: #ff5555;
+
+   --logo-filter-light: invert(37%) sepia(16%) saturate(5508%) hue-rotate(103deg) brightness(98%) contrast(69%);
+
+   /* --main-brand-color: #36B64F; */
+   --splash-screen-light: #ff5555;
+
+   --secondary-light: #2b2d42;
+
+   --bg-color-light: #edf2f4;
+
+   --backdrop-color-light: rgba(32, 39, 51, 0.26);
+
+   --backdrop-solid-light: rgb(171 171 171 / 64%);
+
+   --extra-color-light: #4B556B;
+
+   --gradient-card-light: linear-gradient(-180deg, hsl(0deg 0% 97.65%), hsl(132deg 57.38% 35.88%) );
+
+
+   /*brand color end*/
+
+   /*============ Dark Theme ==================*/
+
+
+   --splash-screen-dark: #ff5555;
+
+   --main-brand-dark: #ff5555;
+   --logo-filter-dark: invert(99%) sepia(4%) saturate(18%) hue-rotate(303deg) brightness(113%) contrast(95%);
+
+
+   --secondary-dark: #e0e0e0;
+
+   --bg-color-dark: #2b2d42;
+
+   --backdrop-color-dark: rgba(218, 218, 218, 0.26);
+
+   --backdrop-solid-dark: rgb(155 155 155 / 64%);
+
+   --gradient-card-dark: linear-gradient(180deg,
+   hsl(240deg 13.89% 14.12%),
+   hsl(131.72deg 54.24% 46.27%)
+   );
+
+   /*text color*/
+  --extra-color-dark:#4B556B;
+   /*text color end*/
+
+            
+/* Typegraphy
+  */
+  
+  --ff-poppins: 'Poppins', sans-serif;
+
+
+  --section-heading: 40px;
+  --fs-lg:           22px;
+  --fs-md:           16px;
+  --fs-x-sm:         12px;
+
+
+  --fw-7: 700;
+  --fw-6: 600;
+  --fw-5: 500;
+  --fw-4: 400;
+  --fw-3: 300;
+  --fw-2: 200;
+
+/* spacing
+*/
+ --px:120px; /* padding-left & padding right */
+}
+
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-decoration: none;
+  scroll-behavior: smooth;
+  scroll-padding-top: 2rem;
+}
+
+html,
+body {
+  /* max-width: 100vw; */
+  overflow-x: hidden;
+  background-color: var(--bg-color);
+  -webkit-font-smoothing: antialiased;
+  transition: all 0.5s ease-in-out;
+}
+
+img {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+li, a, button, p {
+  font-family: 'Poppins', sans-serif;
+  font-weight: var(--fw-5);
+  font-size: var(--fs-md);
+  color: var(--secondary-color);
+  text-decoration: none;
+}
+
+
+@media(prefers-color-scheme: dark) {
+  :root {
+  
+    --splash-screen-color: var(--splash-screen-dark);
+    --main-brand-color: var(--main-brand-dark);
+    --logo-color: var(--logo-filter-dark);
+    --secondary-color: var(--secondary-dark) ;
+   --bg-color: var(--bg-color-dark);
+   --extra-color: var(--extra-color-dark);
+   --gradient-card: var(--gradient-card-dark);
+   --backdrop-color: var(--backdrop-color-dark);
+   --backdrop-solid: var(--backdrop-solid-dark);
+    
+   color-scheme: dark;
+  }
+}
+
+:root[color-scheme='dark'] {
+  --splash-screen-color: var(--splash-screen-dark);
+  --main-brand-color: var(--main-brand-dark);
+  --logo-color: var(--logo-filter-dark);
+  --secondary-color: var(--secondary-dark) ;
+  --bg-color: var(--bg-color-dark) ;
+  --extra-color: var(--extra-color-dark);
+  --gradient-card: var(--gradient-card-dark);
+  --backdrop-color: var(--backdrop-color-dark);
+  --backdrop-solid: var(--backdrop-solid-dark);
+  
+   color-scheme: dark;
+}
+ 
+@media(prefers-color-scheme: light) {
+  :root {
+
+    --splash-screen-color: var(--splash-screen-light);
+    --main-brand-color: var(--main-brand-light);
+    --logo-color: var(--logo-filter-light);
+    --secondary-color: var(--secondary-light);
+    --bg-color: var(--bg-color-light);
+    --extra-color: var(--extra-color-light);
+    --gradient-card: var(--gradient-card-light);
+    --backdrop-color: var(--backdrop-color-light);
+    --backdrop-solid: var(--backdrop-solid-light);
+  
+   color-scheme: light;
+  }
+}
+
+:root[color-scheme='light'] {
+  --splash-screen-color: var(--splash-screen-light);
+  --main-brand-color: var(--main-brand-light);
+  --logo-color: var(--logo-filter-light);
+  --secondary-color: var(--secondary-light);
+  --bg-color: var(--bg-color-light);
+  --extra-color: var(--extra-color-light);
+  --gradient-card: var(--gradient-card-light);
+  --backdrop-color: var(--backdrop-color-light);
+  --backdrop-solid: var(--backdrop-solid-light);
+
+  color-scheme: light;
+}
+

@@ -1,0 +1,42 @@
+{
+  "name": "aceadmin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "axios": "^1.7.4",
+    "cookie": "^0.6.0",
+    "date-fns": "^3.6.0",
+    "file-saver": "^2.0.5",
+    "framer-motion": "^11.3.28",
+    "html2pdf.js": "^0.10.2",
+    "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
+    "next": "^14.2.13",
+    "pdf-lib": "^1.17.1",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-cookie": "^7.2.0",
+    "react-date-range": "^2.0.1",
+    "react-dom": "^18",
+    "react-to-print": "^2.15.1",
+    "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-date-range": "^1.4.9",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "typescript": "^5"
+  }
+}

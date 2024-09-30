@@ -1,0 +1,78 @@
+.container {
+  width: 100%;
+}
+
+.topbar {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.greatings {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.greatings span {
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.greatings p {
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.searcharea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.search {
+  width: 300px;
+}
+
+.notification {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+}
+
+.bell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px;
+  width: 40px;
+  height: 40px;
+  background: var(--main-brand-color);
+  color: #f7f7f7;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+  user-select: none;
+  cursor: pointer;
+}
+
+.bell span {
+  position: absolute;
+  top: -12px;
+  left: 31px;
+  color: var(--main-brand-color);
+  background-color: #f7f7f7;
+  padding: 4px;
+  border-radius: 50px;
+}

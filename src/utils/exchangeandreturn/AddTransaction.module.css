@@ -1,0 +1,88 @@
+.container {
+  padding: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.formField {
+  flex: 1;
+  min-width: 200px; /* Adjust as needed */
+}
+
+.label {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.itemsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.itemCard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.itemGroup {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.removeItemButton {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.addItemButton {
+  background-color: var(--main-brand-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.totalContainer,
+.balanceContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.submitButton {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+

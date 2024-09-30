@@ -1,0 +1,108 @@
+.container {
+  position: fixed;
+  width: max-content;
+  height: fit-content;
+  top: 157px;
+  left: 295px;
+  opacity: 1;
+  visibility: visible;
+  border-radius: 30px;
+  transition: 0.5s ease-in-out;
+}
+
+.header {
+  font-size: 30px;
+  text-transform: capitalize;
+  color: var(--secondary-color);
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.table_container {
+  width: 930px;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 20px;
+}
+
+.additem {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  font-size: 14px;
+  color: #ebebeb;
+  background-color: var(--main-brand-color);
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: solid transparent;
+  transition: 0.5s ease-out;
+}
+
+
+.additem:hover {
+  border: 2px solid var(--secondary-color);
+}
+
+/* Scoped table styles */
+.tableContainer {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  -webkit-backdrop-filter: blur(25px) saturate(162%);
+  backdrop-filter: blur(25px) saturate(162%);
+  background-color: var(--backdrop-color);
+  border: 1px solid var(--backdrop-solid);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+  padding: 12px;
+  border-radius: 20px;
+}
+
+.tableContainer table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.tableContainer th,
+.tableContainer td {
+  padding: 4px 12px;
+  text-align: center;
+  white-space: break-spaces;
+  color: var(--secondary-color);
+  text-transform: capitalize;
+  font-size: 16px;
+}
+
+.tableContainer th {
+  text-align: left;
+}
+
+.tableContainer tr:nth-child(even) {
+  background-color: var(--main-brand-color);
+}
+
+.tableContainer tr {
+  padding-top: 8px;
+  cursor: pointer;
+}
+
+.tableContainer td img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 40px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+}
+
+.totalLabel {
+  font-size: 18px;
+  color: #ebebeb;
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
+/* Other styles... */
