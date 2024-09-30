@@ -1,3 +1,5 @@
+"use client"
+
 import React, { forwardRef, Ref } from "react";
 import "./salesreceipt.css";
 import CurrencyFormatter from "../../utils/currency/Currency";
@@ -177,5 +179,8 @@ const SalesReceipt = forwardRef<HTMLDivElement, SalesReceiptProps>(
     );
   }
 );
+
+// Set display name for the component
+SalesReceipt.displayName = "SalesReceipt";
 
 export default SalesReceipt;

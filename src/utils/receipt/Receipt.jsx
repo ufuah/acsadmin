@@ -27,7 +27,7 @@ const Receipt = forwardRef(
         <div className={styles.brandarea}>
           <h2 className={styles.receiptTitle}>Receipt</h2>
           <div className={styles.logo}>
-            <Image src={logo} />
+            <Image src={logo} alt="logo"/>
           </div>
           <div className={styles.address}>
             <p>
@@ -322,5 +322,8 @@ const Receipt = forwardRef(
     );
   }
 );
+
+// Set display name for the component
+Receipt.displayName = "Receipt";
 
 export default Receipt;

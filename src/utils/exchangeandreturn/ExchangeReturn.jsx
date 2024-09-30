@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import useStore from '../../useStore/Store';
-import styles from './ExchangeReturn.module.css';
+import styles from "./AddTransaction.module.css";
 
 const ExchangeReturn = () => {
   const { stocks, updateStock } = useStore((state) => ({

@@ -1,3 +1,6 @@
+"use client"
+
+
 import React, { forwardRef } from "react";
 import styles from "./SalePreview.module.css";
 import CurrencyFormatter from "../../currency/Currency";
@@ -73,4 +76,7 @@ const SalePreview = forwardRef<HTMLDivElement, SalePreviewProps>(
   }
 );
 
+
+// Set display name for the component
+SalePreview.displayName = "SalePreview";
 export default SalePreview;

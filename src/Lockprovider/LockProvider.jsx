@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import useStore from "../useStore/Store";
 
@@ -20,8 +20,8 @@ const LockProvider = ({ children }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
-  // Function to handle lock checking and redirection
-  const handleLockCheck = async () => {
+  // Memoize the handleLockCheck function
+  const handleLockCheck = useCallback(async () => {
     try {
       await checkLock(); // Fetch lock status
     } catch (error) {
@@ -29,12 +29,12 @@ const LockProvider = ({ children }) => {
     } finally {
       setLoading(false); // Set loading to false after the lock check
     }
-  };
+  }, [checkLock]);
 
   useEffect(() => {
     // Perform the initial lock check on mount
     handleLockCheck();
-  }, []);
+  }, [handleLockCheck]);
 
   useEffect(() => {
     if (!loading) {
