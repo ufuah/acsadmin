@@ -1301,7 +1301,14 @@ const getAuthToken = () => {
   return Cookies.get("accessToken");
 };
 
-let baseURL = "http://localhost:5000"; // Default base URL
+
+if (process.env.NODE_ENV === "production") {
+  // Use the public URL provided by Coolify
+  baseURL = "https://server.e-palateoasis.com"; // Replace with your actual Coolify URL
+} else {
+  // Use localhost for development
+  baseURL = "http://localhost:5000";
+}
 
 // Function to update the base URL
 export const setBaseURL = (url) => {
@@ -1798,20 +1805,34 @@ const useStore = create((set, get) => ({
   //   }
   // },
 
-    toggleLock: async () => {
+  //   toggleLock: async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       "http://192.168.43.194:5000/api/auth/togglelock",
+  //       {},
+  //       {
+  //         withCredentials: true, // Ensures cookies are sent with the request
+  //       }
+  //     );
+  //     set({ isLocked: response.data.lock_status === "locked" });
+  //   } catch (error) {
+  //     console.error("Failed to toggle lock status:", error);
+  //   }
+  // },
+
+  checkLock: async () => {
     try {
-      const response = await axios.post(
-        "http://192.168.43.194:5000/api/auth/togglelock",
-        {},
-        {
-          withCredentials: true, // Ensures cookies are sent with the request
-        }
-      );
-      set({ isLocked: response.data.lock_status === "locked" });
+      const response = await axios.get(`${baseURL}/api/auth/checklock`, {
+        withCredentials: true, // Ensures cookies are sent with the request
+      });
+      
+      set({ isLocked: response.data.isLocked }); // Expecting a Boolean from the backend
     } catch (error) {
-      console.error("Failed to toggle lock status:", error);
+      console.error("Failed to fetch lock status:", error);
+      // You can decide how to handle errors here (e.g., set a default lock state, show a notification, etc.)
     }
   },
+  
 }));
 
 export default useStore;
