@@ -1282,6 +1282,9 @@ import { create } from "zustand";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode"; // corrected import
 import Cookies from "js-cookie"; // Using js-Cookies for handling Cookies
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Axios interceptor to attach token in Cookies to the request headers
 axios.interceptors.request.use(
