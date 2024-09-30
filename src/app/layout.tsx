@@ -11,7 +11,7 @@ import LockProvider from "../Lockprovider/LockProvider";
 const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Ace Global",
+  title: "Acs Global",
   description:
     "Here at ACS ROOFING we are always looking for a better way of doing things",
 };

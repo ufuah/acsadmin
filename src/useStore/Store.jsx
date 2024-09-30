@@ -1301,7 +1301,7 @@ const getAuthToken = () => {
   return Cookies.get("accessToken");
 };
 
-let baseURL = "http://192.168.43.194:5000"; // Default base URL
+let baseURL = "http://localhost:5000"; // Default base URL
 
 // Function to update the base URL
 export const setBaseURL = (url) => {
