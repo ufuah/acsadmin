@@ -1283,8 +1283,8 @@ import axios from "axios";
 // import { jwtDecode } from "jwt-decode"; // corrected import
 // import Cookies from "js-cookie"; // Using js-Cookies for handling Cookies
 
-import Cookies from 'js-cookie';
-import {jwtDecode} from 'jwt-decode';
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 // Axios interceptor to attach token in Cookies to the request headers
 axios.interceptors.request.use(
@@ -1304,7 +1304,6 @@ const getAuthToken = () => {
   return Cookies.get("accessToken");
 };
 
-
 // let baseURL;
 
 // const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
@@ -1317,7 +1316,6 @@ const baseURL = "https://api.e-palateoasis.com";
 //   // Use localhost for development
 //   baseURL = "http://localhost:5000";
 // }
-
 
 const useStore = create((set, get) => ({
   // State variables
@@ -1333,7 +1331,7 @@ const useStore = create((set, get) => ({
   /** =============================== CATEGORY SECTION ============================ */
   fetchCategories: async () => {
     try {
-      apiGet("/categories")
+      apiGet("/categories");
       const response = await axios.get(`${baseURL}/api/categories`);
       set({ categories: response.data });
     } catch (error) {
@@ -1543,7 +1541,6 @@ const useStore = create((set, get) => ({
     }
   },
 
-
   // login: async (username, password, onSuccess) => {
   //   try {
   //     const response = await axios.post(
@@ -1583,21 +1580,21 @@ const useStore = create((set, get) => ({
         { username, password },
         { withCredentials: true } // Important for sending and receiving cookies
       );
-  
+
       console.log("Login response:", response.data); // Log the response data
-  
+
       const { user } = response.data;
-  
+
       if (user) {
         // Store user data (including role) in localStorage
         localStorage.setItem(
           "user",
           JSON.stringify({ username: user.username, role: user.role })
         );
-  
+
         // Update state with user and role
         set({ user: user.username, role: user.role });
-  
+
         if (onSuccess) onSuccess(user.role);
       } else {
         throw new Error("Login failed. User or token not received.");
@@ -1607,7 +1604,6 @@ const useStore = create((set, get) => ({
       throw new Error("Login failed.");
     }
   },
-  
 
   /** =============================== CUSTOMER SECTION ============================ */
   getCustomerDetails: async (customer_name) => {
@@ -1635,35 +1631,33 @@ const useStore = create((set, get) => ({
 
   /** =============================== Cookies & AUTH HANDLING ============================ */
 
-
-
   // loadUserFromStorage: async function() {
   //   const token = Cookies.get("accessToken"); // Access token from Cookies
   //   const refreshToken = Cookies.get("refreshToken"); // Refresh token from Cookies
   //   console.log("Access token from Cookies:", token); // Log the token
-    
+
   //   const storedUser = localStorage.getItem("user"); // User info from localStorage
   //   console.log("Stored user from localStorage:", storedUser); // Log the stored user
-  
+
   //   if (token && storedUser) {
   //     try {
   //       const decodedToken = jwtDecode(token); // Decode JWT token
   //       const user = JSON.parse(storedUser); // Parse stored user data
-  
+
   //       // Check if the token is expired or about to expire (within 5 minutes)
   //       const isTokenExpired = Date.now() >= decodedToken.exp * 1000;
   //       const isTokenAboutToExpire = Date.now() >= decodedToken.exp * 1000 - 5 * 60 * 1000;
-        
+
   //       if (isTokenExpired) {
   //         console.log("Token expired");
   //         // Remove tokens and clear user info if the token is expired
-  //         Cookies.remove("accessToken"); 
+  //         Cookies.remove("accessToken");
   //         Cookies.remove("refreshToken");
-  //         localStorage.removeItem("user"); 
+  //         localStorage.removeItem("user");
   //         set({ user: null, role: null });
   //         return false; // Token is expired, not authenticated
-  //       } 
-  
+  //       }
+
   //       if (isTokenAboutToExpire && refreshToken) {
   //         // Token is about to expire, try refreshing
   //         const refreshed = await refreshAccessToken();
@@ -1674,7 +1668,7 @@ const useStore = create((set, get) => ({
   //         }
   //         console.log("Token refreshed successfully");
   //       }
-  
+
   //       console.log("Token valid. Setting user and role in state.");
   //       set({
   //         user: user.username,
@@ -1692,22 +1686,21 @@ const useStore = create((set, get) => ({
   //     return false;
   //   }
   // },
-  
 
-  loadUserFromStorage: async function() { 
+  loadUserFromStorage: async function () {
     const storedUser = localStorage.getItem("user"); // User info from localStorage
     console.log("Stored user from localStorage:", storedUser); // Log the stored user
-  
+
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser); // Parse stored user data
-        
+
         // You can't read `HttpOnly` cookies, so just set the user from localStorage
         set({
           user: user.username,
           role: user.role,
         });
-  
+
         return true; // User is authenticated
       } catch (error) {
         console.error("Error loading user from localStorage:", error);
@@ -1720,19 +1713,20 @@ const useStore = create((set, get) => ({
       return false;
     }
   },
-  
-  
+
   refreshAccessToken: async () => {
     try {
       // Make a POST request to refresh the access token
       const response = await axios.post(`${baseURL}/api/auth/refresh`, null, {
         withCredentials: true, // To include cookies (for refreshToken)
       });
-  
+
       // Log success if the token is refreshed
       if (response.status === 200 && response.data.newAccessToken) {
         // Update the new access token in Cookies
-        Cookies.set("accessToken", response.data.newAccessToken, { expires: 1 / 96 }); // Set it to expire in 15 minutes (optional)
+        Cookies.set("accessToken", response.data.newAccessToken, {
+          expires: 1 / 96,
+        }); // Set it to expire in 15 minutes (optional)
         console.log("Access token refreshed and updated in cookies");
         return true;
       }
@@ -1741,16 +1735,11 @@ const useStore = create((set, get) => ({
       return false; // Return false on failure to refresh the token
     }
   },
-  
-
-
-
 
   isAuthenticated: () => {
     const user = localStorage.getItem("user"); // User info from localStorage
     return !!user; // Both token and user data should be present
   },
-
 
   checkLock: async () => {
     try {
@@ -1764,32 +1753,23 @@ const useStore = create((set, get) => ({
     }
   },
 
-  checkLock: async () => {
+  toggleLock: async () => {
     try {
-      const response = await axios.get(`${baseURL}/api/auth/checklock`, {
-        withCredentials: true, // Ensures cookies are sent with the request
-      });
-      
-      set({ isLocked: response.data.isLocked }); // Expecting a Boolean from the backend
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/togglelock",
+        {},
+        {
+          withCredentials: true, // Ensures cookies are sent with the request
+        }
+      );
+      set({ isLocked: response.data.lock_status === "locked" });
     } catch (error) {
-      console.error("Failed to fetch lock status:", error);
-      // You can decide how to handle errors here (e.g., set a default lock state, show a notification, etc.)
+      console.error("Failed to toggle lock status:", error);
     }
   },
-  
 }));
 
 export default useStore;
-
-
-
-
-
-
-
-
-
-
 
 // import { create } from "zustand";
 // import axios from "axios";
