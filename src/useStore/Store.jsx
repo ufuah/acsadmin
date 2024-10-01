@@ -1755,18 +1755,16 @@ const useStore = create((set, get) => ({
 
   toggleLock: async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/togglelock",
-        {},
-        {
-          withCredentials: true, // Ensures cookies are sent with the request
-        }
-      );
+      const response = await axios.post(`${baseURL}/api/auth/togglelock`, {}, {
+        withCredentials: true, // Ensures cookies are sent with the request
+      });
       set({ isLocked: response.data.lock_status === "locked" });
     } catch (error) {
       console.error("Failed to toggle lock status:", error);
+      // Handle errors accordingly
     }
   },
+  
 }));
 
 export default useStore;
