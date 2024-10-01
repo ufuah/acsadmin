@@ -1,3 +1,6 @@
+"use clent"
+
+
 import React, { useEffect } from "react";
 import useStore from "../../useStore/Store";
 import styles from "./StockList.module.css";
@@ -91,7 +94,7 @@ const StockList = () => {
                     <td>{stock.purchase_qty}</td>
                     <td>{stock.exchange_qty ?? 0}</td>
                     <td>{stock.return_qty ?? 0}</td>
-                    <td>{stock.standard_price.toFixed(2)}</td>
+                    <td>{stock.standard_price}</td>
                     {/* <td>{stock.closing_stock ?? 0}</td>
                   <td>{stock.closing_value ?? 0}</td> */}
                     <td>
@@ -114,7 +117,7 @@ const StockList = () => {
                     Total Closing Value
                   </td>
                   <td>
-                    <CurrencyFormatter amount={totalClosingValue.toFixed(2)} />
+                    <CurrencyFormatter amount={totalClosingValue} />
                   </td>
                 </tr>
                 {/* <td className={styles.totalContainer}>
@@ -155,7 +158,7 @@ const StockList = () => {
                     <td>{stock.purchase_qty}</td>
                     <td>{stock.exchange_qty ?? 0}</td>
                     <td>{stock.return_qty ?? 0}</td>
-                    <td>{stock.standard_price.toFixed(2)}</td>
+                    <td>{stock.standard_price}</td>
                     {/* <td>{stock.closing_stock ?? 0}</td>
                   <td>{stock.closing_value ?? 0}</td> */}
                     <td>
@@ -177,7 +180,7 @@ const StockList = () => {
                     Total Closing Value
                   </td>
                   <td>
-                    <CurrencyFormatter amount={totalClosingValue.toFixed(2)} />
+                    <CurrencyFormatter amount={totalClosingValue} />
                   </td>
                 </tr>
                 {/* <td className={styles.totalContainer}>
