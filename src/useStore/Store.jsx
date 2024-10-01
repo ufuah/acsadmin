@@ -1305,18 +1305,16 @@ const getAuthToken = () => {
 };
 
 
+let baseURL;
+
 if (process.env.NODE_ENV === "production") {
-  // Use the public URL provided by Coolify
-  baseURL = "https://server.e-palateoasis.com"; // Replace with your actual Coolify URL
+  // Use the public URL provided by Coolify for production
+  baseURL = "https://api.e-palateoasis.com"; // Replace with your actual Coolify URL
 } else {
   // Use localhost for development
   baseURL = "http://localhost:5000";
 }
 
-// Function to update the base URL
-export const setBaseURL = (url) => {
-  baseURL = url;
-};
 
 const useStore = create((set, get) => ({
   // State variables
