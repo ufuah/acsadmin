@@ -488,7 +488,7 @@ export default function AddSale() {
         Submit Sale
       </button>
       {/* style={{ display: "none" }} */}
-      <div>
+      <div style={{ display: "none" }} >
         <SalesReceipt
           ref={printRef} // Attach the ref to the SalePreview component
           items={form.items}

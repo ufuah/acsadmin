@@ -699,7 +699,7 @@ const ReturnExchange = () => {
         Submit
       </button>
 
-      <div>
+      <div style={{ display: "none" }}>
         <Receipt
           ref={receiptRef}
           customer={customer}
