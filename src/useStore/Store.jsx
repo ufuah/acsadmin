@@ -1280,8 +1280,11 @@
 
 import { create } from "zustand";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode"; // corrected import
-import Cookies from "js-cookie"; // Using js-Cookies for handling Cookies
+// import { jwtDecode } from "jwt-decode"; // corrected import
+// import Cookies from "js-cookie"; // Using js-Cookies for handling Cookies
+
+import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
 
 // Axios interceptor to attach token in Cookies to the request headers
 axios.interceptors.request.use(
@@ -1655,11 +1658,13 @@ const useStore = create((set, get) => ({
   // }
 
 
-  loadUserFromStorage: async () => {
+
+
+  loadUserFromStorage: async function() {
     const token = Cookies.get("accessToken"); // Access token from Cookies
     const refreshToken = Cookies.get("refreshToken"); // Refresh token from Cookies
     console.log("Access token from Cookies:", token); // Log the token
-  
+    
     const storedUser = localStorage.getItem("user"); // User info from localStorage
     console.log("Stored user from localStorage:", storedUser); // Log the stored user
   
@@ -1674,21 +1679,23 @@ const useStore = create((set, get) => ({
         
         if (isTokenExpired) {
           console.log("Token expired");
-          Cookies.remove("accessToken"); // Remove token from Cookies
-          Cookies.remove("refreshToken"); // Remove refresh token (if applicable)
-          localStorage.removeItem("user"); // Clear user info from localStorage
+          // Remove tokens and clear user info if the token is expired
+          Cookies.remove("accessToken"); 
+          Cookies.remove("refreshToken");
+          localStorage.removeItem("user"); 
           set({ user: null, role: null });
           return false; // Token is expired, not authenticated
-        } else if (isTokenAboutToExpire && refreshToken) {
+        } 
+  
+        if (isTokenAboutToExpire && refreshToken) {
           // Token is about to expire, try refreshing
           const refreshed = await refreshAccessToken();
-          if (refreshed) {
-            console.log("Token refreshed successfully");
-          } else {
+          if (!refreshed) {
             console.log("Failed to refresh token");
             set({ user: null, role: null });
             return false;
           }
+          console.log("Token refreshed successfully");
         }
   
         console.log("Token valid. Setting user and role in state.");
@@ -1708,6 +1715,63 @@ const useStore = create((set, get) => ({
       return false;
     }
   },
+  
+
+
+
+  // loadUserFromStorage: async () => {
+  //   const token = Cookies.get("accessToken"); // Access token from Cookies
+  //   const refreshToken = Cookies.get("refreshToken"); // Refresh token from Cookies
+  //   console.log("Access token from Cookies:", token); // Log the token
+  
+  //   const storedUser = localStorage.getItem("user"); // User info from localStorage
+  //   console.log("Stored user from localStorage:", storedUser); // Log the stored user
+  
+  //   if (token && storedUser) {
+  //     try {
+  //       const decodedToken = jwtDecode(token); // Decode JWT token
+  //       const user = JSON.parse(storedUser); // Parse stored user data
+  
+  //       // Check if the token is expired or about to expire (within 5 minutes)
+  //       const isTokenExpired = Date.now() >= decodedToken.exp * 1000;
+  //       const isTokenAboutToExpire = Date.now() >= decodedToken.exp * 1000 - 5 * 60 * 1000;
+        
+  //       if (isTokenExpired) {
+  //         console.log("Token expired");
+  //         Cookies.remove("accessToken"); // Remove token from Cookies
+  //         Cookies.remove("refreshToken"); // Remove refresh token (if applicable)
+  //         localStorage.removeItem("user"); // Clear user info from localStorage
+  //         set({ user: null, role: null });
+  //         return false; // Token is expired, not authenticated
+  //       } else if (isTokenAboutToExpire && refreshToken) {
+  //         // Token is about to expire, try refreshing
+  //         const refreshed = await refreshAccessToken();
+  //         if (refreshed) {
+  //           console.log("Token refreshed successfully");
+  //         } else {
+  //           console.log("Failed to refresh token");
+  //           set({ user: null, role: null });
+  //           return false;
+  //         }
+  //       }
+  
+  //       console.log("Token valid. Setting user and role in state.");
+  //       set({
+  //         user: user.username,
+  //         role: user.role,
+  //       });
+  //       return true; // User is authenticated
+  //     } catch (error) {
+  //       console.error("Error loading user from Cookies/localStorage:", error);
+  //       set({ user: null, role: null });
+  //       return false;
+  //     }
+  //   } else {
+  //     console.log("No token or stored user found.");
+  //     set({ user: null, role: null });
+  //     return false;
+  //   }
+  // },
   
   // Function to refresh access token
   
