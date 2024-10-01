@@ -1284,7 +1284,7 @@ import axios from "axios";
 // import Cookies from "js-cookie"; // Using js-Cookies for handling Cookies
 
 import Cookies from 'js-cookie';
-import jwtDecode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
 // Axios interceptor to attach token in Cookies to the request headers
 axios.interceptors.request.use(
@@ -1601,62 +1601,6 @@ const useStore = create((set, get) => ({
   },
 
   /** =============================== Cookies & AUTH HANDLING ============================ */
-  // loadUserFromStorage: () => {
-  //   const token = Cookies.get("accessToken"); // Access token from Cookies
-  //   console.log("Access token from Cookies:", token); // Log the token
-
-  //   const storedUser = localStorage.getItem("user"); // User info from localStorage
-  //   console.log("Stored user from localStorage:", storedUser); // Log the stored user
-
-  //   if (token && storedUser) {
-  //     try {
-  //       const decodedToken = jwtDecode(token); // Decode JWT token
-  //       const user = JSON.parse(storedUser); // Parse stored user data
-
-  //       // Check if the token is expired
-  //       const isTokenExpired = Date.now() >= decodedToken.exp * 1000;
-  //       console.log("Is token expired?", isTokenExpired); // Log the token expiration status
-
-  //       if (isTokenExpired) {
-  //         console.log("Token expired");
-  //         Cookies.remove("accessToken"); // Remove token from Cookies
-  //         localStorage.removeItem("user"); // Clear user info from localStorage
-  //         set({ user: null, role: null });
-  //       } else {
-  //         console.log("Token valid. Setting user and role in state.");
-  //         set({
-  //           user: user.username,
-  //           role: user.role,
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.error("Error loading user from Cookies/localStorage:", error);
-  //       set({ user: null, role: null });
-  //     }
-  //   } else {
-  //     console.log("No token or stored user found.");
-  //     set({ user: null, role: null });
-  //   }
-  // },
-
-  // const refreshAccessToken = async () => {
-  //   try {
-  //     // Make a POST request to refresh the access token
-  //     const response = await axios.post(`${baseURL}/api/auth/refresh`, null, {
-  //       withCredentials: true, // To include cookies (for refreshToken)
-  //     });
-  
-  //     // Log success if the token is refreshed
-  //     if (response.status === 200) {
-  //       console.log("Access token refreshed successfully");
-  //       return true;
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to refresh access token:", error);
-  //     return false; // Return false on failure to refresh the token
-  //   }
-  // }
-
 
 
 
@@ -1716,65 +1660,6 @@ const useStore = create((set, get) => ({
     }
   },
   
-
-
-
-  // loadUserFromStorage: async () => {
-  //   const token = Cookies.get("accessToken"); // Access token from Cookies
-  //   const refreshToken = Cookies.get("refreshToken"); // Refresh token from Cookies
-  //   console.log("Access token from Cookies:", token); // Log the token
-  
-  //   const storedUser = localStorage.getItem("user"); // User info from localStorage
-  //   console.log("Stored user from localStorage:", storedUser); // Log the stored user
-  
-  //   if (token && storedUser) {
-  //     try {
-  //       const decodedToken = jwtDecode(token); // Decode JWT token
-  //       const user = JSON.parse(storedUser); // Parse stored user data
-  
-  //       // Check if the token is expired or about to expire (within 5 minutes)
-  //       const isTokenExpired = Date.now() >= decodedToken.exp * 1000;
-  //       const isTokenAboutToExpire = Date.now() >= decodedToken.exp * 1000 - 5 * 60 * 1000;
-        
-  //       if (isTokenExpired) {
-  //         console.log("Token expired");
-  //         Cookies.remove("accessToken"); // Remove token from Cookies
-  //         Cookies.remove("refreshToken"); // Remove refresh token (if applicable)
-  //         localStorage.removeItem("user"); // Clear user info from localStorage
-  //         set({ user: null, role: null });
-  //         return false; // Token is expired, not authenticated
-  //       } else if (isTokenAboutToExpire && refreshToken) {
-  //         // Token is about to expire, try refreshing
-  //         const refreshed = await refreshAccessToken();
-  //         if (refreshed) {
-  //           console.log("Token refreshed successfully");
-  //         } else {
-  //           console.log("Failed to refresh token");
-  //           set({ user: null, role: null });
-  //           return false;
-  //         }
-  //       }
-  
-  //       console.log("Token valid. Setting user and role in state.");
-  //       set({
-  //         user: user.username,
-  //         role: user.role,
-  //       });
-  //       return true; // User is authenticated
-  //     } catch (error) {
-  //       console.error("Error loading user from Cookies/localStorage:", error);
-  //       set({ user: null, role: null });
-  //       return false;
-  //     }
-  //   } else {
-  //     console.log("No token or stored user found.");
-  //     set({ user: null, role: null });
-  //     return false;
-  //   }
-  // },
-  
-  // Function to refresh access token
-  
   
   refreshAccessToken: async () => {
     try {
@@ -1818,72 +1703,6 @@ const useStore = create((set, get) => ({
       // You can decide how to handle errors here
     }
   },
-
-  // checkLock: async () => {
-  //   try {
-  //     const response = await axios.get("http://192.168.43.194:5000/api/auth/checklock", {
-  //       withCredentials: true,
-  //     });
-  
-  //     // Set the isLocked state based on the response
-  //     set({ isLocked: response.data.isLocked });
-      
-  //     // Handle the message if needed
-  //     if (response.data.isLocked) {
-  //       console.warn(response.data.message); // Log the message if the system is locked
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to fetch lock status:", error);
-  //     // Handle other types of errors if necessary
-  //   }
-  // },
-
-  
-  
-
-  // checkLock: async () => {
-  //   try {
-  //     const response = await axios.get(`${baseURL}/api/auth/checklock`, {
-  //       headers: {
-  //         Authorization: `Bearer ${getAuthToken()}`, // Add the auth token to the request
-  //       },
-  //     });
-  //     set({ isLocked: response.data.lock_status === "locked" });
-  //   } catch (error) {
-  //     console.error("Failed to fetch lock status:", error);
-  //     // Optionally handle specific error messages
-  //   }
-  // },
-
-  // toggleLock: async () => {
-  //   try {
-  //     const response = await axios.post(
-  //       `${baseURL}/api/auth/togglelock`,
-  //       {},
-  //       {
-  //         withCredentials: true, // Ensures cookies are sent with the request
-  //       }
-  //     );
-  //     set({ isLocked: response.data.lock_status === "locked" });
-  //   } catch (error) {
-  //     console.error("Failed to toggle lock status:", error);
-  //   }
-  // },
-
-  //   toggleLock: async () => {
-  //   try {
-  //     const response = await axios.post(
-  //       "http://192.168.43.194:5000/api/auth/togglelock",
-  //       {},
-  //       {
-  //         withCredentials: true, // Ensures cookies are sent with the request
-  //       }
-  //     );
-  //     set({ isLocked: response.data.lock_status === "locked" });
-  //   } catch (error) {
-  //     console.error("Failed to toggle lock status:", error);
-  //   }
-  // },
 
   checkLock: async () => {
     try {
