@@ -688,9 +688,9 @@ const ReturnExchange = () => {
         )}
         content={() => receiptRef.current}
       /> */}
-      <button onClick={handleSubmit} className={styles.printButton}>
+      {/* <button onClick={handleSubmit} className={styles.printButton}>
         Print Receipt
-      </button>
+      </button> */}
       <button
         type="button"
         onClick={handleSubmit}
