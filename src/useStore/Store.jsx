@@ -1282,9 +1282,6 @@ import { create } from "zustand";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode"; // corrected import
 import Cookies from "js-cookie"; // Using js-Cookies for handling Cookies
-import dotenv from "dotenv";
-
-dotenv.config();
 
 // Axios interceptor to attach token in Cookies to the request headers
 axios.interceptors.request.use(
@@ -1305,15 +1302,17 @@ const getAuthToken = () => {
 };
 
 
-let baseURL;
+// let baseURL;
 
-if (process.env.NODE_ENV === "production") {
-  // Use the public URL provided by Coolify for production
-  baseURL = "https://api.e-palateoasis.com"; // Replace with your actual Coolify URL
-} else {
-  // Use localhost for development
-  baseURL = "http://localhost:5000";
-}
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
+
+// if (process.env.NODE_ENV === "production") {
+//   // Use the public URL provided by Coolify for production
+//   baseURL = "https://api.e-palateoasis.com"; // Replace with your actual Coolify URL
+// } else {
+//   // Use localhost for development
+//   baseURL = "http://localhost:5000";
+// }
 
 
 const useStore = create((set, get) => ({
