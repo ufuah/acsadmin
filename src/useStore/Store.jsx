@@ -1544,6 +1544,38 @@ const useStore = create((set, get) => ({
   },
 
 
+  // login: async (username, password, onSuccess) => {
+  //   try {
+  //     const response = await axios.post(
+  //       `${baseURL}/api/auth/login`,
+  //       { username, password },
+  //       { withCredentials: true } // Important for sending and receiving cookies
+  //     );
+
+  //     console.log("Login response:", response.data); // Log the response data
+
+  //     const { user} = response.data;
+
+  //     if (user) {
+  //       // Store user data (including role) in localStorage
+  //       localStorage.setItem(
+  //         "user",
+  //         JSON.stringify({ username: user.username, role: user.role })
+  //       );
+  //       // Cookies.set("accessToken", accessToken, { sameSite: "Strict" });
+  //       // Update state with user and role
+  //       set({ user: user.username, role: user.role });
+
+  //       if (onSuccess) onSuccess(user.role);
+  //     } else {
+  //       throw new Error("Login failed. User or token not received.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Login failed:", error.response?.data || error.message);
+  //     throw new Error("Login failed.");
+  //   }
+  // },
+
   login: async (username, password, onSuccess) => {
     try {
       const response = await axios.post(
@@ -1551,21 +1583,21 @@ const useStore = create((set, get) => ({
         { username, password },
         { withCredentials: true } // Important for sending and receiving cookies
       );
-
+  
       console.log("Login response:", response.data); // Log the response data
-
-      const { user} = response.data;
-
+  
+      const { user } = response.data;
+  
       if (user) {
         // Store user data (including role) in localStorage
         localStorage.setItem(
           "user",
           JSON.stringify({ username: user.username, role: user.role })
         );
-        // Cookies.set("accessToken", accessToken, { sameSite: "Strict" });
+  
         // Update state with user and role
         set({ user: user.username, role: user.role });
-
+  
         if (onSuccess) onSuccess(user.role);
       } else {
         throw new Error("Login failed. User or token not received.");
@@ -1575,6 +1607,7 @@ const useStore = create((set, get) => ({
       throw new Error("Login failed.");
     }
   },
+  
 
   /** =============================== CUSTOMER SECTION ============================ */
   getCustomerDetails: async (customer_name) => {
@@ -1604,57 +1637,85 @@ const useStore = create((set, get) => ({
 
 
 
-  loadUserFromStorage: async function() {
-    const token = Cookies.get("accessToken"); // Access token from Cookies
-    const refreshToken = Cookies.get("refreshToken"); // Refresh token from Cookies
-    console.log("Access token from Cookies:", token); // Log the token
+  // loadUserFromStorage: async function() {
+  //   const token = Cookies.get("accessToken"); // Access token from Cookies
+  //   const refreshToken = Cookies.get("refreshToken"); // Refresh token from Cookies
+  //   console.log("Access token from Cookies:", token); // Log the token
     
+  //   const storedUser = localStorage.getItem("user"); // User info from localStorage
+  //   console.log("Stored user from localStorage:", storedUser); // Log the stored user
+  
+  //   if (token && storedUser) {
+  //     try {
+  //       const decodedToken = jwtDecode(token); // Decode JWT token
+  //       const user = JSON.parse(storedUser); // Parse stored user data
+  
+  //       // Check if the token is expired or about to expire (within 5 minutes)
+  //       const isTokenExpired = Date.now() >= decodedToken.exp * 1000;
+  //       const isTokenAboutToExpire = Date.now() >= decodedToken.exp * 1000 - 5 * 60 * 1000;
+        
+  //       if (isTokenExpired) {
+  //         console.log("Token expired");
+  //         // Remove tokens and clear user info if the token is expired
+  //         Cookies.remove("accessToken"); 
+  //         Cookies.remove("refreshToken");
+  //         localStorage.removeItem("user"); 
+  //         set({ user: null, role: null });
+  //         return false; // Token is expired, not authenticated
+  //       } 
+  
+  //       if (isTokenAboutToExpire && refreshToken) {
+  //         // Token is about to expire, try refreshing
+  //         const refreshed = await refreshAccessToken();
+  //         if (!refreshed) {
+  //           console.log("Failed to refresh token");
+  //           set({ user: null, role: null });
+  //           return false;
+  //         }
+  //         console.log("Token refreshed successfully");
+  //       }
+  
+  //       console.log("Token valid. Setting user and role in state.");
+  //       set({
+  //         user: user.username,
+  //         role: user.role,
+  //       });
+  //       return true; // User is authenticated
+  //     } catch (error) {
+  //       console.error("Error loading user from Cookies/localStorage:", error);
+  //       set({ user: null, role: null });
+  //       return false;
+  //     }
+  //   } else {
+  //     console.log("No token or stored user found.");
+  //     set({ user: null, role: null });
+  //     return false;
+  //   }
+  // },
+  
+
+  loadUserFromStorage: async function() { 
     const storedUser = localStorage.getItem("user"); // User info from localStorage
     console.log("Stored user from localStorage:", storedUser); // Log the stored user
   
-    if (token && storedUser) {
+    if (storedUser) {
       try {
-        const decodedToken = jwtDecode(token); // Decode JWT token
         const user = JSON.parse(storedUser); // Parse stored user data
-  
-        // Check if the token is expired or about to expire (within 5 minutes)
-        const isTokenExpired = Date.now() >= decodedToken.exp * 1000;
-        const isTokenAboutToExpire = Date.now() >= decodedToken.exp * 1000 - 5 * 60 * 1000;
         
-        if (isTokenExpired) {
-          console.log("Token expired");
-          // Remove tokens and clear user info if the token is expired
-          Cookies.remove("accessToken"); 
-          Cookies.remove("refreshToken");
-          localStorage.removeItem("user"); 
-          set({ user: null, role: null });
-          return false; // Token is expired, not authenticated
-        } 
-  
-        if (isTokenAboutToExpire && refreshToken) {
-          // Token is about to expire, try refreshing
-          const refreshed = await refreshAccessToken();
-          if (!refreshed) {
-            console.log("Failed to refresh token");
-            set({ user: null, role: null });
-            return false;
-          }
-          console.log("Token refreshed successfully");
-        }
-  
-        console.log("Token valid. Setting user and role in state.");
+        // You can't read `HttpOnly` cookies, so just set the user from localStorage
         set({
           user: user.username,
           role: user.role,
         });
+  
         return true; // User is authenticated
       } catch (error) {
-        console.error("Error loading user from Cookies/localStorage:", error);
+        console.error("Error loading user from localStorage:", error);
         set({ user: null, role: null });
         return false;
       }
     } else {
-      console.log("No token or stored user found.");
+      console.log("No stored user found.");
       set({ user: null, role: null });
       return false;
     }
@@ -1686,9 +1747,8 @@ const useStore = create((set, get) => ({
 
 
   isAuthenticated: () => {
-    const token = Cookies.get("accessToken"); // Access token from Cookies
     const user = localStorage.getItem("user"); // User info from localStorage
-    return !!token && !!user; // Both token and user data should be present
+    return !!user; // Both token and user data should be present
   },
 
 
