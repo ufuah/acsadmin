@@ -1304,7 +1304,8 @@ const getAuthToken = () => {
 
 // let baseURL;
 
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
+// const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
+const baseURL = "https://api.e-palateoasis.com";
 
 // if (process.env.NODE_ENV === "production") {
 //   // Use the public URL provided by Coolify for production
