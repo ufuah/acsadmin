@@ -312,6 +312,19 @@ const Table = () => {
     );
   };
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       await fetchSales();
+  //       showNotification("Sales data fetched successfully!", "success");
+  //     } catch (error) {
+  //       console.error("Failed to fetch sales:", error);
+  //       showNotification("Failed to fetch sales data!", "error");
+  //     }
+  //   };
+  //   fetchData();
+  // }, [fetchSales, showNotification]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -323,8 +336,9 @@ const Table = () => {
       }
     };
     fetchData();
-  }, [fetchSales, showNotification]);
+  }, [fetchSales]);
 
+  
   const applyFilters = useCallback(() => {
     let filtered = [...sales];
 
