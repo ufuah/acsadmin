@@ -1278,6 +1278,9 @@
 
 // export default useStore;
 
+
+
+
 import { create } from "zustand";
 import axios from "axios";
 // import { jwtDecode } from "jwt-decode"; // corrected import
@@ -1297,24 +1300,6 @@ axios.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
-
-// Add this after your axios configuration
-// axios.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     const store = useStore.getState();
-//     if (error.response && error.response.status === 401) {
-//       try {
-//         await store.refreshAccessToken();
-//         return axios.request(error.config);
-//       } catch (refreshError) {
-//         await store.logout();
-//         window.location.href = "/login"; // Redirect to login if token refresh fails
-//       }
-//     }
-//     return Promise.reject(error);
-//   }
-// );
 
 axios.interceptors.response.use(
   (response) => response,
