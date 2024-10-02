@@ -22,9 +22,9 @@ const Topbar = () => {
       <div className={styles.topbar}>
         <div className={styles.greatings}>
           <span>
-            {user?.role === "admin" ? "welcome back, boss" : "welcome back,"}
+          {role === "admin" ? "welcome back, boss" : "welcome back,"}
           </span>
-          <p>{user?.username}</p>
+          <p>{user}</p>
         </div>
 
         <div className={styles.searcharea}>

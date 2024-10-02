@@ -18,7 +18,7 @@ const Profile = ({user}) => {
           <p>{user?.username}</p>
         </div> */}
 
-        <span>hi,{user?.username}</span>
+        <span>hi,{user}</span>
       </div>
     </div>
   );
