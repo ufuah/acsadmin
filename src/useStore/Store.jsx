@@ -1299,17 +1299,59 @@ axios.interceptors.request.use(
 );
 
 // Add this after your axios configuration
+// axios.interceptors.response.use(
+//   (response) => response,
+//   async (error) => {
+//     const store = useStore.getState();
+//     if (error.response && error.response.status === 401) {
+//       try {
+//         await store.refreshAccessToken();
+//         return axios.request(error.config);
+//       } catch (refreshError) {
+//         await store.logout();
+//         window.location.href = "/login"; // Redirect to login if token refresh fails
+//       }
+//     }
+//     return Promise.reject(error);
+//   }
+// );
+
 axios.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response && error.response.status === 401) {
-      const store = useStore.getState();
-      await store.logout(); // Call the logout function from Zustand store
-      window.location.href = "/login"; // Redirect to login page
+    const store = useStore.getState();
+    const originalRequest = error.config;
+
+    // Check if the request is to login or refresh to avoid retry loop
+    if (originalRequest.url.includes('/login') || originalRequest.url.includes('/refresh')) {
+      return Promise.reject(error);
     }
+
+    // Flag to prevent endless loop
+    if (!originalRequest._retry) {
+      originalRequest._retry = true; // Set a flag to indicate retry is happening
+
+      // Handle 401 Unauthorized
+      if (error.response && error.response.status === 401) {
+        try {
+          const success = await store.refreshAccessToken();
+          if (success) {
+            // Retry the original request with new token
+            return axios(originalRequest);
+          }
+        } catch (refreshError) {
+          console.error("Token refresh failed:", refreshError);
+          await store.logout();
+          window.location.href = "/login"; // Redirect to login after logging out
+        }
+      }
+    }
+    
     return Promise.reject(error);
   }
 );
+
+
 
 
 // const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
