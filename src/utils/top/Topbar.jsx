@@ -5,7 +5,7 @@ import Searchbar from "../searchExtr/searchbar";
 import Profile from "../profile/Profile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
-import useStore from "../../useStore/Store"; 
+import useStore from "../../useStore/Store";
 
 const Topbar = () => {
   // Get the user and role from the Zustand store
@@ -18,8 +18,10 @@ const Topbar = () => {
     <div className={styles.container}>
       <div className={styles.topbar}>
         <div className={styles.greatings}>
-          <span>welcome back,</span>
-          <p>{user}</p>
+          <span>
+            {user?.role === "admin" ? "welcome back, boss" : "welcome back,"}
+          </span>
+          <p>{user?.username}</p>
         </div>
 
         <div className={styles.searcharea}>
@@ -28,7 +30,7 @@ const Topbar = () => {
           </div>
 
           <div className={styles.notification}>
-            <Profile />
+            <Profile user={user} />
             <div className={styles.bell}>
               <div className={styles.icon}>
                 <FontAwesomeIcon icon={faBell} />
