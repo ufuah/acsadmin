@@ -1352,18 +1352,29 @@ axios.interceptors.response.use(
 );
 
 
+// axios.interceptors.response.use(
+//   (response) => response,
+//   async (error) => {
+//     const store = useStore.getState();
+//     if (error.response && error.response.status === 401) {
+//       try {
+//         await store.refreshAccessToken();
+//         return axios.request(error.config);
+//       } catch (refreshError) {
+//         await store.logout();
+//         window.location.href = "/login"; // Redirect to login if token refresh fails
+//       }
+//     }
+//     return Promise.reject(error);
+//   }
+// );
+
 
 
 // const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
 const baseURL = "https://api.e-palateoasis.com";
 
-// if (process.env.NODE_ENV === "production") {
-//   // Use the public URL provided by Coolify for production
-//   baseURL = "https://api.e-palateoasis.com"; // Replace with your actual Coolify URL
-// } else {
-//   // Use localhost for development
-//   baseURL = "http://localhost:5000";
-// }
+
 
 const useStore = create((set, get) => ({
   // State variables
@@ -1429,25 +1440,6 @@ const useStore = create((set, get) => ({
   },
 
   /** =============================== STOCK SECTION ============================ */
-  // saveStock: async (stock) => {
-  //   try {
-  //     const response = stock.description
-  //       ? await axios.put(
-  //           `${baseURL}/api/stocks/${stock.description}`,
-  //           stock
-  //         )
-  //       : await axios.post("${baseURL}/api/stocks/add", stock);
-
-  //     set((state) => ({
-  //       stocks: [
-  //         ...state.stocks.filter((s) => s.id !== stock.id),
-  //         response.data,
-  //       ],
-  //     }));
-  //   } catch (error) {
-  //     console.error("Failed to save stock:", error);
-  //   }
-  // },
 
   saveStock: async (stock) => {
     try {
@@ -1589,38 +1581,6 @@ const useStore = create((set, get) => ({
     }
   },
 
-  // login: async (username, password, onSuccess) => {
-  //   try {
-  //     const response = await axios.post(
-  //       `${baseURL}/api/auth/login`,
-  //       { username, password },
-  //       { withCredentials: true } // Important for sending and receiving cookies
-  //     );
-
-  //     console.log("Login response:", response.data); // Log the response data
-
-  //     const { user} = response.data;
-
-  //     if (user) {
-  //       // Store user data (including role) in localStorage
-  //       localStorage.setItem(
-  //         "user",
-  //         JSON.stringify({ username: user.username, role: user.role })
-  //       );
-  //       // Cookies.set("accessToken", accessToken, { sameSite: "Strict" });
-  //       // Update state with user and role
-  //       set({ user: user.username, role: user.role });
-
-  //       if (onSuccess) onSuccess(user.role);
-  //     } else {
-  //       throw new Error("Login failed. User or token not received.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Login failed:", error.response?.data || error.message);
-  //     throw new Error("Login failed.");
-  //   }
-  // },
-
   /** =============================== RETURN SECTION ============================ */
   addReturn: async (returnData) => {
     try {
@@ -1637,20 +1597,7 @@ const useStore = create((set, get) => ({
   },
 
   /** =============================== EXCHANGE SECTION ============================ */
-  // addExchange: async (exchangeData) => {
-  //   try {
-  //     const response = await axios.post(
-  //       `${baseURL}/api/sales/exchange`,
-  //       exchangeData
-  //     );
-  //     set((state) => ({
-  //       exchanges: [...state.exchanges, response.data],
-  //     }));
-  //   } catch (error) {
-  //     console.error("Failed to add exchange:", error);
-  //   }
-  // },
-
+ 
   addExchange: async (exchangeData) => {
     try {
       const response = await axios.post(

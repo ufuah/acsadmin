@@ -43,9 +43,13 @@ interface StockItem {
 }
 
 export default function AddSale() {
-  const now = new Date(); // Get the current date
-  const formattedDate = now.toISOString().split("T")[0]; // Format to YYYY-MM-DD
-  
+  // const now = new Date(); // Get the current date
+  // const formattedDate = now.toISOString().split("T")[0]; // Format to YYYY-MM-DD
+
+
+  const now = new Date();
+  const formattedDate = format(now, "dd/MM/yyyy"); // "16/09/2024"
+
   const { stocks, fetchStocks, addSale, currentSalesId, getCustomerDetails } =
     useStore((state) => ({
       stocks: state.stocks,
