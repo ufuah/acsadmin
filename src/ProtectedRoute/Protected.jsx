@@ -547,7 +547,7 @@ const ProtectedRoute = ({ children }) => {
         console.log(
           "Manager role detected. Access denied to /addstock. Redirecting to /stockmanagement."
         );
-        router.push("/stockmanagement");
+        router.push("/stock");
         return;
       }
 
