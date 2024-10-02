@@ -557,6 +557,13 @@ const ProtectedRoute = ({ children }) => {
       }
 
       // Allow access to /sales and /return for users with role "user"
+      if (role === "manager" && pathname !== "/sales" && pathname !== "/return" && pathname !== "/stock") {
+        console.log("Non-admin user trying to access restricted route. Redirecting to /sales.");
+        router.push("/sales");
+        return;
+      }
+
+      // Allow access to /sales and /return for users with role "user"
       if (role === "user" && pathname !== "/sales" && pathname !== "/return") {
         console.log("Non-admin user trying to access restricted route. Redirecting to /sales.");
         router.push("/sales");
