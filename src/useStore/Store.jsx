@@ -1590,19 +1590,38 @@ const useStore = create((set, get) => ({
   },
 
   /** =============================== EXCHANGE SECTION ============================ */
+  // addExchange: async (exchangeData) => {
+  //   try {
+  //     const response = await axios.post(
+  //       `${baseURL}/api/sales/exchange`,
+  //       exchangeData
+  //     );
+  //     set((state) => ({
+  //       exchanges: [...state.exchanges, response.data],
+  //     }));
+  //   } catch (error) {
+  //     console.error("Failed to add exchange:", error);
+  //   }
+  // },
+
   addExchange: async (exchangeData) => {
     try {
       const response = await axios.post(
         `${baseURL}/api/sales/exchange`,
         exchangeData
       );
-      set((state) => ({
-        exchanges: [...state.exchanges, response.data],
-      }));
+      set((state) => {
+        // Ensure that exchanges is always an array
+        const currentExchanges = Array.isArray(state.exchanges) ? state.exchanges : [];
+        return {
+          exchanges: [...currentExchanges, response.data],
+        };
+      });
     } catch (error) {
       console.error("Failed to add exchange:", error);
     }
   },
+  
 
   login: async (username, password, onSuccess) => {
     try {
