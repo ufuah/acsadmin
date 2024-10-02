@@ -50,7 +50,8 @@ export default function AddSale() {
 
   const now = new Date();
   // const formattedDate = format(now, "dd/MM/yyyy"); // "16/09/2024"
-  const formattedDate = format(now, "dd-MM-yyyy"); // e.g., "02-10-2024"
+  // const formattedDate = format(now, "dd-MM-yyyy"); // e.g., "02-10-2024"
+  const formattedDate = format(now, "yyyy-MM-dd"); // "2024-10-02"
 
   const { stocks, fetchStocks, addSale, currentSalesId, getCustomerDetails } =
     useStore((state) => ({
