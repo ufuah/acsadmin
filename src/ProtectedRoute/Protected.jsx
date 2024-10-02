@@ -477,6 +477,7 @@
 // };
 
 // export default ProtectedRoute;
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -484,14 +485,19 @@ import { useRouter, usePathname } from "next/navigation";
 import useStore from "../useStore/Store";
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, loadUserFromStorage, role, isLocked, checkLock } =
-    useStore((state) => ({
-      isAuthenticated: state.isAuthenticated,
-      loadUserFromStorage: state.loadUserFromStorage,
-      role: state.role,
-      isLocked: state.isLocked,
-      checkLock: state.checkLock,
-    }));
+  const {
+    isAuthenticated,
+    loadUserFromStorage,
+    role,
+    isLocked,
+    checkLock,
+  } = useStore((state) => ({
+    isAuthenticated: state.isAuthenticated,
+    loadUserFromStorage: state.loadUserFromStorage,
+    role: state.role,
+    isLocked: state.isLocked,
+    checkLock: state.checkLock,
+  }));
 
   const router = useRouter();
   const pathname = usePathname();
@@ -516,46 +522,55 @@ const ProtectedRoute = ({ children }) => {
     if (!authLoading) {
       const isAuth = isAuthenticated();
 
+      // Allow access to login and signup pages for all users
       if (pathname === "/login" || pathname === "/signup") {
         console.log(`Accessing ${pathname} page.`);
         return;
       }
 
+      // Redirect if user is not authenticated
       if (!isAuth) {
         console.log("User not authenticated. Redirecting to /login.");
         router.push("/login");
         return;
       }
 
+      // Redirect if the system is locked and user is not admin or manager
       if (isLocked && role !== "admin" && role !== "manager") {
-        console.log(
-          "System is locked for non-admin/manager users. Redirecting to /locked."
-        );
+        console.log("System is locked for non-admin/manager users. Redirecting to /locked.");
         router.push("/locked");
         return;
       }
 
-      // Redirect manager role to /stockmanagement
+      // Manage access for the manager role
       if (role === "manager") {
-        console.log("Manager role detected. Redirecting to /stockmanagement.");
-        router.push("/stock");
-        return;
-      }
+        // Redirect manager to /stock if accessing restricted routes
+        if (pathname === "/addstock") {
+          console.log("Manager role detected. Access denied to /addstock. Redirecting to /stock.");
+          router.push("/stock");
+          return;
+        }
+        
+        // Allow access to specific routes for manager
+        if (
+          pathname === "/stock" ||
+          pathname === "/salesmanagement" ||
+          pathname === "/sales" ||
+          pathname === "/return"
+        ) {
+          console.log("Manager role detected. Access granted.");
+          return;
+        }
 
-      // Allow access to stockmanagement, salesmanagement, sales, and return for users with role "manager"
-      if (role === "manager" && pathname === "/addstock") {
-        console.log(
-          "Manager role detected. Access denied to /addstock. Redirecting to /stockmanagement."
-        );
+        // Default to redirecting manager if accessing other routes
+        console.log("Manager role detected. Redirecting to /stock.");
         router.push("/stock");
         return;
       }
 
       // Allow access to /sales and /return for users with role "user"
-      if (role === "user" && pathname !== "/sales" && pathname !== "/return") {
-        console.log(
-          "Non-admin user trying to access restricted route. Redirecting to /sales."
-        );
+      if (role === "user" && (pathname !== "/sales" && pathname !== "/return")) {
+        console.log("Non-admin user trying to access restricted route. Redirecting to /sales.");
         router.push("/sales");
         return;
       }
