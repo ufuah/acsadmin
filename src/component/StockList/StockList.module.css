@@ -1,7 +1,6 @@
 .container {
   width: 100%;
-  height: -moz-fit-content;
-  height: 100%;
+  height: fit-content; /* Removed -moz-fit-content as it's outdated */
   padding: 50px;
   opacity: 1;
   visibility: visible;
@@ -17,7 +16,7 @@
   font-weight: bold;
 }
 
-.stock_hearding span{
+.stock_hearding span {
   font-size: 30px;
   text-transform: capitalize;
   color: var(--secondary-color);
@@ -129,4 +128,96 @@
   font-weight: bold;
 }
 
-/* Other styles... */
+/* Media queries for responsiveness */
+
+/* Large devices (desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .container {
+    padding: 50px;
+  }
+
+  .tableContainer th,
+  .tableContainer td {
+    font-size: 18px;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .container {
+    padding: 30px;
+  }
+
+  .header, .stock_hearding span {
+    font-size: 24px;
+  }
+
+  .button {
+    padding: 8px 16px;
+  }
+
+  .tableContainer th,
+  .tableContainer td {
+    font-size: 14px;
+  }
+
+  .tableContainer td img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Small devices (phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .container {
+    padding: 20px;
+  }
+
+  .header, .stock_hearding span {
+    font-size: 20px;
+  }
+
+  .button {
+    padding: 6px 12px;
+  }
+
+  .tableContainer th,
+  .tableContainer td {
+    font-size: 12px;
+  }
+
+  .tableContainer td img {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575px) {
+  .container {
+    padding: 15px;
+  }
+
+  .header, .stock_hearding span {
+    font-size: 18px;
+  }
+
+  .button {
+    padding: 5px 10px;
+  }
+
+  .tableContainer th,
+  .tableContainer td {
+    font-size: 10px;
+  }
+
+  .tableContainer td img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
