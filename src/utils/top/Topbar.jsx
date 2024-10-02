@@ -1,3 +1,6 @@
+"use client"
+
+
 import Image from "next/image";
 import styles from "./topbar.module.css";
 import Calendar from "../calender/Calender";
