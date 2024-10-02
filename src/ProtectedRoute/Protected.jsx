@@ -554,7 +554,7 @@ const ProtectedRoute = ({ children }) => {
         // Allow access to specific routes for manager
         if (
           pathname === "/stock" ||
-          pathname === "/salesmanagement" ||
+          pathname === "/salesmanager" ||
           pathname === "/sales" ||
           pathname === "/return"
         ) {
