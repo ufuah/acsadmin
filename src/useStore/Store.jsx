@@ -1298,13 +1298,19 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Assuming you have a way to retrieve the auth token, e.g. from local storage or a global state
-const getAuthToken = () => {
-  // Replace with your method to retrieve the token
-  return Cookies.get("accessToken");
-};
+// Add this after your axios configuration
+axios.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response && error.response.status === 401) {
+      const store = useStore.getState();
+      await store.logout(); // Call the logout function from Zustand store
+      window.location.href = "/login"; // Redirect to login page
+    }
+    return Promise.reject(error);
+  }
+);
 
-// let baseURL;
 
 // const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
 const baseURL = "https://api.e-palateoasis.com";
@@ -1573,7 +1579,6 @@ const useStore = create((set, get) => ({
   //   }
   // },
 
-  
   /** =============================== RETURN SECTION ============================ */
   addReturn: async (returnData) => {
     try {
@@ -1612,7 +1617,9 @@ const useStore = create((set, get) => ({
       );
       set((state) => {
         // Ensure that exchanges is always an array
-        const currentExchanges = Array.isArray(state.exchanges) ? state.exchanges : [];
+        const currentExchanges = Array.isArray(state.exchanges)
+          ? state.exchanges
+          : [];
         return {
           exchanges: [...currentExchanges, response.data],
         };
@@ -1621,7 +1628,6 @@ const useStore = create((set, get) => ({
       console.error("Failed to add exchange:", error);
     }
   },
-  
 
   login: async (username, password, onSuccess) => {
     try {
@@ -1764,6 +1770,18 @@ const useStore = create((set, get) => ({
     }
   },
 
+  checkTokenValidity: async () => {
+    try {
+      await axios.get(`${baseURL}/api/protected-endpoint`);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        const store = useStore.getState();
+        await store.logout();
+        window.location.href = "/login";
+      }
+    }
+  },
+
   refreshAccessToken: async () => {
     try {
       // Make a POST request to refresh the access token
@@ -1805,16 +1823,19 @@ const useStore = create((set, get) => ({
 
   toggleLock: async () => {
     try {
-      const response = await axios.post(`${baseURL}/api/auth/togglelock`, {}, {
-        withCredentials: true, // Ensures cookies are sent with the request
-      });
+      const response = await axios.post(
+        `${baseURL}/api/auth/togglelock`,
+        {},
+        {
+          withCredentials: true, // Ensures cookies are sent with the request
+        }
+      );
       set({ isLocked: response.data.lock_status === "locked" });
     } catch (error) {
       console.error("Failed to toggle lock status:", error);
       // Handle errors accordingly
     }
   },
-  
 }));
 
 export default useStore;
