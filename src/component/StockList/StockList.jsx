@@ -99,14 +99,14 @@ const StockList = () => {
                   <td>{stock.closing_value ?? 0}</td> */}
                     <td>
                       {stock.closing_stock ?? 0}
-                      {stock.closing_stock < 100 && (
+                      {stock.closing_stock < 200 && (
                         <span className={styles.dot}></span>
                       )}
                     </td>
                     <td>
                     <CurrencyFormatter amount={stock.closing_value ?? 0} />
                       {/* {stock.closing_value ?? 0} */}
-                      {stock.closing_value < 100 && (
+                      {stock.closing_value < 200 && (
                         <span className={styles.dot}></span>
                       )}
                     </td>
