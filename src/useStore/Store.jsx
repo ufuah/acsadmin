@@ -1573,6 +1573,37 @@ const useStore = create((set, get) => ({
   //   }
   // },
 
+  
+  /** =============================== RETURN SECTION ============================ */
+  addReturn: async (returnData) => {
+    try {
+      const response = await axios.post(
+        `${baseURL}/api/sales/return`,
+        returnData
+      );
+      set((state) => ({
+        returns: [...state.returns, response.data],
+      }));
+    } catch (error) {
+      console.error("Failed to add return:", error);
+    }
+  },
+
+  /** =============================== EXCHANGE SECTION ============================ */
+  addExchange: async (exchangeData) => {
+    try {
+      const response = await axios.post(
+        `${baseURL}/api/sales/exchange`,
+        exchangeData
+      );
+      set((state) => ({
+        exchanges: [...state.exchanges, response.data],
+      }));
+    } catch (error) {
+      console.error("Failed to add exchange:", error);
+    }
+  },
+
   login: async (username, password, onSuccess) => {
     try {
       const response = await axios.post(
