@@ -154,7 +154,7 @@ const Sidebar: React.FC = () => {
   const filteredNavItems = allNavItems.filter((item) => {
     if (role === "admin") return true; // Admin has access to all paths
     if (role === "manager")
-      return item.path === "/sales" || item.path === "/manage" || item.path === "/return"  || item.path === "/salesmanager";; // Manager can access sales and manage
+      return item.path === "/sales" || item.path === "/manage" || item.path === "/return"  || item.path === "/salesmanager" || item.path === "/salesmanager"; // Manager can access sales and manage
     if (role === "user") return item.path === "/sales"  || item.path === "/return"; // User can only access sales
     return false; // No access if the role doesn't match
   });
