@@ -45,15 +45,15 @@ interface StockItem {
 export default function AddSale() {
   const now = new Date(); // Get the current date
   const formattedDate = now.toISOString().split("T")[0]; // Format to YYYY-MM-DD
-  const { stocks, fetchStocks, addSale, currentSalesId ,getCustomerDetails} = useStore(
-    (state) => ({
+  
+  const { stocks, fetchStocks, addSale, currentSalesId, getCustomerDetails } =
+    useStore((state) => ({
       stocks: state.stocks,
       fetchStocks: state.fetchStocks,
       addSale: state.addSale,
       currentSalesId: state.currentSalesId,
-      getCustomerDetails: state.getCustomerDetails
-    })
-  );
+      getCustomerDetails: state.getCustomerDetails,
+    }));
 
   const initialFormState: FormState = {
     date: formattedDate,
@@ -74,7 +74,6 @@ export default function AddSale() {
   const [category, setCategory] = useState("roofing");
   const printRef = useRef(null);
   const router = useRouter();
-
 
   const { notification, showNotification } = useNotifications(); // Use the notification hook
 
@@ -144,7 +143,6 @@ export default function AddSale() {
       }
     }
   };
-
 
   const handleAddItem = () => {
     setForm((prevForm) => ({
@@ -261,7 +259,7 @@ export default function AddSale() {
 
           <div className={styles.userinputs}>
             <div className={styles.inputGroup}>
-              <div className={styles.formField}>
+              {/* <div className={styles.formField}>
                 <label htmlFor="date" className={styles.label}>
                   Date
                 </label>
@@ -274,15 +272,30 @@ export default function AddSale() {
                   className={styles.input}
                   required
                 />
-              </div>
+                {form.date}
+              </div> */}
+
               <div className={styles.formField}>
-                <label htmlFor="customer_name" className={styles.label}>Customer Name</label>
+                <label htmlFor="date" className={styles.label}>
+                  Date
+                </label>
+                <span className={styles.input}>
+                  {form.date} {/* Display the formatted date */}
+                </span>
+              </div>
+
+              <div className={styles.formField}>
+                <label htmlFor="customer_name" className={styles.label}>
+                  Customer Name
+                </label>
                 <input
                   type="text"
                   name="customer_name"
                   id="customer_name"
                   value={form.customer_name}
-                  onChange={(e) => handleCustomerChange("customer_name", e.target.value)} // Use handleCustomerChange
+                  onChange={(e) =>
+                    handleCustomerChange("customer_name", e.target.value)
+                  } // Use handleCustomerChange
                   className={styles.input}
                   placeholder="Enter customer name"
                   required
@@ -488,7 +501,7 @@ export default function AddSale() {
         Submit Sale
       </button>
       {/* style={{ display: "none" }} */}
-      <div style={{ display: "none" }} >
+      <div style={{ display: "none" }}>
         <SalesReceipt
           ref={printRef} // Attach the ref to the SalePreview component
           items={form.items}
