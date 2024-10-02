@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -23,9 +29,6 @@ import Calendar from "../calender/Calender";
 import { addDays } from "date-fns";
 
 const Table = () => {
-
-  
-
   // const { notification, showNotification } = UseNotifications();
   // const [expandedCustomer, setExpandedCustomer] = useState(null);
   // const [filteredSales, setFilteredSales] = useState([]);
@@ -105,11 +108,10 @@ const Table = () => {
   //   };
   //   fetchData();
   // }, [fetchSales, showNotification]); // Add showNotification here
-  
+
   // useEffect(() => {
   //   applyFilters();
   // }, [filterStatus, filterType, category, sales, applyFilters]); // Add applyFilters here
-
 
   // const applyFilters = () => {
   //   let filtered = [...sales]; // Start with full sales data
@@ -161,7 +163,6 @@ const Table = () => {
   //   setSearchResults(filtered); // Also update search results when filters change
   // };
 
-  
   // console.log(sales.transaction_type);
 
   // // Apply filters whenever filterStatus, filterType, or category changes
@@ -268,12 +269,14 @@ const Table = () => {
   const printRef = useRef(null);
   const receiptRef = useRef({});
 
-  const { sales, fetchSales, updateSale, fetchSalesById } = useStore((state) => ({
-    sales: state.sales,
-    fetchSales: state.fetchSales,
-    updateSale: state.updateSale,
-    fetchSaleById: state.fetchSaleById,
-  }));
+  const { sales, fetchSales, updateSale, fetchSalesById } = useStore(
+    (state) => ({
+      sales: state.sales,
+      fetchSales: state.fetchSales,
+      updateSale: state.updateSale,
+      fetchSaleById: state.fetchSaleById,
+    })
+  );
 
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
@@ -303,7 +306,9 @@ const Table = () => {
 
   const toggleCustomerDetails = (customerName, salesId) => {
     setExpandedCustomer((prev) =>
-      prev === `${customerName}-${salesId}` ? null : `${customerName}-${salesId}`
+      prev === `${customerName}-${salesId}`
+        ? null
+        : `${customerName}-${salesId}`
     );
   };
 
@@ -351,13 +356,9 @@ const Table = () => {
     setSearchResults(filtered);
   }, [filterStatus, filterType, category, dateRange, sales]);
 
-
-
   useEffect(() => {
     applyFilters();
   }, [filterStatus, filterType, category, sales, dateRange, applyFilters]);
-
-
 
   const groupedOrders = useMemo(() => {
     const salesData = searchResults.length > 0 ? searchResults : filteredSales;
@@ -684,18 +685,21 @@ const Table = () => {
         totalSaleValue={sales?.totalSaleValue || 0}
         currentSalesId={sales?.sales_id || ""}
       /> */}
-      <SalesReceipt
-        ref={receiptRef}
-        items={selectedSale?.items || []}
-        date={selectedSale?.date || ""}
-        brand={selectedSale?.brand || ""}
-        name={selectedSale?.customer_name || ""}
-        number={selectedSale?.customer_number || ""}
-        status={selectedSale?.status || ""}
-        suppliedBy={selectedSale?.suppliedBy || ""}
-        totalSaleValue={selectedSale?.totalSaleValue || 0}
-        currentSalesId={selectedSale?.sales_id || ""}
-      />
+
+      <div style={{ display: "none" }}>
+        <SalesReceipt
+          ref={receiptRef}
+          items={selectedSale?.items || []}
+          date={selectedSale?.date || ""}
+          brand={selectedSale?.brand || ""}
+          name={selectedSale?.customer_name || ""}
+          number={selectedSale?.customer_number || ""}
+          status={selectedSale?.status || ""}
+          suppliedBy={selectedSale?.suppliedBy || ""}
+          totalSaleValue={selectedSale?.totalSaleValue || 0}
+          currentSalesId={selectedSale?.sales_id || ""}
+        />
+      </div>
     </div>
   );
 };
