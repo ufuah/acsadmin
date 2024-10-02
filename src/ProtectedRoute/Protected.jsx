@@ -552,7 +552,7 @@ const ProtectedRoute = ({ children }) => {
       // Redirect manager role to /stockmanagement
       if (role === "manager") {
         console.log("Manager role detected. Redirecting to /stockmanagement.");
-        router.push("/stockmanagement");
+        router.push("/stock");
         return;
       }
 
