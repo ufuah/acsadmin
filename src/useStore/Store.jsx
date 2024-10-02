@@ -1282,7 +1282,7 @@ import { create } from "zustand";
 import axios from "axios";
 // import { jwtDecode } from "jwt-decode"; // corrected import
 // import Cookies from "js-cookie"; // Using js-Cookies for handling Cookies
-import { useRouter } from "next/router"; // Import Next.js router for navigation
+
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
@@ -1316,8 +1316,6 @@ axios.interceptors.request.use(
 //   }
 // );
 
-const router = useRouter(); // Initialize router
-
 axios.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -1343,15 +1341,12 @@ axios.interceptors.response.use(
           }
         } catch (refreshError) {
           console.error("Token refresh failed:", refreshError);
-
-          await store.logout(); // Log out user if refresh fails
-          
-          // Use Next.js router to navigate to login
-          router.push("/login");
+          await store.logout();
+          window.location.href = "/login"; // Redirect to login after logging out
         }
       }
     }
-
+    
     return Promise.reject(error);
   }
 );
