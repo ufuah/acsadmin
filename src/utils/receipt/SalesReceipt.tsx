@@ -23,6 +23,7 @@ interface SalesReceiptProps {
   name: string;
   number: string;
   status: string;
+  payment: string;
   suppliedBy: string;
   totalSaleValue: number;
   currentSalesId: string;
@@ -42,6 +43,7 @@ const SalesReceipt = forwardRef<HTMLDivElement, SalesReceiptProps>(
       currentSalesId,
       status,
       suppliedBy,
+      payment
     },
     ref
   ) => {
@@ -82,6 +84,11 @@ const SalesReceipt = forwardRef<HTMLDivElement, SalesReceiptProps>(
             <div className="item">
               <p>Brand:</p>
               <p>{brand}</p>
+            </div>
+
+            <div className="item">
+              <p>payment menthod:</p>
+              <p>{payment}</p>
             </div>
 
             

@@ -520,6 +520,7 @@ export default function AddSale() {
           totalSaleValue={form.total_sale_value}
           currentSalesId={currentSalesId}
           suppliedBy={form.supplied_by}
+          payment={form.bank_or_pos}
         />
       </div>
       {showPreview && (
