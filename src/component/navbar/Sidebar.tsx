@@ -176,7 +176,7 @@ const Sidebar: React.FC = () => {
   }
 
   // Only render the sidebar if the system is not locked, or if the user is an admin or manager
-  if (isLocked && role !== "admin" && role !== "manager") {
+  if (isLocked && role !== "admin") {
     return null;
   }
 
