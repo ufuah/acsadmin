@@ -37,6 +37,7 @@ const Table = () => {
   const [filterType, setFilterType] = useState("all");
   const [category, setCategory] = useState("all");
   const [selectedSale, setSelectedSale] = useState(null);
+  const [selectedSupplier, setSelectedSupplier] = useState("");
   const [dateRange, setDateRange] = useState({
     startDate: new Date(),
     endDate: addDays(new Date(), 7),
@@ -236,14 +237,75 @@ const Table = () => {
       });
   };
 
-  const handleStatusChange = async (customerName, salesId, newStatus) => {
+  // const handleStatusChange = async (customerName, salesId, newStatus) => {
+  //   try {
+  //     await updateSale(salesId, newStatus);
+  //     await fetchSales();
+  //     showNotification("Sale status updated successfully!", "success");
+  //   } catch (error) {
+  //     console.error("Failed to update status:", error);
+  //     showNotification("Failed to update sale status!", "error");
+  //   }
+  // };
+  const [salesLocked, setSalesLocked] = useState({}); // Track locked sales where status is 'supplied'
+
+  // const handleStatusChange = async (
+  //   customerName,
+  //   salesId,
+  //   newStatus,
+  //   supplier
+  // ) => {
+  //   try {
+  //     await updateSale(salesId, newStatus, supplier); // Pass supplier with the status update
+  //     await fetchSales();
+  //     showNotification(
+  //       "Sale status and supplier updated successfully!",
+  //       "success"
+  //     );
+  //   } catch (error) {
+  //     console.error("Failed to update status and supplier:", error);
+  //     showNotification("Failed to update sale status and supplier!", "error");
+  //   }
+  // };
+
+  // Confirmation and status update function
+  const handleStatusChange = async (
+    customerName,
+    salesId,
+    newStatus,
+    supplier
+  ) => {
+    // Check if the status is 'supplied' and ask for confirmation
+    if (newStatus === "supplied" && supplier) {
+      const confirm = window.confirm(
+        `Are you sure you want to mark this sale as "Supplied" with ${supplier}? This action cannot be undone.`
+      );
+
+      if (!confirm) {
+        return; // If the user cancels, stop the update process
+      }
+    }
+
+    // Proceed with updating the status if confirmed
     try {
-      await updateSale(salesId, newStatus);
-      await fetchSales();
-      showNotification("Sale status updated successfully!", "success");
+      // await updateSale(salesId, newStatus, supplier); // Pass the status and supplier to update the sale
+      await updateSale(salesId.toString(), newStatus, { supplier: selectedSupplier });
+
+      console.log(`Checking sale ID: ${salesId}`);
+
+      // If the status is updated to 'supplied', lock the status
+      if (newStatus === "supplied") {
+        setSalesLocked((prevState) => ({ ...prevState, [salesId]: true }));
+      }
+
+      await fetchSales(); // Refresh the sales data
+      showNotification(
+        "Sale status and supplier updated successfully!",
+        "success"
+      );
     } catch (error) {
-      console.error("Failed to update status:", error);
-      showNotification("Failed to update sale status!", "error");
+      console.error("Failed to update status and supplier:", error);
+      showNotification("Failed to update sale status and supplier!", "error");
     }
   };
 
@@ -392,7 +454,7 @@ const Table = () => {
                           </div>
 
                           <div className="status-dropdown">
-                            <select
+                            {/* <select
                               value={
                                 groupedOrders[customerName][salesId].status
                               }
@@ -406,8 +468,74 @@ const Table = () => {
                             >
                               <option value="pending">Pending</option>
                               <option value="supplied">Supplied</option>
+                            </select> */}
+
+                            {/* Disable status selection if the sale is locked */}
+                            <select
+                              value={
+                                groupedOrders[customerName][salesId].status
+                              }
+                              onChange={(e) => {
+                                handleStatusChange(
+                                  customerName,
+                                  groupedOrders[customerName][salesId],
+                                  e.target.value,
+                                  selectedSupplier // Pass the supplier value
+                                );
+                              }}
+                            >
+                              <option value="pending">Pending</option>
+                              <option value="supplied">Supplied</option>
                             </select>
                           </div>
+
+                          {/* <div className="formField">
+                            <label htmlFor="supplied_by" className="label">
+                              Supplied By
+                            </label>
+                            <select
+                              name="supplied_by"
+                              id="supplied_by"
+                              value={selectedSupplier} // The supplier value you are managing in state
+                              onChange={(e) =>
+                                setSelectedSupplier(e.target.value)
+                              } // Handle the change event
+                              className="input"
+                              required
+                            >
+                              <option value="">Select a supplier</option>
+
+                              <option value="Cyprian">Cyprian</option>
+                              <option value="Stelle">Stelle</option>
+                              <option value="Juliana">Juliana</option>
+                              <option value="Comfort">Comfort</option>
+                            </select>
+                          </div> */}
+
+                          {groupedOrders[customerName][salesId].status !==
+                            "supplied" && ( // Check the status
+                            <div className="formField">
+                              <label htmlFor="supplied_by" className="label">
+                                Supplied By
+                              </label>
+                              <select
+                                name="supplied_by"
+                                id="supplied_by"
+                                value={selectedSupplier} // The supplier value you are managing in state
+                                onChange={(e) =>
+                                  setSelectedSupplier(e.target.value)
+                                } // Handle the change event
+                                className="input"
+                                required
+                              >
+                                <option value="">Select a supplier</option>
+                                <option value="Cyprian">Cyprian</option>
+                                <option value="Stelle">Stelle</option>
+                                <option value="Juliana">Juliana</option>
+                                <option value="Comfort">Comfort</option>
+                              </select>
+                            </div>
+                          )}
 
                           <div className="supplied_">
                             <span>Supplied by:</span>
@@ -502,18 +630,6 @@ const Table = () => {
             ))}
         </div>
       </div>
-      {/* <SalesReceipt
-        ref={receiptRef}
-        items={sales?.items || []}
-        date={sales?.date || ""}
-        brand={sales?.brand || ""}
-        name={sales?.customer_name || ""}
-        number={sales?.customer_number || ""}
-        status={sales?.status || ""}
-        suppliedBy={sales?.suppliedBy || ""}
-        totalSaleValue={sales?.totalSaleValue || 0}
-        currentSalesId={sales?.sales_id || ""}
-      /> */}
 
       <div>
         <SalesReceipt

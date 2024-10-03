@@ -1278,9 +1278,6 @@
 
 // export default useStore;
 
-
-
-
 import { create } from "zustand";
 import axios from "axios";
 // import { jwtDecode } from "jwt-decode"; // corrected import
@@ -1308,7 +1305,10 @@ axios.interceptors.response.use(
     const originalRequest = error.config;
 
     // Check if the request is to login or refresh to avoid retry loop
-    if (originalRequest.url.includes('/login') || originalRequest.url.includes('/refresh')) {
+    if (
+      originalRequest.url.includes("/login") ||
+      originalRequest.url.includes("/refresh")
+    ) {
       return Promise.reject(error);
     }
 
@@ -1331,11 +1331,10 @@ axios.interceptors.response.use(
         }
       }
     }
-    
+
     return Promise.reject(error);
   }
 );
-
 
 // axios.interceptors.response.use(
 //   (response) => response,
@@ -1354,12 +1353,8 @@ axios.interceptors.response.use(
 //   }
 // );
 
-
-
 // const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
 const baseURL = "https://api.e-palateoasis.com";
-
-
 
 const useStore = create((set, get) => ({
   // State variables
@@ -1567,20 +1562,39 @@ const useStore = create((set, get) => ({
     }
   },
 
-    updateSale: async (id, newStatus) => {
+  // updateSale: async (salesId, newStatus, supplier) => {
+  //   try {
+  //     const url = `${baseURL}/api/sales/${salesId}/status`;
+  //     const response = await axios.put(url, { status: newStatus, supplier });
+  //     set((state) => ({
+  //       sales: state.sales.map((sale) =>
+  //         sale.id === id ? { ...sale, ...response.data } : sale
+  //       ),
+  //     }));
+  //   } catch (error) {
+  //     console.error("Failed to update sale:", error);
+  //   }
+  // },
+
+
+  updateSale: async (salesId, newStatus, supplier) => {
     try {
-      const url = `${baseURL}/api/sales/${id}/status`;
-      const response = await axios.put(url, { status: newStatus });
+      const url = `${baseURL}/api/sales/${salesId}/status`;
+  
+      // Send the new status and supplier in the request body
+      const response = await axios.put(url, { status: newStatus, supplier });
+  
+      // Update the state with the new data returned from the API
       set((state) => ({
         sales: state.sales.map((sale) =>
-          sale.id === id ? { ...sale, ...response.data } : sale
+          sale.id === salesId ? { ...sale, ...response.data } : sale
         ),
       }));
     } catch (error) {
       console.error("Failed to update sale:", error);
     }
   },
-
+  
   /** =============================== AUTH SECTION ============================ */
   signup: async (userData) => {
     try {
@@ -1606,7 +1620,7 @@ const useStore = create((set, get) => ({
   },
 
   /** =============================== EXCHANGE SECTION ============================ */
- 
+
   addExchange: async (exchangeData) => {
     try {
       const response = await axios.post(
