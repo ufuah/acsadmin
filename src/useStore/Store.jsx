@@ -1524,9 +1524,19 @@ const useStore = create((set, get) => ({
     }
   },
 
-  fetchSalesById: async (id) => {
+  // fetchSalesById: async (id) => {
+  //   try {
+  //     const response = await axios.get(`${baseURL}/api/sales/${id}`);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Failed to fetch sale by ID:", error);
+  //     return null;
+  //   }
+  // },
+
+  fetchSalesById: async (salesId) => {
     try {
-      const response = await axios.get(`${baseURL}/api/sales/${id}`);
+      const response = await axios.get(`${baseURL}/api/sales/${salesId}`);
       return response.data;
     } catch (error) {
       console.error("Failed to fetch sale by ID:", error);

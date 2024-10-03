@@ -29,230 +29,6 @@ import Calendar from "../calender/Calender";
 import { addDays } from "date-fns";
 
 const Table = () => {
-  // const { notification, showNotification } = UseNotifications();
-  // const [expandedCustomer, setExpandedCustomer] = useState(null);
-  // const [filteredSales, setFilteredSales] = useState([]);
-  // const [searchResults, setSearchResults] = useState([]);
-  // const [filterStatus, setFilterStatus] = useState("all");
-  // const [filterType, setFilterType] = useState("all");
-  // const [category, setCategory] = useState("all");
-  // const [selectedSale, setSelectedSale] = useState(null); // New state to store the selected sale
-  // const [dateRange, setDateRange] = useState({
-  //   startDate: new Date(),
-  //   endDate: addDays(new Date(), 7),
-  // });
-
-  // const printRef = useRef(null);
-  // const receiptRef = useRef({});
-
-  // const { sales, fetchSales, updateSale, fetchSalesById } = useStore(
-  //   (state) => ({
-  //     sales: state.sales,
-  //     fetchSales: state.fetchSales,
-  //     updateSale: state.updateSale,
-  //     fetchSaleById: state.fetchSaleById,
-  //   })
-  // );
-
-  // // const { sales, fetchSales, fetchSalesById } = useStore((state) => ({
-  // //   sales: state.sales,
-  // //   fetchSales: state.fetchSales,
-  // //   fetchSalesById: state.fetchSalesById,
-  // // }));
-
-  // const handlePrint = useReactToPrint({
-  //   content: () => printRef.current,
-  // });
-
-  // const handlePrintBySalesId = async (salesId) => {
-  //   try {
-  //     // Ensure fetchSalesById is accessible
-  //     const sale = await fetchSalesById(salesId);
-  //     // If the sale is successfully fetched, proceed to print
-  //     if (sale) {
-  //       const ref = receiptRef.current[salesId];
-  //       if (ref) {
-  //         printRef.current = ref;
-  //         handlePrint(); // Call the print function
-  //         setSelectedSale(null); // Reset after print
-  //       } else {
-  //         console.error(`No print reference found for salesId: ${salesId}`);
-  //       }
-  //       showNotification("Sale data fetched successfully!", "success");
-  //     } else {
-  //       showNotification("Sale not found!", "error");
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to fetch sale:", error);
-  //     showNotification("Failed to fetch sale data!", "error");
-  //   }
-  // };
-
-  // const toggleCustomerDetails = (customerName, salesId) => {
-  //   setExpandedCustomer((prev) =>
-  //     prev === `${customerName}-${salesId}`
-  //       ? null
-  //       : `${customerName}-${salesId}`
-  //   );
-  // };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       await fetchSales();
-  //       showNotification("Sales data fetched successfully!", "success");
-  //     } catch (error) {
-  //       console.error("Failed to fetch sales:", error);
-  //       showNotification("Failed to fetch sales data!", "error");
-  //     }
-  //   };
-  //   fetchData();
-  // }, [fetchSales, showNotification]); // Add showNotification here
-
-  // useEffect(() => {
-  //   applyFilters();
-  // }, [filterStatus, filterType, category, sales, applyFilters]); // Add applyFilters here
-
-  // const applyFilters = () => {
-  //   let filtered = [...sales]; // Start with full sales data
-
-  //   // Console log current filter values
-  //   console.log("Applying filters. Current filters:", {
-  //     filterStatus,
-  //     filterType,
-  //     category,
-  //     dateRange,
-  //   });
-
-  //   // Filter by status
-  //   if (filterStatus !== "all") {
-  //     filtered = filtered.filter((order) => order.status === filterStatus);
-  //   }
-
-  //   // Filter by type (sales, returns, exchange_and_return)
-  //   if (filterType !== "all") {
-  //     filtered = filtered.filter(
-  //       (order) => order.transaction_type === filterType
-  //     );
-  //   }
-
-  //   // Filter by category (roofing, water_collector, etc.)
-  //   if (category !== "all") {
-  //     filtered = filtered.filter((order) => order.category === category);
-  //   }
-
-  //   // Filter by date range
-  //   if (dateRange.startDate && dateRange.endDate) {
-  //     console.log("Filtering by date range:", dateRange);
-
-  //     filtered = filtered.filter((order) => {
-  //       const orderDate = new Date(order.date).setHours(0, 0, 0, 0); // Set time to 00:00:00
-  //       const startDate = new Date(dateRange.startDate).setHours(0, 0, 0, 0); // Set time to 00:00:00
-  //       const endDate = new Date(dateRange.endDate).setHours(23, 59, 59, 999); // Set time to the end of the day
-
-  //       // Check if the order date is within the start and end date range
-  //       const isWithinRange = orderDate >= startDate && orderDate <= endDate;
-  //       console.log(`Order ${order.sales_id} is within range: ${isWithinRange}`);
-
-  //       return isWithinRange;
-  //     });
-  //   }
-
-  //   console.log("Filtered sales after applying all filters:", filtered);
-  //   setFilteredSales(filtered);
-  //   setSearchResults(filtered); // Also update search results when filters change
-  // };
-
-  // console.log(sales.transaction_type);
-
-  // // Apply filters whenever filterStatus, filterType, or category changes
-  // useEffect(() => {
-  //   applyFilters();
-  // }, [filterStatus, filterType, category, sales]);
-
-  // // Group filtered sales by customer and salesId
-  // const groupedOrders = useMemo(() => {
-  //   const salesData = searchResults.length > 0 ? searchResults : filteredSales;
-
-  //   return salesData.reduce((acc, order) => {
-  //     if (!acc[order.customer_name]) {
-  //       acc[order.customer_name] = {};
-  //     }
-  //     if (!acc[order.customer_name][order.sales_id]) {
-  //       acc[order.customer_name][order.sales_id] = {
-  //         orders: [],
-  //         totalAmount: 0,
-  //         totalPaid: 0,
-  //         status: order.status,
-  //         suppliedBy: order.supplied_by || "",
-  //         customerImage: order.customer_image || logo,
-  //         orderId: order.sales_id,
-  //         date: order.date,
-  //         methodOfPayment: order.bank_or_pos,
-  //       };
-  //     }
-  //     acc[order.customer_name][order.sales_id].orders.push(order);
-  //     acc[order.customer_name][order.sales_id].totalAmount += order.amount_paid;
-  //     acc[order.customer_name][order.sales_id].totalPaid += order.amount_paid;
-  //     return acc;
-  //   }, {});
-  // }, [searchResults, filteredSales]);
-
-  // const handleFilterChange = (event) => {
-  //   setFilterType(event.target.value); // Filter by sales, returns, etc.
-  // };
-
-  // const handleCategoryChange = (event) => {
-  //   setCategory(event.target.value); // Filter by category
-  // };
-
-  // const handleCopyOrderId = (orderId) => {
-  //   navigator.clipboard
-  //     .writeText(orderId)
-  //     .then(() =>
-  //       showNotification(`Order ID ${orderId} copied to clipboard!`, "success")
-  //     )
-  //     .catch((err) => {
-  //       console.error("Failed to copy: ", err);
-  //       showNotification("Failed to copy Order ID!", "error");
-  //     });
-  // };
-
-  // const handleStatusChange = async (customerName, salesId, newStatus) => {
-  //   try {
-  //     await updateSale(salesId, newStatus);
-  //     await fetchSales(); // Refresh sales data
-  //     showNotification("Sale status updated successfully!", "success");
-  //   } catch (error) {
-  //     console.error("Failed to update status:", error);
-  //     showNotification("Failed to update sale status!", "error");
-  //   }
-  // };
-
-  // const handleSearch = (query) => {
-  //   if (query.trim() === "") {
-  //     setSearchResults(filteredSales);
-  //   } else {
-  //     const filteredResults = filteredSales.filter(
-  //       (order) =>
-  //         order.sales_id.toString().includes(query.toLowerCase()) ||
-  //         order.customer_name.toLowerCase().includes(query.toLowerCase())
-  //     );
-  //     setSearchResults(filteredResults);
-  //   }
-  // };
-
-  // const formatDate = (dateString) => {
-  //   const options = { year: "numeric", month: "long", day: "numeric" };
-  //   const date = new Date(dateString);
-  //   return date.toLocaleDateString(undefined, options);
-  // };
-
-  // // Handle status filtering via buttons
-  // const filterSalesByStatus = (status) => {
-  //   setFilterStatus(status); // Update status and trigger filtering
-  // };
-
   const { notification, showNotification } = UseNotifications();
   const [expandedCustomer, setExpandedCustomer] = useState(null);
   const [filteredSales, setFilteredSales] = useState([]);
@@ -269,12 +45,21 @@ const Table = () => {
   const printRef = useRef(null);
   const receiptRef = useRef({});
 
+  // const { sales, fetchSales, updateSale, fetchSalesById } = useStore(
+  //   (state) => ({
+  //     sales: state.sales,
+  //     fetchSales: state.fetchSales,
+  //     updateSale: state.updateSale,
+  //     fetchSaleById: state.fetchSaleById,
+  //   })
+  // );
+
   const { sales, fetchSales, updateSale, fetchSalesById } = useStore(
     (state) => ({
       sales: state.sales,
       fetchSales: state.fetchSales,
       updateSale: state.updateSale,
-      fetchSaleById: state.fetchSaleById,
+      fetchSalesById: state.fetchSalesById,
     })
   );
 
@@ -282,15 +67,44 @@ const Table = () => {
     content: () => printRef.current,
   });
 
+  // const handlePrintBySalesId = async (salesId) => {
+  //   try {
+  //     const sale = await fetchSalesById(salesId);
+  //     if (sale) {
+  //       const ref = receiptRef.current[salesId];
+  //       if (ref) {
+  //         printRef.current = ref;
+  //         handlePrint();
+  //         setSelectedSale(null);
+  //       } else {
+  //         console.error(`No print reference found for salesId: ${salesId}`);
+  //       }
+  //       showNotification("Sale data fetched successfully!", "success");
+  //     } else {
+  //       showNotification("Sale not found!", "error");
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to fetch sale:", error);
+  //     showNotification("Failed to fetch sale data!", "error");
+  //   }
+  // };
+
   const handlePrintBySalesId = async (salesId) => {
     try {
+      // Fetch the sales data by ID
       const sale = await fetchSalesById(salesId);
+
+      // Check if the sale data is fetched successfully
       if (sale) {
+        // Set the fetched sale data to selectedSale
+        setSelectedSale(sale);
+
+        // Get the reference to the SalesReceipt component
         const ref = receiptRef.current[salesId];
         if (ref) {
-          printRef.current = ref;
-          handlePrint();
-          setSelectedSale(null);
+          printRef.current = ref; // Assign the reference for printing
+          handlePrint(); // Call the print function
+          setSelectedSale(null); // Reset selectedSale if needed
         } else {
           console.error(`No print reference found for salesId: ${salesId}`);
         }
@@ -303,6 +117,8 @@ const Table = () => {
       showNotification("Failed to fetch sale data!", "error");
     }
   };
+
+  console.log("Selected Sale:", selectedSale);
 
   const toggleCustomerDetails = (customerName, salesId) => {
     setExpandedCustomer((prev) =>
@@ -338,7 +154,6 @@ const Table = () => {
     fetchData();
   }, [fetchSales]);
 
-  
   const applyFilters = useCallback(() => {
     let filtered = [...sales];
 
@@ -700,16 +515,16 @@ const Table = () => {
         currentSalesId={sales?.sales_id || ""}
       /> */}
 
-      <div style={{ display: "none" }}>
+      <div>
         <SalesReceipt
           ref={receiptRef}
           items={selectedSale?.items || []}
           date={selectedSale?.date || ""}
           brand={selectedSale?.brand || ""}
           name={selectedSale?.customer_name || ""}
-          number={selectedSale?.customer_number || ""}
+          number={selectedSale?.number || ""}
           status={selectedSale?.status || ""}
-          suppliedBy={selectedSale?.suppliedBy || ""}
+          suppliedBy={selectedSale?.supplied_by || ""}
           totalSaleValue={selectedSale?.totalSaleValue || 0}
           currentSalesId={selectedSale?.sales_id || ""}
         />

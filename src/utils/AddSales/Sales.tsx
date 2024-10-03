@@ -23,7 +23,6 @@ interface SaleItem {
   total_value: number;
 }
 
-
 interface FormState {
   date: string;
   customer_name: string;
@@ -46,7 +45,6 @@ interface StockItem {
 export default function AddSale() {
   // const now = new Date(); // Get the current date
   // const formattedDate = now.toISOString().split("T")[0]; // Format to YYYY-MM-DD
-
 
   const now = new Date();
   // const formattedDate = format(now, "dd/MM/yyyy"); // "16/09/2024"
@@ -355,7 +353,7 @@ export default function AddSale() {
                   required
                 />
               </div>
-              {form.status === "supplied" && (
+              {/* {form.status === "supplied" && (
                 <div className={styles.formField}>
                   <label htmlFor="supplied_by" className={styles.label}>
                     Supplied By
@@ -370,6 +368,29 @@ export default function AddSale() {
                     placeholder="Enter supplier"
                     required
                   />
+                </div>
+              )} */}
+
+              {form.status === "supplied" && (
+                <div className={styles.formField}>
+                  <label htmlFor="supplied_by" className={styles.label}>
+                    Supplied By
+                  </label>
+                  <select
+                    name="supplied_by"
+                    id="supplied_by"
+                    value={form.supplied_by}
+                    onChange={handleChange}
+                    className={styles.input}
+                    required
+                  >
+                    <option value="">Select a supplier</option>
+                    {/* Replace these with your actual supplier names */}
+                    <option value="Cyprian">Cyprian</option>
+                    <option value="Stelle">Stelle</option>
+                    <option value="Juliana">Juliana</option>
+                    <option value="Comfort">Comfort</option>
+                  </select>
                 </div>
               )}
             </div>
