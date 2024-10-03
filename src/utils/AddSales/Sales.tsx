@@ -80,6 +80,9 @@ export default function AddSale() {
   const printRef = useRef(null);
   const router = useRouter();
 
+   // New state to check if there are valid items
+   const [itemsAreValid, setItemsAreValid] = useState(false);
+
   const { notification, showNotification } = useNotifications(); // Use the notification hook
 
   useEffect(() => {
@@ -101,6 +104,39 @@ export default function AddSale() {
     );
     setFilteredStocks(dayToDayStocks);
   }, [stocks, category]);
+
+  // const handleChange = (
+  //   e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  //   index?: number
+  // ) => {
+  //   const { name, value } = e.target;
+
+  //   if (index !== undefined) {
+  //     const updatedItems = [...form.items];
+  //     updatedItems[index] = { ...updatedItems[index], [name]: value };
+
+  //     if (name === "amount_per_item" || name === "quantity_purchased") {
+  //       updatedItems[index].total_value =
+  //         updatedItems[index].amount_per_item *
+  //         updatedItems[index].quantity_purchased;
+  //     }
+
+  //     setForm((prevForm) => ({
+  //       ...prevForm,
+  //       items: updatedItems,
+  //       total_sale_value: updatedItems.reduce(
+  //         (sum, item) => sum + item.total_value,
+  //         0
+  //       ),
+  //     }));
+  //   } else {
+  //     setForm((prevForm) => ({
+  //       ...prevForm,
+  //       [name]: value,
+  //     }));
+  //   }
+  // };
+
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -126,6 +162,9 @@ export default function AddSale() {
           0
         ),
       }));
+
+      // Check if items are valid after change
+      checkItemsValidity(updatedItems);
     } else {
       setForm((prevForm) => ({
         ...prevForm,
@@ -133,6 +172,7 @@ export default function AddSale() {
       }));
     }
   };
+
 
   const handleCustomerChange = async (field: string, value: string) => {
     setForm((prevForm) => ({ ...prevForm, [field]: value })); // Update form state
@@ -148,6 +188,17 @@ export default function AddSale() {
       }
     }
   };
+  
+
+  // const handleAddItem = () => {
+  //   setForm((prevForm) => ({
+  //     ...prevForm,
+  //     items: [
+  //       ...prevForm.items,
+  //       { item: "", amount_per_item: 0, quantity_purchased: 0, total_value: 0 },
+  //     ],
+  //   }));
+  // };
 
   const handleAddItem = () => {
     setForm((prevForm) => ({
@@ -157,7 +208,22 @@ export default function AddSale() {
         { item: "", amount_per_item: 0, quantity_purchased: 0, total_value: 0 },
       ],
     }));
+
+    // Reset items validity after adding a new item
+    setItemsAreValid(false);
   };
+
+  // const handleRemoveItem = (index: number) => {
+  //   const updatedItems = form.items.filter((_, i) => i !== index);
+  //   setForm((prevForm) => ({
+  //     ...prevForm,
+  //     items: updatedItems,
+  //     total_sale_value: updatedItems.reduce(
+  //       (sum, item) => sum + item.total_value,
+  //       0
+  //     ),
+  //   }));
+  // };
 
   const handleRemoveItem = (index: number) => {
     const updatedItems = form.items.filter((_, i) => i !== index);
@@ -169,7 +235,23 @@ export default function AddSale() {
         0
       ),
     }));
+
+    // Check if items are valid after removing an item
+    checkItemsValidity(updatedItems);
   };
+
+ 
+  const checkItemsValidity = (items: SaleItem[]) => {
+    const isValid = items.every(
+      (item) =>
+        item.item !== "" && 
+        item.amount_per_item > 0 &&
+        item.quantity_purchased > 0
+    );
+    setItemsAreValid(isValid);
+  };
+
+
 
   const handlePreview = () => {
     if (!form.date || !form.customer_name || form.items.length === 0) {
@@ -182,9 +264,12 @@ export default function AddSale() {
     }
   };
 
+
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
   });
+
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -203,6 +288,8 @@ export default function AddSale() {
       );
       return;
     }
+
+    setIsLoading(true); // Set loading to true when submitting
 
     try {
       const response = await addSale(form);
@@ -224,8 +311,51 @@ export default function AddSale() {
         error instanceof Error ? error.message : "An unknown error occurred.";
       showNotification(errorMessage, "error");
       console.error("Submission error:", error);
+    } finally {
+      setIsLoading(false); // Reset loading state
     }
   };
+
+  // const handleSubmit = async (e: FormEvent) => {
+  //   e.preventDefault();
+
+  //   if (
+  //     !form.date ||
+  //     !form.customer_name ||
+  //     form.items.length === 0 ||
+  //     form.items.some(
+  //       (item) => item.amount_per_item <= 0 || item.quantity_purchased <= 0
+  //     )
+  //   ) {
+  //     showNotification(
+  //       "Please fill in all required fields and add valid item amounts.",
+  //       "error"
+  //     );
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await addSale(form);
+
+  //     if (response.error) {
+  //       showNotification(response.error, "error");
+  //     } else {
+  //       showNotification(response.message, "success");
+  //       setShowPreview(false);
+
+  //       if (printRef.current) {
+  //         handlePrint();
+  //       }
+
+  //       setForm(initialFormState);
+  //     }
+  //   } catch (error) {
+  //     const errorMessage =
+  //       error instanceof Error ? error.message : "An unknown error occurred.";
+  //     showNotification(errorMessage, "error");
+  //     console.error("Submission error:", error);
+  //   }
+  // };
 
   return (
     <div className={styles.container}>
@@ -514,7 +644,7 @@ export default function AddSale() {
           </div>
         </div>
       </form>
-      <button
+      {/* <button
         type="button"
         onClick={handlePreview}
         className={styles.previewButton}
@@ -525,9 +655,35 @@ export default function AddSale() {
         type="submit"
         className={styles.submitButton}
         onClick={handleSubmit}
+        disabled={isLoading} // Disable while loading
       >
-        Submit Sale
-      </button>
+        {isLoading ? "Submitting..." : "Submit Sale"}{" "}
+      </button> */}
+      {/* Conditionally render buttons based on items validity */}
+      {itemsAreValid && (
+          <div className={styles.buttonContainer}>
+            <button
+              type="button"
+              onClick={handlePreview}
+              className={styles.previewButton}
+              aria-label="Preview Sale"
+            >
+              Preview
+            </button>
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className={styles.submitButton}
+              disabled={isLoading}
+              aria-label="Submit Sale"
+            >
+              {isLoading ? "Submitting..." : "Submit Sale"}
+            </button>
+          </div>
+        )}
+
+      {/* Optionally show a loading spinner */}
+      {isLoading && <div className={styles.loadingSpinner}>Loading...</div>}
       {/* style={{ display: "none" }} */}
       <div style={{ display: "none" }}>
         <SalesReceipt

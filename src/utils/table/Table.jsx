@@ -1,6 +1,7 @@
 "use client";
 
 import React, {
+  Suspense,
   useCallback,
   useEffect,
   useMemo,
@@ -38,6 +39,7 @@ const Table = () => {
   const [category, setCategory] = useState("all");
   const [selectedSale, setSelectedSale] = useState(null);
   const [selectedSupplier, setSelectedSupplier] = useState("");
+  const [loading, setLoading] = useState(true); // New loading state
   const [dateRange, setDateRange] = useState({
     startDate: new Date(),
     endDate: addDays(new Date(), 7),
@@ -45,15 +47,6 @@ const Table = () => {
 
   const printRef = useRef(null);
   const receiptRef = useRef({});
-
-  // const { sales, fetchSales, updateSale, fetchSalesById } = useStore(
-  //   (state) => ({
-  //     sales: state.sales,
-  //     fetchSales: state.fetchSales,
-  //     updateSale: state.updateSale,
-  //     fetchSaleById: state.fetchSaleById,
-  //   })
-  // );
 
   const { sales, fetchSales, updateSale, fetchSalesById } = useStore(
     (state) => ({
@@ -67,28 +60,6 @@ const Table = () => {
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
   });
-
-  // const handlePrintBySalesId = async (salesId) => {
-  //   try {
-  //     const sale = await fetchSalesById(salesId);
-  //     if (sale) {
-  //       const ref = receiptRef.current[salesId];
-  //       if (ref) {
-  //         printRef.current = ref;
-  //         handlePrint();
-  //         setSelectedSale(null);
-  //       } else {
-  //         console.error(`No print reference found for salesId: ${salesId}`);
-  //       }
-  //       showNotification("Sale data fetched successfully!", "success");
-  //     } else {
-  //       showNotification("Sale not found!", "error");
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to fetch sale:", error);
-  //     showNotification("Failed to fetch sale data!", "error");
-  //   }
-  // };
 
   const handlePrintBySalesId = async (salesId) => {
     try {
@@ -129,19 +100,6 @@ const Table = () => {
     );
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       await fetchSales();
-  //       showNotification("Sales data fetched successfully!", "success");
-  //     } catch (error) {
-  //       console.error("Failed to fetch sales:", error);
-  //       showNotification("Failed to fetch sales data!", "error");
-  //     }
-  //   };
-  //   fetchData();
-  // }, [fetchSales, showNotification]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -150,6 +108,22 @@ const Table = () => {
       } catch (error) {
         console.error("Failed to fetch sales:", error);
         showNotification("Failed to fetch sales data!", "error");
+      }
+    };
+    fetchData();
+  }, [fetchSales]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true); // Start loading
+      try {
+        await fetchSales();
+        showNotification("Sales data fetched successfully!", "success");
+      } catch (error) {
+        console.error("Failed to fetch sales:", error);
+        showNotification("Failed to fetch sales data!", "error");
+      } finally {
+        setLoading(false); // Stop loading
       }
     };
     fetchData();
@@ -237,38 +211,8 @@ const Table = () => {
       });
   };
 
-  // const handleStatusChange = async (customerName, salesId, newStatus) => {
-  //   try {
-  //     await updateSale(salesId, newStatus);
-  //     await fetchSales();
-  //     showNotification("Sale status updated successfully!", "success");
-  //   } catch (error) {
-  //     console.error("Failed to update status:", error);
-  //     showNotification("Failed to update sale status!", "error");
-  //   }
-  // };
   const [salesLocked, setSalesLocked] = useState({}); // Track locked sales where status is 'supplied'
 
-  // const handleStatusChange = async (
-  //   customerName,
-  //   salesId,
-  //   newStatus,
-  //   supplier
-  // ) => {
-  //   try {
-  //     await updateSale(salesId, newStatus, supplier); // Pass supplier with the status update
-  //     await fetchSales();
-  //     showNotification(
-  //       "Sale status and supplier updated successfully!",
-  //       "success"
-  //     );
-  //   } catch (error) {
-  //     console.error("Failed to update status and supplier:", error);
-  //     showNotification("Failed to update sale status and supplier!", "error");
-  //   }
-  // };
-
-  // Confirmation and status update function
   const handleStatusChange = async (
     customerName,
     salesId,
@@ -289,7 +233,9 @@ const Table = () => {
     // Proceed with updating the status if confirmed
     try {
       // await updateSale(salesId, newStatus, supplier); // Pass the status and supplier to update the sale
-      await updateSale(salesId.toString(), newStatus, { supplier: selectedSupplier });
+      await updateSale(salesId.toString(), newStatus, {
+        supplier: selectedSupplier,
+      });
 
       console.log(`Checking sale ID: ${salesId}`);
 
@@ -332,6 +278,9 @@ const Table = () => {
     setFilterStatus(status);
   };
 
+  // A loading fallback UI
+  const LoadingIndicator = () => <div className="loading"><span>Loading...</span></div>;
+
   return (
     <div className="container">
       <Notification notification={notification} />
@@ -348,9 +297,9 @@ const Table = () => {
                 <select className="sortby-select" onChange={handleFilterChange}>
                   <option value="all">All</option>
                   <option value="sales">Sales</option>
-                  <option value="returns">Returns</option>
-                  <option value="exchange_and_return">
-                    Exchanges and Returns
+                  <option value="return">Return</option>
+                  <option value="exchange">
+                    Exchanges
                   </option>
                 </select>
               </div>
@@ -406,232 +355,218 @@ const Table = () => {
         </div>
 
         <div className="table_body">
-          {Object.keys(groupedOrders).length > 0 &&
-            Object.keys(groupedOrders).map((customerName) => (
-              <div key={customerName} className="customer-section">
-                {Object.keys(groupedOrders[customerName]).map((salesId) => (
-                  <div key={salesId} className="sales-section">
-                    <div
-                      className="customer-header"
-                      onClick={() =>
-                        toggleCustomerDetails(customerName, salesId)
-                      }
-                    >
-                      <div className="pictureBox">
-                        <div className="brandsales">
-                          <Image
-                            src={
-                              groupedOrders[customerName][salesId].customerImage
-                            }
-                            alt="customer"
-                            width={50}
-                            height={50}
-                          />
-                        </div>
+          <Suspense fallback={<LoadingIndicator />}>
+            {loading ? (
+              <LoadingIndicator />
+            ) : (
+              <>
+                {Object.keys(groupedOrders).length > 0 &&
+                  Object.keys(groupedOrders).map((customerName) => (
+                    <div key={customerName} className="customer-section">
+                      {Object.keys(groupedOrders[customerName]).map(
+                        (salesId) => (
+                          <div key={salesId} className="sales-section">
+                            <div
+                              className="customer-header"
+                              onClick={() =>
+                                toggleCustomerDetails(customerName, salesId)
+                              }
+                            >
+                              <div className="pictureBox">
+                                <div className="brandsales">
+                                  <Image
+                                    src={
+                                      groupedOrders[customerName][salesId]
+                                        .customerImage
+                                    }
+                                    alt="customer"
+                                    width={50}
+                                    height={50}
+                                  />
+                                </div>
 
-                        <h3>{customerName}</h3>
-                      </div>
+                                <h3>{customerName}</h3>
+                              </div>
 
-                      <div className="customer-info">
-                        <div className="left">
-                          <div className="orderid">
-                            <p>Order ID:</p>
-                            <div className="order-id">
-                              <span>
-                                {groupedOrders[customerName][
-                                  salesId
-                                ].orderId.substring(0, 8)}
-                              </span>
-                              <FontAwesomeIcon
-                                icon={faCopy}
-                                onClick={() =>
-                                  handleCopyOrderId(
-                                    groupedOrders[customerName][salesId].orderId
-                                  )
-                                }
-                              />
+                              <div className="customer-info">
+                                <div className="left">
+                                  <div className="orderid">
+                                    <p>Order ID:</p>
+                                    <div className="order-id">
+                                      <span>
+                                        {groupedOrders[customerName][
+                                          salesId
+                                        ].orderId?.substring(0, 8)}
+                                      </span>
+                                      <FontAwesomeIcon
+                                        icon={faCopy}
+                                        onClick={() =>
+                                          handleCopyOrderId(
+                                            groupedOrders[customerName][salesId]
+                                              .orderId
+                                          )
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div className="status-dropdown">
+                                    <select
+                                      value={
+                                        groupedOrders[customerName][salesId]
+                                          .status
+                                      }
+                                      onChange={(e) => {
+                                        handleStatusChange(
+                                          customerName,
+                                          groupedOrders[customerName][salesId],
+                                          e.target.value,
+                                          selectedSupplier // Pass the supplier value
+                                        );
+                                      }}
+                                    >
+                                      <option value="pending">Pending</option>
+                                      <option value="supplied">Supplied</option>
+                                    </select>
+                                  </div>
+
+                                  {groupedOrders[customerName][salesId]
+                                    .status !== "supplied" && ( // Check the status
+                                    <div className="formField">
+                                      <label
+                                        htmlFor="supplied_by"
+                                        className="label"
+                                      >
+                                        Supplied By
+                                      </label>
+                                      <select
+                                        name="supplied_by"
+                                        id="supplied_by"
+                                        value={selectedSupplier} // The supplier value you are managing in state
+                                        onChange={(e) =>
+                                          setSelectedSupplier(e.target.value)
+                                        } // Handle the change event
+                                        className="input"
+                                        required
+                                      >
+                                        <option value="">
+                                          Select a supplier
+                                        </option>
+                                        <option value="Cyprian">Cyprian</option>
+                                        <option value="Stelle">Stelle</option>
+                                        <option value="Juliana">Juliana</option>
+                                        <option value="Comfort">Comfort</option>
+                                      </select>
+                                    </div>
+                                  )}
+
+                                  <div className="supplied_">
+                                    <span>Supplied by:</span>
+                                    <p>
+                                      {
+                                        groupedOrders[customerName][salesId]
+                                          .suppliedBy
+                                      }
+                                    </p>
+                                  </div>
+
+                                  <div
+                                    className="print"
+                                    onClick={() =>
+                                      handlePrintBySalesId(salesId)
+                                    }
+                                  >
+                                    <FontAwesomeIcon icon={faFilePdf} />
+                                  </div>
+                                </div>
+
+                                <div className="right">
+                                  <div className="sumTotal">
+                                    <p>
+                                      Total Amount:
+                                      <CurrencyFormatter
+                                        amount={
+                                          groupedOrders[customerName][salesId]
+                                            .totalAmount
+                                        }
+                                      />
+                                    </p>
+                                    <p>
+                                      Amount Paid:
+                                      <CurrencyFormatter
+                                        amount={
+                                          groupedOrders[customerName][salesId]
+                                            .totalPaid
+                                        }
+                                      />
+                                    </p>
+
+                                    <p>
+                                      Date:
+                                      {formatDate(
+                                        groupedOrders[customerName][salesId]
+                                          .date
+                                      )}
+                                    </p>
+                                    <p>
+                                      Payment Method:
+                                      {
+                                        groupedOrders[customerName][salesId]
+                                          .methodOfPayment
+                                      }
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="status-dropdown">
-                            {/* <select
-                              value={
-                                groupedOrders[customerName][salesId].status
-                              }
-                              onChange={(e) =>
-                                handleStatusChange(
-                                  customerName,
-                                  groupedOrders[customerName][salesId].orderId,
-                                  e.target.value
-                                )
-                              }
-                            >
-                              <option value="pending">Pending</option>
-                              <option value="supplied">Supplied</option>
-                            </select> */}
-
-                            {/* Disable status selection if the sale is locked */}
-                            <select
-                              value={
-                                groupedOrders[customerName][salesId].status
-                              }
-                              onChange={(e) => {
-                                handleStatusChange(
-                                  customerName,
-                                  groupedOrders[customerName][salesId],
-                                  e.target.value,
-                                  selectedSupplier // Pass the supplier value
-                                );
-                              }}
-                            >
-                              <option value="pending">Pending</option>
-                              <option value="supplied">Supplied</option>
-                            </select>
-                          </div>
-
-                          {/* <div className="formField">
-                            <label htmlFor="supplied_by" className="label">
-                              Supplied By
-                            </label>
-                            <select
-                              name="supplied_by"
-                              id="supplied_by"
-                              value={selectedSupplier} // The supplier value you are managing in state
-                              onChange={(e) =>
-                                setSelectedSupplier(e.target.value)
-                              } // Handle the change event
-                              className="input"
-                              required
-                            >
-                              <option value="">Select a supplier</option>
-
-                              <option value="Cyprian">Cyprian</option>
-                              <option value="Stelle">Stelle</option>
-                              <option value="Juliana">Juliana</option>
-                              <option value="Comfort">Comfort</option>
-                            </select>
-                          </div> */}
-
-                          {groupedOrders[customerName][salesId].status !==
-                            "supplied" && ( // Check the status
-                            <div className="formField">
-                              <label htmlFor="supplied_by" className="label">
-                                Supplied By
-                              </label>
-                              <select
-                                name="supplied_by"
-                                id="supplied_by"
-                                value={selectedSupplier} // The supplier value you are managing in state
-                                onChange={(e) =>
-                                  setSelectedSupplier(e.target.value)
-                                } // Handle the change event
-                                className="input"
-                                required
-                              >
-                                <option value="">Select a supplier</option>
-                                <option value="Cyprian">Cyprian</option>
-                                <option value="Stelle">Stelle</option>
-                                <option value="Juliana">Juliana</option>
-                                <option value="Comfort">Comfort</option>
-                              </select>
-                            </div>
-                          )}
-
-                          <div className="supplied_">
-                            <span>Supplied by:</span>
-                            <p>
-                              {groupedOrders[customerName][salesId].suppliedBy}
-                            </p>
-                          </div>
-
-                          <div
-                            className="print"
-                            onClick={() => handlePrintBySalesId(salesId)}
-                          >
-                            <FontAwesomeIcon icon={faFilePdf} />
-                          </div>
-                        </div>
-
-                        <div className="right">
-                          <div className="sumTotal">
-                            <p>
-                              Total Amount:
-                              <CurrencyFormatter
-                                amount={
-                                  groupedOrders[customerName][salesId]
-                                    .totalAmount
-                                }
-                              />
-                            </p>
-                            <p>
-                              Amount Paid:
-                              <CurrencyFormatter
-                                amount={
-                                  groupedOrders[customerName][salesId].totalPaid
-                                }
-                              />
-                            </p>
-
-                            <p>
-                              Date:
-                              {formatDate(
-                                groupedOrders[customerName][salesId].date
-                              )}
-                            </p>
-                            <p>
-                              Payment Method:
-                              {
-                                groupedOrders[customerName][salesId]
-                                  .methodOfPayment
-                              }
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {expandedCustomer === `${customerName}-${salesId}` && (
-                      <div className="order-details">
-                        <table>
-                          <thead>
-                            <tr>
-                              <th>Item</th>
-                              <th>Amount per Item</th>
-                              <th>Quantity</th>
-                              <th>Total</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {groupedOrders[customerName][salesId]?.orders.map(
-                              (order, index) => (
-                                <tr key={index}>
-                                  <td>{order.item}</td>
-                                  <td>
-                                    <CurrencyFormatter
-                                      amount={order.amount_per_item}
-                                    />
-                                  </td>
-                                  <td>{order.quantity_purchased}</td>
-                                  <td>
-                                    <CurrencyFormatter
-                                      amount={order.amount_paid}
-                                    />
-                                  </td>
-                                </tr>
-                              )
+                            {expandedCustomer ===
+                              `${customerName}-${salesId}` && (
+                              <div className="order-details">
+                                <table>
+                                  <thead>
+                                    <tr>
+                                      <th>Item</th>
+                                      <th>Amount per Item</th>
+                                      <th>Quantity</th>
+                                      <th>Total</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {groupedOrders[customerName][
+                                      salesId
+                                    ]?.orders.map((order, index) => (
+                                      <tr key={index}>
+                                        <td>{order.item}</td>
+                                        <td>
+                                          <CurrencyFormatter
+                                            amount={order.amount_per_item}
+                                          />
+                                        </td>
+                                        <td>{order.quantity_purchased}</td>
+                                        <td>
+                                          <CurrencyFormatter
+                                            amount={order.amount_paid}
+                                          />
+                                        </td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
                             )}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ))}
+                          </div>
+                        )
+                      )}
+                    </div>
+                  ))}
+              </>
+            )}
+          </Suspense>
         </div>
       </div>
 
-      <div>
+      <div style={{ display: "none" }}>
         <SalesReceipt
           ref={receiptRef}
           items={selectedSale?.items || []}
