@@ -536,11 +536,12 @@ const ProtectedRoute = ({ children }) => {
       }
 
       // Redirect if the system is locked and user is not admin or manager
-      if (isLocked && role !== "admin" && role !== "manager") {
+      if (isLocked && role !== "admin") {
         console.log("System is locked for non-admin/manager users. Redirecting to /locked.");
         router.push("/locked");
         return;
       }
+      // && role !== "manager"
 
       // Manage access for the manager role
       if (role === "manager") {

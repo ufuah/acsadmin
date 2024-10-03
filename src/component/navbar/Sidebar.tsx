@@ -114,6 +114,17 @@ const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
+
+  const logout = useStore((state) => state.logout); // Get the logout function from the store
+   // For programmatic navigation
+
+  const handleLogout = async () => {
+    await logout(); // Call the logout function
+    router.push("/login")
+  };
+
+
+
   const { isLocked, role, checkLock, isAuthenticated, loadUserFromStorage } =
     useStore((state) => ({
       isLocked: state.isLocked,
@@ -188,6 +199,12 @@ const Sidebar: React.FC = () => {
               </li>
             ))}
           </ul>
+
+          <li>
+          <button onClick={handleLogout} className={Styles.logoutbtn}>
+            Logout
+          </button>
+        </li>
         </div>
 
         <div className={Styles.profile}>{/* Add profile section here */}</div>

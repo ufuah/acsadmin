@@ -116,3 +116,17 @@
 
   background: var(--main-brand-color);
 }
+
+.logout_btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.logout_btn:hover {
+  background-color: #d32f2f;
+}
