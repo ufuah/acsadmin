@@ -1567,6 +1567,20 @@ const useStore = create((set, get) => ({
     }
   },
 
+    updateSale: async (id, newStatus) => {
+    try {
+      const url = `${baseURL}/api/sales/${id}/status`;
+      const response = await axios.put(url, { status: newStatus });
+      set((state) => ({
+        sales: state.sales.map((sale) =>
+          sale.id === id ? { ...sale, ...response.data } : sale
+        ),
+      }));
+    } catch (error) {
+      console.error("Failed to update sale:", error);
+    }
+  },
+
   /** =============================== AUTH SECTION ============================ */
   signup: async (userData) => {
     try {
