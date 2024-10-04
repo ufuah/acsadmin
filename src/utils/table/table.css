@@ -898,7 +898,7 @@ td img {
   }
 }
 
-@media screen and (max-width: 414px) {
+/* @media screen and (max-width: 414px) {
   .table_container {
     width: -webkit-fill-available;
   }
@@ -910,9 +910,9 @@ td img {
     padding: 4px 12px;
     font-size: 14px;
 }
-}
+} */
 
-@media screen and (max-width: 390px) {
+@media screen and (max-width: 414px) {
   .table_container {
     width: -webkit-fill-available;
   }

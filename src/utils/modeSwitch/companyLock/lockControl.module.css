@@ -38,10 +38,10 @@
     justify-content: center;
   }
 }
-@media (max-width: 390px) {
+@media (max-width: 414px) {
   .container {
     top: 14px;
-    left: 316px;
+    left: 330px;
     width: 40px;
     height: 40px;
   }
