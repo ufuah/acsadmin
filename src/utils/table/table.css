@@ -887,23 +887,21 @@ td img {
     font-size: 14px;
   }
 
-
   .order-id {
     font-size: 14px;
-}
+  }
 
-th, td {
-  padding: 4px 12px;
-  font-size: 13px;
-
-}
+  th,
+  td {
+    padding: 4px 12px;
+    font-size: 13px;
+  }
 }
 
 @media screen and (max-width: 414px) {
   .table_container {
-    width: 386px;
+    width: -webkit-fill-available;
   }
-
   table {
     width: unset;
   }
