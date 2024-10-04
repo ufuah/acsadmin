@@ -1508,7 +1508,7 @@ const useStore = create((set, get) => ({
   /** =============================== SALES SECTION ============================ */
   fetchSales: async () => {
     try {
-      const response = await axios.get(`${baseURL}/api/sales/`);
+      const response = await axios.get(`${baseURL}/api/transations/sales`);
       console.log("Fetched Sales Data:", response.data);
       set({ sales: response.data.sales });
     } catch (error) {
@@ -1531,7 +1531,7 @@ const useStore = create((set, get) => ({
 
   fetchSalesById: async (salesId) => {
     try {
-      const response = await axios.get(`${baseURL}/api/sales/${salesId}`);
+      const response = await axios.get(`${baseURL}/api/transations/sales/${salesId}`);
       return response.data;
     } catch (error) {
       console.error("Failed to fetch sale by ID:", error);
@@ -1541,7 +1541,7 @@ const useStore = create((set, get) => ({
 
   addSale: async (sale) => {
     try {
-      const response = await axios.post(`${baseURL}/api/sales/add`, sale);
+      const response = await axios.post(`${baseURL}/api/transations/sales/add`, sale);
       const { sales_id } = response.data;
 
       if (sales_id) {
@@ -1576,14 +1576,13 @@ const useStore = create((set, get) => ({
   //   }
   // },
 
-
   updateSale: async (salesId, newStatus, supplier) => {
     try {
-      const url = `${baseURL}/api/sales/${salesId}/status`;
-  
+      const url = `${baseURL}/api/transations/sales/${salesId}/status`;
+
       // Send the new status and supplier in the request body
       const response = await axios.put(url, { status: newStatus, supplier });
-  
+
       // Update the state with the new data returned from the API
       set((state) => ({
         sales: state.sales.map((sale) =>
@@ -1594,7 +1593,119 @@ const useStore = create((set, get) => ({
       console.error("Failed to update sale:", error);
     }
   },
-  
+
+  /** =============================== RETURN SECTION ============================ */
+
+  fetchReturns: async () => {
+    try {
+      const response = await axios.get(`${baseURL}/api/transations/returns`); // Adjust the API endpoint as needed
+      console.log("Fetched Returns Data:", response.data);
+      set({ returns: response.data.returns }); // Adjust based on response structure
+    } catch (error) {
+      console.error(
+        "Failed to fetch returns:",
+        error.response?.data || error.message
+      );
+    }
+  },
+
+  addReturn: async (returnData) => {
+    try {
+      const response = await axios.post(
+        `${baseURL}/api/transations/returns/add`, // Adjust the API endpoint as needed
+        returnData
+      );
+      set((state) => ({
+        returns: [...state.returns, response.data],
+      }));
+    } catch (error) {
+      console.error("Failed to add return:", error);
+    }
+  },
+
+  updateReturn: async (returnId, updatedData) => {
+    try {
+      const response = await axios.put(
+        `${baseURL}/api/transations/returns/${returnId}`, // Adjust the API endpoint as needed
+        updatedData
+      );
+      set((state) => ({
+        returns: state.returns.map((r) =>
+          r.id === returnId ? { ...r, ...response.data } : r
+        ),
+      }));
+    } catch (error) {
+      console.error("Failed to update return:", error);
+    }
+  },
+
+  deleteReturn: async (returnId) => {
+    try {
+      await axios.delete(`${baseURL}/api/transations/returns/${returnId}`); // Adjust the API endpoint as needed
+      set((state) => ({
+        returns: state.returns.filter((r) => r.id !== returnId),
+      }));
+    } catch (error) {
+      console.error("Failed to delete return:", error);
+    }
+  },
+
+  /** =============================== EXCHANGE SECTION ============================ */
+
+  fetchExchanges: async () => {
+    try {
+      const response = await axios.get(`${baseURL}/api/transations/exchanges`); // Adjust the API endpoint as needed
+      console.log("Fetched Exchanges Data:", response.data);
+      set({ exchanges: response.data.exchanges}); // Adjust based on response structure
+    } catch (error) {
+      console.error(
+        "Failed to fetch exchanges:",
+        error.response?.data || error.message
+      );
+    }
+  },
+
+  addExchange: async (exchangeData) => {
+    try {
+      const response = await axios.post(
+        `${baseURL}/api/transations/exchanges/add`, // Adjust the API endpoint as needed
+        exchangeData
+      );
+      set((state) => ({
+        exchanges: [...state.exchanges, response.data],
+      }));
+    } catch (error) {
+      console.error("Failed to add exchange:", error);
+    }
+  },
+
+  updateExchange: async (exchangeId, updatedData) => {
+    try {
+      const response = await axios.put(
+        `${baseURL}/api/transations/exchanges/${exchangeId}`, // Adjust the API endpoint as needed
+        updatedData
+      );
+      set((state) => ({
+        exchanges: state.exchanges.map((e) =>
+          e.id === exchangeId ? { ...e, ...response.data } : e
+        ),
+      }));
+    } catch (error) {
+      console.error("Failed to update exchange:", error);
+    }
+  },
+
+  deleteExchange: async (exchangeId) => {
+    try {
+      await axios.delete(`${baseURL}/api/transations/exchanges/${exchangeId}`); // Adjust the API endpoint as needed
+      set((state) => ({
+        exchanges: state.exchanges.filter((e) => e.id !== exchangeId),
+      }));
+    } catch (error) {
+      console.error("Failed to delete exchange:", error);
+    }
+  },
+
   /** =============================== AUTH SECTION ============================ */
   signup: async (userData) => {
     try {
@@ -1608,7 +1719,7 @@ const useStore = create((set, get) => ({
   addReturn: async (returnData) => {
     try {
       const response = await axios.post(
-        `${baseURL}/api/sales/return`,
+        `${baseURL}/api/transations/return`,
         returnData
       );
       set((state) => ({
@@ -1624,7 +1735,7 @@ const useStore = create((set, get) => ({
   addExchange: async (exchangeData) => {
     try {
       const response = await axios.post(
-        `${baseURL}/api/sales/exchange`,
+        `${baseURL}/api/transations/exchange`,
         exchangeData
       );
       set((state) => {

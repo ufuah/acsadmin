@@ -1,6 +1,10 @@
 "use client";
 
-import React, {
+import { faCopy, faFilePdf, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { addDays } from "date-fns";
+import Image from "next/image";
+import {
   Suspense,
   useCallback,
   useEffect,
@@ -8,28 +12,20 @@ import React, {
   useRef,
   useState,
 } from "react";
-import Image from "next/image";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCopy,
-  faFilePdf,
-  faNairaSign,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { useReactToPrint } from "react-to-print";
+import logo from "../../../public/logo2.jpg";
+import useStore from "../../useStore/Store";
 import { generatePdf } from "../../utils/GeneratePdf/generatePdf";
-import CurrencyFormatter from "../../utils/currency/Currency";
 import UseNotifications from "../../utils/Middlewares/Notifications/UseNotifications";
 import Notification from "../../utils/Middlewares/Notifications/notification/Notification";
-import SearchBox from "../searchExtr/searchbar";
-import useStore from "../../useStore/Store";
-import "./table.css"; // Ensure your CSS is updated
-import logo from "../../../public/logo2.jpg";
-import SalesReceipt from "../receipt/SalesReceipt";
-import { useReactToPrint } from "react-to-print";
+import CurrencyFormatter from "../../utils/currency/Currency";
 import Calendar from "../calender/Calender";
-import { addDays } from "date-fns";
+import SalesReceipt from "../receipt/SalesReceipt";
+import SearchBox from "../searchExtr/searchbar";
+import "./table.css"; // Ensure your CSS is updated
 
 const Table = () => {
+ 
   const { notification, showNotification } = UseNotifications();
   const [expandedCustomer, setExpandedCustomer] = useState(null);
   const [filteredSales, setFilteredSales] = useState([]);
@@ -39,7 +35,7 @@ const Table = () => {
   const [category, setCategory] = useState("all");
   const [selectedSale, setSelectedSale] = useState(null);
   const [selectedSupplier, setSelectedSupplier] = useState("");
-  const [loading, setLoading] = useState(true); // New loading state
+  const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState({
     startDate: new Date(),
     endDate: addDays(new Date(), 7),
@@ -48,14 +44,29 @@ const Table = () => {
   const printRef = useRef(null);
   const receiptRef = useRef({});
 
-  const { sales, fetchSales, updateSale, fetchSalesById } = useStore(
-    (state) => ({
-      sales: state.sales,
-      fetchSales: state.fetchSales,
-      updateSale: state.updateSale,
-      fetchSalesById: state.fetchSalesById,
-    })
-  );
+  // Added new state for transaction type
+  const [selectedTransactionType, setSelectedTransactionType] =
+    useState("sales");
+
+  const {
+    sales,
+    returns,
+    exchanges,
+    fetchExchanges,
+    fetchReturns,
+    fetchSales,
+    updateSale,
+    fetchSalesById,
+  } = useStore((state) => ({
+    sales: state.sales,
+    returns: state.returns,
+    fetchReturns: state.fetchReturns,
+    exchanges: state.exchanges,
+    fetchExchanges: state.fetchExchanges,
+    fetchSales: state.fetchSales,
+    updateSale: state.updateSale,
+    fetchSalesById: state.fetchSalesById,
+  }));
 
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
@@ -63,20 +74,14 @@ const Table = () => {
 
   const handlePrintBySalesId = async (salesId) => {
     try {
-      // Fetch the sales data by ID
       const sale = await fetchSalesById(salesId);
-
-      // Check if the sale data is fetched successfully
       if (sale) {
-        // Set the fetched sale data to selectedSale
         setSelectedSale(sale);
-
-        // Get the reference to the SalesReceipt component
         const ref = receiptRef.current[salesId];
         if (ref) {
-          printRef.current = ref; // Assign the reference for printing
-          handlePrint(); // Call the print function
-          setSelectedSale(null); // Reset selectedSale if needed
+          printRef.current = ref;
+          handlePrint();
+          setSelectedSale(null);
         } else {
           console.error(`No print reference found for salesId: ${salesId}`);
         }
@@ -90,8 +95,6 @@ const Table = () => {
     }
   };
 
-  console.log("Selected Sale:", selectedSale);
-
   const toggleCustomerDetails = (customerName, salesId) => {
     setExpandedCustomer((prev) =>
       prev === `${customerName}-${salesId}`
@@ -100,73 +103,168 @@ const Table = () => {
     );
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await fetchSales();
-        showNotification("Sales data fetched successfully!", "success");
-      } catch (error) {
-        console.error("Failed to fetch sales:", error);
-        showNotification("Failed to fetch sales data!", "error");
-      }
-    };
-    fetchData();
-  }, [fetchSales]);
+ 
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // Start loading
       try {
-        await fetchSales();
-        showNotification("Sales data fetched successfully!", "success");
+        console.log("Fetching returns..."); // Add this log
+        await fetchSales(); // Fetch sales data
+        await fetchReturns(); // Fetch returns data
+        await fetchExchanges(); // Fetch exchanges data
+
+        console.log("sales Data:", sales); // Ensure this line logs the data after fetching
+        console.log("Returns Data:", returns); // Ensure this line logs the data after fetching
+        console.log("exchange Data:", exchanges); // Ensure this line logs the data after fetching
+        showNotification("Data fetched successfully!", "success");
       } catch (error) {
-        console.error("Failed to fetch sales:", error);
-        showNotification("Failed to fetch sales data!", "error");
+        console.error("Failed to fetch data:", error);
+        showNotification("Failed to fetch data!", "error");
       } finally {
         setLoading(false); // Stop loading
       }
     };
     fetchData();
-  }, [fetchSales]);
+  }, [fetchSales, fetchReturns, fetchExchanges]);
 
+  useEffect(() => {
+    const testFetchReturns = async () => {
+      try {
+        const returnsData = await fetchReturns();
+        console.log("Fetched Returns Data:", returnsData); // Log the raw return data here
+      } catch (error) {
+        console.error("Error fetching returns:", error);
+      }
+    };
+    testFetchReturns();
+  }, []);
+
+  // const applyFilters = useCallback(() => {
+  //   let filtered = [];
+
+  //   // Select data based on the selected transaction type
+  //   if (selectedTransactionType === "sales") {
+  //     filtered = [...sales];
+  //   } else if (selectedTransactionType === "returns") {
+  //     filtered = [...returns];
+  //   } else if (selectedTransactionType === "exchanges") {
+  //     filtered = [...exchanges];
+  //   }
+
+  //   if (filterStatus !== "all") {
+  //     filtered = filtered.filter((order) => order.status === filterStatus);
+  //   }
+
+  //   if (filterType !== "all") {
+  //     filtered = filtered.filter(
+  //       (order) => order.transaction_type === filterType
+  //     );
+  //   }
+
+  //   if (category !== "all") {
+  //     filtered = filtered.filter((order) => order.category === category);
+  //   }
+
+  //   if (dateRange.startDate && dateRange.endDate) {
+  //     filtered = filtered.filter((order) => {
+  //       const orderDate = new Date(order.date).setHours(0, 0, 0, 0);
+  //       const startDate = new Date(dateRange.startDate).setHours(0, 0, 0, 0);
+  //       const endDate = new Date(dateRange.endDate).setHours(23, 59, 59, 999);
+  //       return orderDate >= startDate && orderDate <= endDate;
+  //     });
+  //   }
+
+  //   setFilteredSales(filtered);
+  //   setSearchResults(filtered);
+  // }, [
+  //   filterStatus,
+  //   filterType,
+  //   category,
+  //   dateRange,
+  //   sales,
+  //   returns,
+  //   exchanges,
+  //   selectedTransactionType,
+  // ]);
+
+  // Logging here after useEffect will also show the current value of returns
+  
+  
+  useEffect(() => {
+    console.log("Final Returns Data after Fetch:", returns);
+  }, [returns]); // This logs the 'returns' data when it changes
   const applyFilters = useCallback(() => {
-    let filtered = [...sales];
+    let filtered = []; // Initialize filtered as an empty array
+    console.log("Filtered before date range:", filtered);
+    // Select data based on the selected transaction type
+    if (selectedTransactionType === "sales") {
+      filtered = Array.isArray(sales) ? [...sales] : []; // Ensure sales is an array
+    } else if (selectedTransactionType === "returns") {
+      filtered = Array.isArray(returns) ? [...returns] : []; // Ensure returns is an array
+    } else if (selectedTransactionType === "exchanges") {
+      filtered = Array.isArray(exchanges) ? [...exchanges] : []; // Ensure exchanges is an array
+    }
 
+    // Apply filters based on status
     if (filterStatus !== "all") {
       filtered = filtered.filter((order) => order.status === filterStatus);
     }
 
+    // Apply filters based on transaction type
     if (filterType !== "all") {
       filtered = filtered.filter(
         (order) => order.transaction_type === filterType
       );
     }
 
+    // Apply filters based on category
     if (category !== "all") {
       filtered = filtered.filter((order) => order.category === category);
     }
 
+    // Apply filters based on date range
     if (dateRange.startDate && dateRange.endDate) {
       filtered = filtered.filter((order) => {
         const orderDate = new Date(order.date).setHours(0, 0, 0, 0);
         const startDate = new Date(dateRange.startDate).setHours(0, 0, 0, 0);
         const endDate = new Date(dateRange.endDate).setHours(23, 59, 59, 999);
-
         return orderDate >= startDate && orderDate <= endDate;
       });
     }
 
+    // Update the state with the filtered results
     setFilteredSales(filtered);
     setSearchResults(filtered);
-  }, [filterStatus, filterType, category, dateRange, sales]);
+  }, [
+    filterStatus,
+    filterType,
+    category,
+    dateRange,
+    sales,
+    returns,
+    exchanges,
+    selectedTransactionType,
+  ]);
+
+  // console.log('Filtered before date range:', filtered);
 
   useEffect(() => {
     applyFilters();
-  }, [filterStatus, filterType, category, sales, dateRange, applyFilters]);
+  }, [
+    filterStatus,
+    filterType,
+    category,
+    sales,
+    returns,
+    exchanges,
+    dateRange,
+    selectedTransactionType,
+    applyFilters,
+  ]);
 
   const groupedOrders = useMemo(() => {
     const salesData = searchResults.length > 0 ? searchResults : filteredSales;
-
     return salesData.reduce((acc, order) => {
       if (!acc[order.customer_name]) {
         acc[order.customer_name] = {};
@@ -199,6 +297,12 @@ const Table = () => {
     setCategory(event.target.value);
   };
 
+  console.log("Selected Transaction Type:", selectedTransactionType);
+
+  const handleTransactionTypeChange = (event) => {
+    setSelectedTransactionType(event.target.value); // Update selected transaction type
+  };
+
   const handleCopyOrderId = (orderId) => {
     navigator.clipboard
       .writeText(orderId)
@@ -211,40 +315,25 @@ const Table = () => {
       });
   };
 
-  const [salesLocked, setSalesLocked] = useState({}); // Track locked sales where status is 'supplied'
-
   const handleStatusChange = async (
     customerName,
     salesId,
     newStatus,
     supplier
   ) => {
-    // Check if the status is 'supplied' and ask for confirmation
     if (newStatus === "supplied" && supplier) {
       const confirm = window.confirm(
         `Are you sure you want to mark this sale as "Supplied" with ${supplier}? This action cannot be undone.`
       );
-
       if (!confirm) {
-        return; // If the user cancels, stop the update process
+        return;
       }
     }
-
-    // Proceed with updating the status if confirmed
     try {
-      // await updateSale(salesId, newStatus, supplier); // Pass the status and supplier to update the sale
       await updateSale(salesId.toString(), newStatus, {
         supplier: selectedSupplier,
       });
-
-      console.log(`Checking sale ID: ${salesId}`);
-
-      // If the status is updated to 'supplied', lock the status
-      if (newStatus === "supplied") {
-        setSalesLocked((prevState) => ({ ...prevState, [salesId]: true }));
-      }
-
-      await fetchSales(); // Refresh the sales data
+      await fetchSales();
       showNotification(
         "Sale status and supplier updated successfully!",
         "success"
@@ -279,7 +368,12 @@ const Table = () => {
   };
 
   // A loading fallback UI
-  const LoadingIndicator = () => <div className="loading"><span>Loading...</span></div>;
+  const LoadingIndicator = () => (
+    <div className="loading">
+      <span>Loading...</span>
+    </div>
+  );
+
 
   return (
     <div className="container">
@@ -292,15 +386,32 @@ const Table = () => {
           <div className="filt">
             <SearchBox onSearch={handleSearch} />
             <div className="seperate">
-              <div className="sortby">
+              {/* <div className="sortby">
                 <span className="sortby-label">Sort by:</span>
                 <select className="sortby-select" onChange={handleFilterChange}>
                   <option value="all">All</option>
                   <option value="sales">Sales</option>
                   <option value="return">Return</option>
-                  <option value="exchange">
-                    Exchanges
-                  </option>
+                  <option value="exchange">Exchanges</option>
+                </select>
+              </div> */}
+
+              <div className="sortby">
+                <span className="sortby-label">Sort by:</span>
+                <select
+                  className="sortby-select"
+                  onChange={(event) => {
+                    // Update the selected transaction type
+                    setSelectedTransactionType(event.target.value);
+                    // Optionally, call applyFilters if needed
+                    applyFilters(); // Call applyFilters here to refresh data based on the new selection
+                  }}
+                >
+                  <option value="all">All</option>
+                  <option value="sales">Sales</option>
+                  <option value="return">Returns</option>{" "}
+                  {/* Corrected to "returns" */}
+                  <option value="exchange">Exchanges</option>
                 </select>
               </div>
 
@@ -373,19 +484,26 @@ const Table = () => {
                               }
                             >
                               <div className="pictureBox">
-                                <div className="brandsales">
-                                  <Image
-                                    src={
-                                      groupedOrders[customerName][salesId]
-                                        .customerImage
-                                    }
-                                    alt="customer"
-                                    width={50}
-                                    height={50}
-                                  />
+                                <div className="box_sort">
+                                  <div className="brandsales">
+                                    <Image
+                                      src={
+                                        groupedOrders[customerName][salesId]
+                                          .customerImage
+                                      }
+                                      alt="customer"
+                                      width={50}
+                                      height={50}
+                                    />
+                                  </div>
+
+                                  <h3>{customerName}</h3>
                                 </div>
 
-                                <h3>{customerName}</h3>
+                                <div className="type">
+                                <p>transaction type:</p>
+                                  <span>{groupedOrders[customerName][salesId].transaction_type}</span>
+                                </div>
                               </div>
 
                               <div className="customer-info">

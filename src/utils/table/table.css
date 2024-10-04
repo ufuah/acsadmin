@@ -123,6 +123,15 @@
   border: 2px solid transparent;
 }
 
+.box_sort {
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+
+
 .btn_shift.active:hover {
   background-color: #ebebeb; /* Darker blue on hover for active button */
   color: var(--main-brand-color);
@@ -154,7 +163,7 @@ button:focus {
 .pictureBox {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 10px;
 }
 
@@ -410,6 +419,14 @@ button:focus {
   font-size: 16px;
   font-weight: bold;
 }
+
+.type p {
+  color: #ebebeb;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
 .payment span {
   color: #ebebeb;
   font-size: 20px;

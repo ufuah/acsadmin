@@ -2,7 +2,7 @@ import AddStock from '@/src/utils/Addstock/AddStock'
 import React from 'react'
 import Table from '../../utils/table/Table'
 import SearchBox from '@/src/utils/searchExtr/searchbar'
-import styles from './manage.module.css'
+
 interface Props {
     
 }
