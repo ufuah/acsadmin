@@ -25,7 +25,6 @@ import SearchBox from "../searchExtr/searchbar";
 import "./table.css"; // Ensure your CSS is updated
 
 const Table = () => {
- 
   const { notification, showNotification } = UseNotifications();
   const [expandedCustomer, setExpandedCustomer] = useState(null);
   const [filteredSales, setFilteredSales] = useState([]);
@@ -102,8 +101,6 @@ const Table = () => {
         : `${customerName}-${salesId}`
     );
   };
-
- 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -189,8 +186,7 @@ const Table = () => {
   // ]);
 
   // Logging here after useEffect will also show the current value of returns
-  
-  
+
   useEffect(() => {
     console.log("Final Returns Data after Fetch:", returns);
   }, [returns]); // This logs the 'returns' data when it changes
@@ -374,7 +370,6 @@ const Table = () => {
     </div>
   );
 
-
   return (
     <div className="container">
       <Notification notification={notification} />
@@ -385,6 +380,8 @@ const Table = () => {
         <div className="box_table">
           <div className="filt">
             <SearchBox onSearch={handleSearch} />
+
+            <Calendar setDateRange={setDateRange} />
             <div className="seperate">
               {/* <div className="sortby">
                 <span className="sortby-label">Sort by:</span>
@@ -428,15 +425,17 @@ const Table = () => {
               </div>
             </div>
 
-            <div className="additem">
-              <FontAwesomeIcon icon={faPlus} />
-            </div>
-            <div className="generate-pdf" onClick={() => generatePdf(sales)}>
-              <FontAwesomeIcon icon={faFilePdf} />
-              Generate PDF
+            <div className="base_extr">
+              <div className="additem">
+                <FontAwesomeIcon icon={faPlus} />
+              </div>
+              <div className="generate-pdf" onClick={() => generatePdf(sales)}>
+                <FontAwesomeIcon icon={faFilePdf} />
+                Generate PDF
+              </div>
             </div>
 
-            <Calendar setDateRange={setDateRange} />
+           
           </div>
 
           <div className="filter_buttons">
@@ -501,8 +500,13 @@ const Table = () => {
                                 </div>
 
                                 <div className="type">
-                                <p>transaction type:</p>
-                                  <span>{groupedOrders[customerName][salesId].transaction_type}</span>
+                                  <p>transaction type:</p>
+                                  <span>
+                                    {
+                                      groupedOrders[customerName][salesId]
+                                        .transaction_type
+                                    }
+                                  </span>
                                 </div>
                               </div>
 

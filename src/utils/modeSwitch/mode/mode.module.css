@@ -37,7 +37,7 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
-  transition: .3s ease-in-out;
+  transition: 0.3s ease-in-out;
 }
 
 @media (max-width: 640px) {
@@ -52,4 +52,26 @@
     top: 90px;
     right: 0px;
   }
+
+
+}
+@media (max-width: 490px) {
+  .container {
+    top: 130px;
+    right: 0px;
+  }
+}
+
+@media (max-width: 390px) {
+  .container {
+    top: 114px;
+    right: 0px;
+  }
+}
+
+@media (max-width: 380px) {
+  .container {
+    top: 112px;
+    right: 0px;
+}
 }
