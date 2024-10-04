@@ -482,11 +482,13 @@
 
 @media (max-width: 414px) {
   .form {
+    width: -webkit-fill-available;
     flex-direction: column;
     padding: 6px;
   }
 
   .itemscontainer {
+    width: -webkit-fill-available;
     grid-template-columns: repeat(2, 1fr);
     padding: 0px;
   }
