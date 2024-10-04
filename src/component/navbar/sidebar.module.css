@@ -17,7 +17,7 @@
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
-    gap: 30px;
+    gap: 6px;
     height: 486px;
     -webkit-backdrop-filter: blur(25px) saturate(162%);
     backdrop-filter: blur(25px) saturate(162%);
@@ -117,16 +117,30 @@
   background: var(--main-brand-color);
 }
 
-.logout_btn {
-  background-color: #f44336;
-  color: white;
+.logoutbtn {
+  margin-top: 10px;
+  background-color: var(--main-brand-color);
+  color: #edf2f4;
   border: none;
-  padding: 10px 15px;
+  padding: 5px;
   cursor: pointer;
-  width: 100%;
-  text-align: left;
+  display: flex;
+  width: 40px;
+  height: 40px;
+  font-size: 19px;
+  text-align: center;
+  border-radius: 50px;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  transition:  0.5s ease-out;
+  user-select: none;
+  cursor: pointer;
 }
 
-.logout_btn:hover {
-  background-color: #d32f2f;
+.logoutbtn:hover {
+  background-color: #edf2f4;
+  color: var(--main-brand-color);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+  border: 2px solid var(--main-brand-color);
 }

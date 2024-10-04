@@ -797,6 +797,11 @@ td img {
     width: unset;
   }
 
+  .filter_buttons {
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
   .filt {
     width: 100%;
     display: flex;

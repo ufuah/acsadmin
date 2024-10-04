@@ -106,6 +106,7 @@ import {
   faFolder,
   faTools,
   faArrowRight,
+  faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import useStore from "@/src/useStore/Store"; // Assuming the store contains the lock and role states
 
@@ -114,16 +115,13 @@ const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-
   const logout = useStore((state) => state.logout); // Get the logout function from the store
-   // For programmatic navigation
+  // For programmatic navigation
 
   const handleLogout = async () => {
     await logout(); // Call the logout function
-    router.push("/login")
+    router.push("/login");
   };
-
-
 
   const { isLocked, role, checkLock, isAuthenticated, loadUserFromStorage } =
     useStore((state) => ({
@@ -165,8 +163,14 @@ const Sidebar: React.FC = () => {
   const filteredNavItems = allNavItems.filter((item) => {
     if (role === "admin") return true; // Admin has access to all paths
     if (role === "manager")
-      return item.path === "/sales"  || item.path === "/return"  || item.path === "/salesmanager" || item.path === "/stock"; // Manager can access sales and manage
-    if (role === "user") return item.path === "/sales"  || item.path === "/return"; // User can only access sales
+      return (
+        item.path === "/sales" ||
+        item.path === "/return" ||
+        item.path === "/salesmanager" ||
+        item.path === "/stock"
+      ); // Manager can access sales and manage
+    if (role === "user")
+      return item.path === "/sales" || item.path === "/return"; // User can only access sales
     return false; // No access if the role doesn't match
   });
 
@@ -199,16 +203,12 @@ const Sidebar: React.FC = () => {
               </li>
             ))}
           </ul>
-
-          <li>
-          <button onClick={handleLogout} className={Styles.logoutbtn}>
-            Logout
-          </button>
-        </li>
         </div>
 
         <div className={Styles.profile}>{/* Add profile section here */}</div>
-
+        <div onClick={handleLogout} className={Styles.logoutbtn}>
+          <FontAwesomeIcon icon={faRightFromBracket} />
+        </div>
         <div className={Styles.toggle} onClick={handleOpen}>
           <FontAwesomeIcon icon={faArrowRight} />
         </div>
