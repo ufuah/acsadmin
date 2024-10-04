@@ -894,7 +894,7 @@ td img {
   th,
   td {
     padding: 4px 12px;
-    font-size: 13px;
+    font-size: 14px;
   }
 }
 
@@ -905,6 +905,11 @@ td img {
   table {
     width: unset;
   }
+
+  th, td {
+    padding: 4px 12px;
+    font-size: 14px;
+}
 }
 
 @media screen and (max-width: 390px) {
