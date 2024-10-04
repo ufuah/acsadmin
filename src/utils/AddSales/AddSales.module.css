@@ -680,6 +680,13 @@
     padding: 0;
   }
 
+  .buttonContainer {
+    width: -webkit-fill-available;
+    display: flex;
+    justify-content: space-between;
+    padding: 13px;
+  }
+
   .itemCard {
     width: 192px;
     padding: 1rem;
@@ -884,6 +891,14 @@
     padding: 6px;
   }
 
+  .addButton,
+  .removeButton,
+  .submitButton,
+  .previewButton {
+    padding: 10px 5px;
+    font-size: 16px;
+  }
+
   .itemscontainer {
     width: -webkit-fill-available;
     grid-template-columns: repeat(2, 1fr);
@@ -919,7 +934,6 @@
     width: 176px;
     padding: 1rem;
   }
- 
 }
 @media screen and (max-width: 375px) {
   .form {
