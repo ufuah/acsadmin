@@ -80,8 +80,8 @@ export default function AddSale() {
   const printRef = useRef(null);
   const router = useRouter();
 
-   // New state to check if there are valid items
-   const [itemsAreValid, setItemsAreValid] = useState(false);
+  // New state to check if there are valid items
+  const [itemsAreValid, setItemsAreValid] = useState(false);
 
   const { notification, showNotification } = useNotifications(); // Use the notification hook
 
@@ -137,7 +137,6 @@ export default function AddSale() {
   //   }
   // };
 
-
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     index?: number
@@ -173,7 +172,6 @@ export default function AddSale() {
     }
   };
 
-
   const handleCustomerChange = async (field: string, value: string) => {
     setForm((prevForm) => ({ ...prevForm, [field]: value })); // Update form state
 
@@ -188,7 +186,6 @@ export default function AddSale() {
       }
     }
   };
-  
 
   // const handleAddItem = () => {
   //   setForm((prevForm) => ({
@@ -240,18 +237,15 @@ export default function AddSale() {
     checkItemsValidity(updatedItems);
   };
 
- 
   const checkItemsValidity = (items: SaleItem[]) => {
     const isValid = items.every(
       (item) =>
-        item.item !== "" && 
+        item.item !== "" &&
         item.amount_per_item > 0 &&
         item.quantity_purchased > 0
     );
     setItemsAreValid(isValid);
   };
-
-
 
   const handlePreview = () => {
     if (!form.date || !form.customer_name || form.items.length === 0) {
@@ -263,7 +257,6 @@ export default function AddSale() {
       setShowPreview(true);
     }
   };
-
 
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
@@ -357,6 +350,26 @@ export default function AddSale() {
   //   }
   // };
 
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll event
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        // You can change 100 to the scroll position you want
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll); // Cleanup the event listener on unmount
+    };
+  }, []);
+
   return (
     <div className={styles.container}>
       {/* {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>} */}
@@ -369,7 +382,11 @@ export default function AddSale() {
           <div className={styles.top}>
             <h1 className={styles.title}>Add Sale</h1>
 
-            <div className={styles.category}>
+            <div
+              className={`${styles.category} ${
+                scrolled ? styles.scrolled : ""
+              }`}
+            >
               <span className={styles.category_label}>Category:</span>
               <select
                 value={category}
@@ -380,16 +397,20 @@ export default function AddSale() {
                 <option value="water_collector">Water Collector</option>
                 {/* Add more categories as needed */}
               </select>
-
-              {/* <select
-                className={styles.category_select}
-                onChange={handleCategoryChange}
-              >
-                <option value="all">All Categories</option>
-                <option value="roofing">Roofing</option>
-                <option value="water_collector">Water collector</option>
-              </select> */}
             </div>
+
+            {/* <div className={styles.category}>
+              <span className={styles.category_label}>Category:</span>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className={styles.category_select}
+              >
+                <option value="roofing">Roofing</option>
+                <option value="water_collector">Water Collector</option>
+              </select>
+
+            </div> */}
           </div>
 
           <div className={styles.userinputs}>
@@ -661,26 +682,26 @@ export default function AddSale() {
       </button> */}
       {/* Conditionally render buttons based on items validity */}
       {itemsAreValid && (
-          <div className={styles.buttonContainer}>
-            <button
-              type="button"
-              onClick={handlePreview}
-              className={styles.previewButton}
-              aria-label="Preview Sale"
-            >
-              Preview
-            </button>
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className={styles.submitButton}
-              disabled={isLoading}
-              aria-label="Submit Sale"
-            >
-              {isLoading ? "Submitting..." : "Submit Sale"}
-            </button>
-          </div>
-        )}
+        <div className={styles.buttonContainer}>
+          <button
+            type="button"
+            onClick={handlePreview}
+            className={styles.previewButton}
+            aria-label="Preview Sale"
+          >
+            Preview
+          </button>
+          <button
+            type="submit"
+            onClick={handleSubmit}
+            className={styles.submitButton}
+            disabled={isLoading}
+            aria-label="Submit Sale"
+          >
+            {isLoading ? "Submitting..." : "Submit Sale"}
+          </button>
+        </div>
+      )}
 
       {/* Optionally show a loading spinner */}
       {isLoading && <div className={styles.loadingSpinner}>Loading...</div>}

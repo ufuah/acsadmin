@@ -38,7 +38,6 @@
 }
 
 .itembox {
-
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -173,7 +172,6 @@
 .addButton {
   align-self: flex-start;
 }
-
 
 .total_box .total {
   font-size: 1.2rem;
@@ -312,7 +310,6 @@
   background-color: var(--main-brand-color) !important;
 }
 
-
 @media (max-width: 884px) {
   .form {
     flex-direction: column;
@@ -392,11 +389,24 @@
 @media (max-width: 428px) {
   .form {
     flex-direction: column;
-    padding: 10px;
+    padding: 6px;
+    gap: 10px;
   }
 
   .itemscontainer {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .category.scrolled {
+    position: fixed;
+    width: -moz-fit-content;
+    width: fit-content;
+    padding: 10px;
+    background-color: #f0f0f0;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0px;
+    border-radius: 10px;
+    border: 3px solid var(--main-brand-color);
   }
 
   .container {
@@ -407,11 +417,22 @@
     font-size: 18px;
   }
 
+  .AddSales_sortby__HMJ8R,
+  .AddSales_category__cc6wX {
+    width: -webkit-fill-available;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
   .label {
     font-size: 1em;
   }
 
-  .Addsales_itemscontainer__EwIaq {
+  /* .itemscontainer {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     justify-items: start;
@@ -422,17 +443,31 @@
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
     padding: 20px;
     border-radius: 10px;
-  }
+  } */
 
   .title {
     font-size: 24px;
     margin-bottom: 20px;
-    margin-top: 20px;
+    margin-top: 0px;
     color: var(--secondary-color);
   }
 
+  .sortby,
+  .category {
+    width: -webkit-fill-available;
+    display: flex;
+    align-items: center;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    transition: 0.5s ease;
+    border: 3px solid transparent;
+  }
+
   .userbox {
-    padding: 20px;
+    padding: 0px;
   }
 
   .userinputs {
@@ -445,14 +480,15 @@
   }
 }
 
-@media (max-width: 390px) {
+@media (max-width: 414px) {
   .form {
     flex-direction: column;
-    padding: 10px;
+    padding: 6px;
   }
 
   .itemscontainer {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0px;
   }
 
   .container {
