@@ -784,9 +784,13 @@ td img {
 
 @media screen and (max-width: 428px) {
   .table_container {
-    width: 428px;
-    gap: 20px;
+    width: -webkit-fill-available;
+    gap: 5px;
     padding: 15px;
+  }
+
+  .body_box {
+    height: 500px;
   }
 
   table {
