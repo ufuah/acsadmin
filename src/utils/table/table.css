@@ -977,6 +977,7 @@ td img {
     font-size: 20px;
   }
 }
+
 @media screen and (max-width: 380px) {
   .table_container {
     width: -webkit-fill-available;
