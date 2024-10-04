@@ -1,5 +1,23 @@
-import React, { useMemo } from "react";
-import CurrencyFormatter from "../../currency/Currency";
+
+"use client";
+
+import { faCopy, faFilePdf, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { addDays } from "date-fns";
+import Image from "next/image";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useReactToPrint } from "react-to-print";
+import logo from "../../../public/logo2.jpg";
+import CurrencyFormatter from "../../utils/currency/Currency";
+import "./table.css"; // Ensure your CSS is updated
+
 
 const Return_Management = ({filteredSales,searchResults}) => {
     const groupedReturnOrders = useMemo(() => {
