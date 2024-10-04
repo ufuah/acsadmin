@@ -298,7 +298,7 @@ export default function AddSale() {
         }
 
         setForm(initialFormState);
-      }
+      } 
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "An unknown error occurred.";

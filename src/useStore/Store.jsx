@@ -1788,7 +1788,7 @@ const useStore = create((set, get) => ({
   getCustomerDetails: async (customer_name) => {
     try {
       const response = await axios.get(
-        `${baseURL}/api/sales/customers/${encodeURIComponent(customer_name)}`
+        `${baseURL}/api/transations/customers/${encodeURIComponent(customer_name)}`
       );
       return response.data;
     } catch (error) {
