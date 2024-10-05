@@ -17,66 +17,7 @@ const Topbar = () => {
     role: state.role,
   }));
 
-  // Access state and functions from your store
-  const {
-    checkNetworkSpeed,
-    checkConnectionType,
-    networkSpeed,
-    connectionType,
-    
-  } = useStore((state) => ({
-    checkNetworkSpeed: state.checkNetworkSpeed,
-    checkConnectionType: state.checkConnectionType,
-    networkSpeed: state.networkSpeed,
-    connectionType: state.connectionType,
-  }));
 
-
-  // console.log(`Initial connection type: ${checkConnectionType}`);
-  // console.log(`Initial network speed: ${checkNetworkSpeed}`);
-  
-
-  // Real-time update for network speed and connection type
-  useEffect(() => {
-    // Function to check network and connection type
-    const updateNetworkInfo = () => {
-      checkNetworkSpeed();
-      checkConnectionType();
-    };
-
-    // Initial check when the component mounts
-    updateNetworkInfo();
-
-    // Set up an interval to check network speed periodically (fallback)
-    const interval = setInterval(() => {
-      updateNetworkInfo();
-    }, 10000); // Check every 10 seconds (adjust as needed)
-
-    // Optional: Listen for changes in connection type and speed using `navigator.connection`
-    const connection =
-      navigator.connection ||
-      navigator.mozConnection ||
-      navigator.webkitConnection;
-
-    if (connection) {
-      // Function to handle changes in the connection
-      const handleConnectionChange = () => {
-        updateNetworkInfo();
-      };
-
-      // Add event listener to detect network connection changes
-      connection.addEventListener("change", handleConnectionChange);
-
-      // Cleanup event listener when component unmounts
-      return () => {
-        clearInterval(interval);
-        connection.removeEventListener("change", handleConnectionChange);
-      };
-    } else {
-      // Cleanup interval only if no connection object exists
-      return () => clearInterval(interval);
-    }
-  }, [checkNetworkSpeed, checkConnectionType]);
 
   return (
     <div className={styles.container}>
@@ -103,15 +44,6 @@ const Topbar = () => {
             </div>
           </div>
 
-          <div className={styles.network_info}>
-            {/* Display network connection type and speed */}
-            <span>Connection Type: {connectionType || "Unknown"}</span>
-            <span>Network Speed: {networkSpeed || "Unknown"}</span>
-            <FontAwesomeIcon icon={faWifi3} />
-            <FontAwesomeIcon icon={faGauge} />
-            <FontAwesomeIcon icon={faGaugeHigh} />
-            <FontAwesomeIcon icon={faGaugeMed} />
-          </div>
 
 
           {/* <div className={styles.profile}>
