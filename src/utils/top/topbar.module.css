@@ -119,6 +119,17 @@
   }
 }
 
+.network_info {
+  display: flex;
+  flex-direction: column; /* Stack the network info vertically */
+  margin-left: 20px; /* Space between elements */
+}
+
+.network_info span {
+  font-size: 0.9em; /* Smaller font size for network info */
+  color: #666; /* Grey color for better readability */
+}
+
 @media screen and (max-width: 475px) {
 }
 

@@ -1366,6 +1366,14 @@ const useStore = create((set, get) => ({
   role: null,
   isLocked: false,
   loading: false,
+  connectionType: null,
+  networkSpeed: null,
+
+  type: 'unknown',
+  effectiveType: 'unknown',
+  downlinkSpeed: 'unknown',
+  isWifi: false,
+  isOnline: false,
 
   /** =============================== CATEGORY SECTION ============================ */
   fetchCategories: async () => {
@@ -1507,17 +1515,37 @@ const useStore = create((set, get) => ({
 
   /** =============================== SALES SECTION ============================ */
   fetchSales: async () => {
-    try {
-      const response = await axios.get(`${baseURL}/api/transations/sales`);
-      console.log("Fetched Sales Data:", response.data);
-      set({ sales: response.data.sales });
-    } catch (error) {
-      console.error(
-        "Failed to fetch sales:",
-        error.response?.data || error.message
-      );
+    
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.get(`${baseURL}/api/transations/sales`);
+        console.log("Fetched Sales Data:", response.data);
+        set({ sales: response.data.sales });
+      } catch (error) {
+        console.error(
+          "Failed to fetch sales:",
+          error.response?.data || error.message
+        );
+      }
+    } else {
+      console.warn("Network is too slow, delaying the stock addition.");
     }
+  
   },
+
+   // if (networkSpeed !== "Slow") {
+  //   try {
+  //     // Proceed with the API call since the network is fast enough
+  //     const response = await axios.post(`${baseURL}/api/stocks/add/`, stock);
+  //     set((state) => ({
+  //       stocks: [...state.stocks, response.data],
+  //     }));
+  //   } catch (error) {
+  //     console.error("Failed to add stock:", error);
+  //   }
+  // } else {
+  //   console.warn("Network is too slow, delaying the stock addition.");
+  // }
 
   // fetchSalesById: async (id) => {
   //   try {
@@ -1531,7 +1559,9 @@ const useStore = create((set, get) => ({
 
   fetchSalesById: async (salesId) => {
     try {
-      const response = await axios.get(`${baseURL}/api/transations/sales/${salesId}`);
+      const response = await axios.get(
+        `${baseURL}/api/transations/sales/${salesId}`
+      );
       return response.data;
     } catch (error) {
       console.error("Failed to fetch sale by ID:", error);
@@ -1541,7 +1571,10 @@ const useStore = create((set, get) => ({
 
   addSale: async (sale) => {
     try {
-      const response = await axios.post(`${baseURL}/api/transations/sales/add`, sale);
+      const response = await axios.post(
+        `${baseURL}/api/transations/sales/add`,
+        sale
+      );
       const { sales_id } = response.data;
 
       if (sales_id) {
@@ -1656,7 +1689,7 @@ const useStore = create((set, get) => ({
     try {
       const response = await axios.get(`${baseURL}/api/transations/exchanges`); // Adjust the API endpoint as needed
       console.log("Fetched Exchanges Data:", response.data);
-      set({ exchanges: response.data.exchanges}); // Adjust based on response structure
+      set({ exchanges: response.data.exchanges }); // Adjust based on response structure
     } catch (error) {
       console.error(
         "Failed to fetch exchanges:",
@@ -1784,11 +1817,27 @@ const useStore = create((set, get) => ({
     }
   },
 
+  // if (networkSpeed !== "Slow") {
+  //   try {
+  //     // Proceed with the API call since the network is fast enough
+  //     const response = await axios.post(`${baseURL}/api/stocks/add/`, stock);
+  //     set((state) => ({
+  //       stocks: [...state.stocks, response.data],
+  //     }));
+  //   } catch (error) {
+  //     console.error("Failed to add stock:", error);
+  //   }
+  // } else {
+  //   console.warn("Network is too slow, delaying the stock addition.");
+  // }
+
   /** =============================== CUSTOMER SECTION ============================ */
   getCustomerDetails: async (customer_name) => {
     try {
       const response = await axios.get(
-        `${baseURL}/api/transations/customers/${encodeURIComponent(customer_name)}`
+        `${baseURL}/api/transations/customers/${encodeURIComponent(
+          customer_name
+        )}`
       );
       return response.data;
     } catch (error) {
@@ -1959,6 +2008,140 @@ const useStore = create((set, get) => ({
       // Handle errors accordingly
     }
   },
+
+
+
+
+
+
+   /** ====================== NETWORK CONNECTION & SPEED CHECK ====================== */
+   checkConnectionType: () => {
+    if ("connection" in navigator) {
+      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      const type = connection.effectiveType || "unknown";
+      
+      set({ connectionType: type });
+      
+      // Log the current connection type
+      console.log(`Connection type: ${type}`);
+      return type;
+    } else {
+      console.warn("Network Information API is not supported in this browser.");
+      return "unknown";
+    }
+  },
+
+  checkNetworkSpeed: () => {
+    if ("connection" in navigator) {
+      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      let speed;
+
+      if (connection.downlink) {
+        // Calculate speed based on downlink (in Mbps)
+        speed = `${connection.downlink} Mbps`;
+      } else if (connection.effectiveType) {
+        // Fallback speed estimate based on the type of connection
+        switch (connection.effectiveType) {
+          case "4g":
+            speed = "Fast";
+            break;
+          case "3g":
+            speed = "Moderate";
+            break;
+          case "2g":
+            speed = "Slow";
+            break;
+          default:
+            speed = "Unknown";
+        }
+      } else {
+        speed = "Unknown";
+      }
+
+      set({ networkSpeed: speed });
+
+      // Log the current network speed
+      console.log(`Network speed: ${speed}`);
+      return speed;
+    } else {
+      console.warn("Network Information API is not supported in this browser.");
+      return "unknown";
+    }
+  },
+
+
+  // checkNetworkStatus: () => {
+  //   const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+
+  //   if (connection) {
+  //     const type = connection.effectiveType; // Network type (e.g., '4g', '3g', '2g')
+  //     const downlink = connection.downlink; // Estimated downlink in megabits per second (Mbps)
+  //     const isOnline = navigator.onLine; // Check if the browser is online
+  //     const isWifi = connection.type === 'wifi'; // Check if connected to Wi-Fi
+
+  //     // Set the network status data to your state
+  //     set({
+  //       type: connection.type,
+  //       effectiveType: type,
+  //       downlinkSpeed: downlink,
+  //       isWifi,
+  //       isOnline,
+  //       networkStatus: {
+  //         type: connection.type, // Connection type (cellular, wifi)
+  //         effectiveType: type, // Network effective type (4g, 3g, etc.)
+  //         downlinkSpeed: downlink, // Downlink speed in Mbps
+  //         isWifi, // Boolean for Wi-Fi status
+  //         isOnline, // Boolean for online status
+  //       },
+  //     });
+
+  //     return {
+  //       type: connection.type,
+  //       effectiveType: type,
+  //       downlinkSpeed: downlink,
+  //       isWifi,
+  //       isOnline,
+  //     };
+  //   } else {
+  //     // If navigator.connection is not supported
+  //     return {
+  //       isOnline: navigator.onLine,
+  //       message: "Network Information API not supported on this browser.",
+  //     };
+  //   }
+  // },
+
+  // monitorNetworkChanges: () => {
+  //   const handleConnectionChange = () => {
+  //     const store = useStore.getState();
+  //     store.checkNetworkStatus();
+  //   };
+
+  //   // Add event listeners for network changes
+  //   window.addEventListener('online', handleConnectionChange);
+  //   window.addEventListener('offline', handleConnectionChange);
+  //   if (navigator.connection) {
+  //     navigator.connection.addEventListener('change', handleConnectionChange); // For more granular connection changes
+  //   }
+
+  //   // Initial check
+  //   handleConnectionChange();
+  // },
+
+  // removeNetworkListeners: () => {
+  //   const handleConnectionChange = () => {
+  //     const store = useStore.getState();
+  //     store.checkNetworkStatus();
+  //   };
+
+  //   window.removeEventListener('online', handleConnectionChange);
+  //   window.removeEventListener('offline', handleConnectionChange);
+  //   if (navigator.connection) {
+  //     navigator.connection.removeEventListener('change', handleConnectionChange);
+  //   }
+  // },
+
+
 }));
 
 export default useStore;
