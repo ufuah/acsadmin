@@ -16,7 +16,7 @@
 
 .network_info.active,
 .network_info.networkactive {
-    top: 50px;
+  top: 50px;
 }
 
 .arrow {
@@ -119,3 +119,25 @@
   font-size: 20px;
   border-radius: 50%;
 }
+
+
+
+
+@media screen and (max-width: 428px) {
+  .network_info {
+    left: 160px;
+    top: -135px;
+  }
+}
+
+@media screen and (max-width: 393px) {
+    .network_info {
+      left: 140px;
+    }
+  }
+
+@media screen and (max-width: 380px) {
+    .network_info {
+      left: 130px;
+    }
+  }
