@@ -1515,7 +1515,7 @@ const useStore = create((set, get) => ({
 
   /** =============================== SALES SECTION ============================ */
   fetchSales: async () => {
-    
+
     if (networkSpeed !== "Slow") {
       try {
         const response = await axios.get(`${baseURL}/api/transations/sales`);
@@ -1533,29 +1533,6 @@ const useStore = create((set, get) => ({
   
   },
 
-   // if (networkSpeed !== "Slow") {
-  //   try {
-  //     // Proceed with the API call since the network is fast enough
-  //     const response = await axios.post(`${baseURL}/api/stocks/add/`, stock);
-  //     set((state) => ({
-  //       stocks: [...state.stocks, response.data],
-  //     }));
-  //   } catch (error) {
-  //     console.error("Failed to add stock:", error);
-  //   }
-  // } else {
-  //   console.warn("Network is too slow, delaying the stock addition.");
-  // }
-
-  // fetchSalesById: async (id) => {
-  //   try {
-  //     const response = await axios.get(`${baseURL}/api/sales/${id}`);
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error("Failed to fetch sale by ID:", error);
-  //     return null;
-  //   }
-  // },
 
   fetchSalesById: async (salesId) => {
     try {
@@ -1595,19 +1572,6 @@ const useStore = create((set, get) => ({
     }
   },
 
-  // updateSale: async (salesId, newStatus, supplier) => {
-  //   try {
-  //     const url = `${baseURL}/api/sales/${salesId}/status`;
-  //     const response = await axios.put(url, { status: newStatus, supplier });
-  //     set((state) => ({
-  //       sales: state.sales.map((sale) =>
-  //         sale.id === id ? { ...sale, ...response.data } : sale
-  //       ),
-  //     }));
-  //   } catch (error) {
-  //     console.error("Failed to update sale:", error);
-  //   }
-  // },
 
   updateSale: async (salesId, newStatus, supplier) => {
     try {
@@ -1817,20 +1781,7 @@ const useStore = create((set, get) => ({
     }
   },
 
-  // if (networkSpeed !== "Slow") {
-  //   try {
-  //     // Proceed with the API call since the network is fast enough
-  //     const response = await axios.post(`${baseURL}/api/stocks/add/`, stock);
-  //     set((state) => ({
-  //       stocks: [...state.stocks, response.data],
-  //     }));
-  //   } catch (error) {
-  //     console.error("Failed to add stock:", error);
-  //   }
-  // } else {
-  //   console.warn("Network is too slow, delaying the stock addition.");
-  // }
-
+  
   /** =============================== CUSTOMER SECTION ============================ */
   getCustomerDetails: async (customer_name) => {
     try {
@@ -1858,62 +1809,6 @@ const useStore = create((set, get) => ({
   },
 
   /** =============================== Cookies & AUTH HANDLING ============================ */
-
-  // loadUserFromStorage: async function() {
-  //   const token = Cookies.get("accessToken"); // Access token from Cookies
-  //   const refreshToken = Cookies.get("refreshToken"); // Refresh token from Cookies
-  //   console.log("Access token from Cookies:", token); // Log the token
-
-  //   const storedUser = localStorage.getItem("user"); // User info from localStorage
-  //   console.log("Stored user from localStorage:", storedUser); // Log the stored user
-
-  //   if (token && storedUser) {
-  //     try {
-  //       const decodedToken = jwtDecode(token); // Decode JWT token
-  //       const user = JSON.parse(storedUser); // Parse stored user data
-
-  //       // Check if the token is expired or about to expire (within 5 minutes)
-  //       const isTokenExpired = Date.now() >= decodedToken.exp * 1000;
-  //       const isTokenAboutToExpire = Date.now() >= decodedToken.exp * 1000 - 5 * 60 * 1000;
-
-  //       if (isTokenExpired) {
-  //         console.log("Token expired");
-  //         // Remove tokens and clear user info if the token is expired
-  //         Cookies.remove("accessToken");
-  //         Cookies.remove("refreshToken");
-  //         localStorage.removeItem("user");
-  //         set({ user: null, role: null });
-  //         return false; // Token is expired, not authenticated
-  //       }
-
-  //       if (isTokenAboutToExpire && refreshToken) {
-  //         // Token is about to expire, try refreshing
-  //         const refreshed = await refreshAccessToken();
-  //         if (!refreshed) {
-  //           console.log("Failed to refresh token");
-  //           set({ user: null, role: null });
-  //           return false;
-  //         }
-  //         console.log("Token refreshed successfully");
-  //       }
-
-  //       console.log("Token valid. Setting user and role in state.");
-  //       set({
-  //         user: user.username,
-  //         role: user.role,
-  //       });
-  //       return true; // User is authenticated
-  //     } catch (error) {
-  //       console.error("Error loading user from Cookies/localStorage:", error);
-  //       set({ user: null, role: null });
-  //       return false;
-  //     }
-  //   } else {
-  //     console.log("No token or stored user found.");
-  //     set({ user: null, role: null });
-  //     return false;
-  //   }
-  // },
 
   loadUserFromStorage: async function () {
     const storedUser = localStorage.getItem("user"); // User info from localStorage
@@ -2015,131 +1910,185 @@ const useStore = create((set, get) => ({
 
 
    /** ====================== NETWORK CONNECTION & SPEED CHECK ====================== */
-   checkConnectionType: () => {
-    if ("connection" in navigator) {
-      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-      const type = connection.effectiveType || "unknown";
+  //  checkConnectionType: () => {
+  //   if ("connection" in navigator) {
+  //     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  //     const type = connection.effectiveType || "unknown";
       
-      set({ connectionType: type });
+  //     set({ connectionType: type });
       
-      // Log the current connection type
-      console.log(`Connection type: ${type}`);
-      return type;
-    } else {
-      console.warn("Network Information API is not supported in this browser.");
-      return "unknown";
-    }
-  },
-
-  checkNetworkSpeed: () => {
-    if ("connection" in navigator) {
-      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-      let speed;
-
-      if (connection.downlink) {
-        // Calculate speed based on downlink (in Mbps)
-        speed = `${connection.downlink} Mbps`;
-      } else if (connection.effectiveType) {
-        // Fallback speed estimate based on the type of connection
-        switch (connection.effectiveType) {
-          case "4g":
-            speed = "Fast";
-            break;
-          case "3g":
-            speed = "Moderate";
-            break;
-          case "2g":
-            speed = "Slow";
-            break;
-          default:
-            speed = "Unknown";
-        }
-      } else {
-        speed = "Unknown";
-      }
-
-      set({ networkSpeed: speed });
-
-      // Log the current network speed
-      console.log(`Network speed: ${speed}`);
-      return speed;
-    } else {
-      console.warn("Network Information API is not supported in this browser.");
-      return "unknown";
-    }
-  },
-
-
-  // checkNetworkStatus: () => {
-  //   const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-
-  //   if (connection) {
-  //     const type = connection.effectiveType; // Network type (e.g., '4g', '3g', '2g')
-  //     const downlink = connection.downlink; // Estimated downlink in megabits per second (Mbps)
-  //     const isOnline = navigator.onLine; // Check if the browser is online
-  //     const isWifi = connection.type === 'wifi'; // Check if connected to Wi-Fi
-
-  //     // Set the network status data to your state
-  //     set({
-  //       type: connection.type,
-  //       effectiveType: type,
-  //       downlinkSpeed: downlink,
-  //       isWifi,
-  //       isOnline,
-  //       networkStatus: {
-  //         type: connection.type, // Connection type (cellular, wifi)
-  //         effectiveType: type, // Network effective type (4g, 3g, etc.)
-  //         downlinkSpeed: downlink, // Downlink speed in Mbps
-  //         isWifi, // Boolean for Wi-Fi status
-  //         isOnline, // Boolean for online status
-  //       },
-  //     });
-
-  //     return {
-  //       type: connection.type,
-  //       effectiveType: type,
-  //       downlinkSpeed: downlink,
-  //       isWifi,
-  //       isOnline,
-  //     };
+  //     // Log the current connection type
+  //     console.log(`Connection type: ${type}`);
+  //     return type;
   //   } else {
-  //     // If navigator.connection is not supported
-  //     return {
-  //       isOnline: navigator.onLine,
-  //       message: "Network Information API not supported on this browser.",
-  //     };
+  //     console.warn("Network Information API is not supported in this browser.");
+  //     return "unknown";
   //   }
   // },
 
-  // monitorNetworkChanges: () => {
-  //   const handleConnectionChange = () => {
-  //     const store = useStore.getState();
-  //     store.checkNetworkStatus();
-  //   };
+  // checkNetworkSpeed: () => {
+  //   if ("connection" in navigator) {
+  //     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  //     let speed;
 
-  //   // Add event listeners for network changes
-  //   window.addEventListener('online', handleConnectionChange);
-  //   window.addEventListener('offline', handleConnectionChange);
-  //   if (navigator.connection) {
-  //     navigator.connection.addEventListener('change', handleConnectionChange); // For more granular connection changes
+  //     if (connection.downlink) {
+  //       // Calculate speed based on downlink (in Mbps)
+  //       speed = `${connection.downlink} Mbps`;
+  //     } else if (connection.effectiveType) {
+  //       // Fallback speed estimate based on the type of connection
+  //       switch (connection.effectiveType) {
+  //         case "4g":
+  //           speed = "Fast";
+  //           break;
+  //         case "3g":
+  //           speed = "Moderate";
+  //           break;
+  //         case "2g":
+  //           speed = "Slow";
+  //           break;
+  //         default:
+  //           speed = "Unknown";
+  //       }
+  //     } else {
+  //       speed = "Unknown";
+  //     }
+
+  //     set({ networkSpeed: speed });
+
+  //     // Log the current network speed
+  //     console.log(`Network speed: ${speed}`);
+  //     return speed;
+  //   } else {
+  //     console.warn("Network Information API is not supported in this browser.");
+  //     return "unknown";
   //   }
-
-  //   // Initial check
-  //   handleConnectionChange();
   // },
 
-  // removeNetworkListeners: () => {
-  //   const handleConnectionChange = () => {
-  //     const store = useStore.getState();
-  //     store.checkNetworkStatus();
-  //   };
+  /** ====================== NETWORK CONNECTION & SPEED CHECK ====================== */
+// checkConnectionType: () => {
+//   if ("connection" in navigator) {
+//     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    
+//     const connectionType = connection.type || "unknown"; // Type of connection (e.g., wifi, cellular)
+//     const effectiveType = connection.effectiveType || "unknown"; // Quality of the connection (e.g., 4g, 3g, 2g)
+    
+//     set({ 
+//       connectionType: connectionType === "unknown" ? effectiveType : connectionType, // Prefer type if available, else fallback to effectiveType
+//       isWifi: connectionType === "wifi" // Check if it's Wi-Fi
+//     });
+    
+//     // Log the current connection type and quality
+//     console.log(`Connection type: ${connectionType}, Effective type: ${effectiveType}`);
+//     return { connectionType, effectiveType };
+    
+//   } else {
+//     console.warn("Network Information API is not supported in this browser.");
+//     return { connectionType: "unknown", effectiveType: "unknown" };
+//   }
+// },
 
-  //   window.removeEventListener('online', handleConnectionChange);
-  //   window.removeEventListener('offline', handleConnectionChange);
-  //   if (navigator.connection) {
-  //     navigator.connection.removeEventListener('change', handleConnectionChange);
-  //   }
-  // },
+// checkNetworkSpeed: () => {
+//   if ("connection" in navigator) {
+//     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+//     let speed;
+
+//     if (connection.downlink) {
+//       // Calculate speed based on downlink (in Mbps)
+//       speed = `${connection.downlink} Mbps`;
+//     } else if (connection.effectiveType) {
+//       // Fallback speed estimate based on effective connection type
+//       switch (connection.effectiveType) {
+//         case "4g":
+//           speed = "Fast"; // Assume fast speed for 4G
+//           break;
+//         case "3g":
+//           speed = "Moderate"; // Assume moderate speed for 3G
+//           break;
+//         case "2g":
+//           speed = "Slow"; // Assume slow speed for 2G
+//           break;
+//         default:
+//           speed = "Unknown"; // Default fallback
+//       }
+//     } else {
+//       speed = "Unknown";
+//     }
+
+//     set({ networkSpeed: speed });
+
+//     // Log the current network speed
+//     console.log(`Network speed: ${speed}`);
+//     return speed;
+
+//   } else {
+//     console.warn("Network Information API is not supported in this browser.");
+//     return "unknown";
+//   }
+// },
+
+/** ====================== NETWORK CONNECTION & SPEED CHECK ====================== */
+
+checkConnectionType: () => {
+  if ("connection" in navigator) {
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    
+    const connectionType = connection.type || "unknown"; // Type of connection (e.g., wifi, cellular)
+    const effectiveType = connection.effectiveType || "unknown"; // Quality of the connection (e.g., 4g, 3g, 2g)
+    
+    set({ 
+      // If connectionType is unknown, fall back to effectiveType
+      connectionType: connectionType !== "unknown" ? connectionType : effectiveType, 
+      isWifi: connectionType === "wifi" // Check if it's Wi-Fi
+    });
+    
+    // Log the current connection type and quality
+    console.log(`Connection type: ${connectionType}, Effective type: ${effectiveType}`);
+    return { connectionType, effectiveType };
+    
+  } else {
+    console.warn("Network Information API is not supported in this browser.");
+    return { connectionType: "unknown", effectiveType: "unknown" };
+  }
+},
+
+checkNetworkSpeed: () => {
+  if ("connection" in navigator) {
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    let speed;
+
+    if (connection.downlink) {
+      // Calculate speed based on downlink (in Mbps)
+      speed = `${connection.downlink} Mbps`;
+    } else if (connection.effectiveType) {
+      // Fallback speed estimate based on effective connection type
+      switch (connection.effectiveType) {
+        case "4g":
+          speed = "Fast"; // Assume fast speed for 4G
+          break;
+        case "3g":
+          speed = "Moderate"; // Assume moderate speed for 3G
+          break;
+        case "2g":
+          speed = "Slow"; // Assume slow speed for 2G
+          break;
+        default:
+          speed = "Unknown"; // Default fallback
+      }
+    } else {
+      speed = "Unknown";
+    }
+
+    set({ networkSpeed: speed });
+
+    // Log the current network speed
+    console.log(`Network speed: ${speed}`);
+    return speed;
+
+  } else {
+    console.warn("Network Information API is not supported in this browser.");
+    return "unknown";
+  }
+}
 
 
 }));

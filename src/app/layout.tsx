@@ -6,7 +6,8 @@ import Mood from "../utils/modeSwitch/mode/Mode";
 import { ThemeContextProvider } from "../Context/ThemeContext";
 import Lock from "../utils/modeSwitch/companyLock/Lock";
 import ProtectedRoute from "../ProtectedRoute/Protected";
-import LockProvider from "../Lockprovider/LockProvider";
+import LockProvider from "../Lockprovider/LockProvider"; 
+import Network from '../utils/Network/Network'
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -29,6 +30,7 @@ export default function RootLayout({
             <Sidebar />
             <Mood />
             <Lock />
+            <Network/>
             {children}
           </ThemeContextProvider>
         </ProtectedRoute>

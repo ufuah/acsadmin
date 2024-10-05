@@ -1,0 +1,121 @@
+.network_info {
+  width: max-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  position: fixed;
+  left: 45%;
+
+  top: -135px;
+  background: #efeded;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+  padding: 7px;
+  border-radius: 15px;
+  z-index: 5;
+  transition: 0.5s ease;
+}
+
+.network_info.active,
+.network_info.networkactive {
+    top: 50px;
+}
+
+.arrow {
+  position: absolute;
+  top: 8px;
+  left: 48%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  font-size: 25px;
+  background: var(--main-brand-color);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+  color: #f0efef;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 50%;
+  z-index: 6;
+  transition: 0.5s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.arrow:hover {
+  color: var(--main-brand-color);
+  background-color: #f0efef;
+}
+
+.arrow.active {
+  transform: rotate(180deg);
+}
+
+.network_details {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.type {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.header p {
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.base {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.space {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row-reverse;
+  gap: 10px;
+}
+
+.quality {
+  font-weight: bold;
+  margin: 4px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.quality.fast {
+  color: rgb(149, 247, 149);
+  background: rgba(7, 208, 34, 0.334);
+}
+
+.quality.normal {
+  color: rgb(32, 178, 170);
+  background: rgba(7, 208, 198, 0.334);
+}
+
+.quality.slow {
+  color: rgb(227, 25, 25);
+  background: rgba(208, 7, 7, 0.334);
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  background-color: var(--main-brand-color);
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  border-radius: 50%;
+}

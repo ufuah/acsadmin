@@ -6,7 +6,7 @@ import Calendar from "../calender/Calender";
 import Searchbar from "../searchExtr/searchbar";
 import Profile from "../profile/Profile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faGauge, faGaugeHigh, faGaugeMed, faWifi3 } from "@fortawesome/free-solid-svg-icons";
 import useStore from "../../useStore/Store";
 import { useEffect } from "react";
 
@@ -107,6 +107,10 @@ const Topbar = () => {
             {/* Display network connection type and speed */}
             <span>Connection Type: {connectionType || "Unknown"}</span>
             <span>Network Speed: {networkSpeed || "Unknown"}</span>
+            <FontAwesomeIcon icon={faWifi3} />
+            <FontAwesomeIcon icon={faGauge} />
+            <FontAwesomeIcon icon={faGaugeHigh} />
+            <FontAwesomeIcon icon={faGaugeMed} />
           </div>
 
 
