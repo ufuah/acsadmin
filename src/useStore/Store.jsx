@@ -148,14 +148,19 @@ const useStore = create((set, get) => ({
 
   // Function to add new stock
   addStock: async (stock) => {
-    try {
-      const response = await axios.post(`${baseURL}/api/stocks/add/`, stock);
-      // Update the local state with the new stock
-      set((state) => ({
-        stocks: [...state.stocks, response.data],
-      }));
-    } catch (error) {
-      console.error("Failed to add stock:", error);
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.post(`${baseURL}/api/stocks/add/`, stock);
+        // Update the local state with the new stock
+        set((state) => ({
+          stocks: [...state.stocks, response.data],
+        }));
+      } catch (error) {
+        console.error("Failed to add stock:", error);
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
@@ -181,27 +186,37 @@ const useStore = create((set, get) => ({
   setFilteredStocks: (filteredStocks) => set({ filteredStocks }),
 
   fetchStocks: async () => {
-    try {
-      const response = await axios.get(`${baseURL}/api/stocks`);
-      set({ stocks: response.data });
-    } catch (error) {
-      console.error(
-        "Failed to fetch stocks:",
-        error.response?.data || error.message
-      );
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.get(`${baseURL}/api/stocks`);
+        set({ stocks: response.data });
+      } catch (error) {
+        console.error(
+          "Failed to fetch stocks:",
+          error.response?.data || error.message
+        );
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
   fetchStockByDescription: async (description) => {
-    try {
-      const encodedDescription = encodeURIComponent(description);
-      const response = await axios.get(
-        `${baseURL}/api/stocks/description?description=${encodedDescription}`
-      );
-      return response.data?.length > 0 ? response.data[0] : null;
-    } catch (error) {
-      console.error("Failed to fetch stock by description:", error);
-      return null;
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const encodedDescription = encodeURIComponent(description);
+        const response = await axios.get(
+          `${baseURL}/api/stocks/description?description=${encodedDescription}`
+        );
+        return response.data?.length > 0 ? response.data[0] : null;
+      } catch (error) {
+        console.error("Failed to fetch stock by description:", error);
+        return null;
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
@@ -216,27 +231,9 @@ const useStore = create((set, get) => ({
     }
   },
 
-  /** =============================== SALES SECTION ============================ */
-  // fetchSales: async () => {
-  //   if (networkSpeed !== "Slow") {
-  //     try {
-  //       const response = await axios.get(`${baseURL}/api/transations/sales`);
-  //       console.log("Fetched Sales Data:", response.data);
-  //       set({ sales: response.data.sales });
-  //     } catch (error) {
-  //       console.error(
-  //         "Failed to fetch sales:",
-  //         error.response?.data || error.message
-  //       );
-  //     }
-  //   } else {
-  //     console.warn("Network is too slow, delaying the stock addition.");
-  //   }
-  // },
-
   fetchSales: async () => {
     const { networkSpeed } = get(); // Access networkSpeed from the state
-  
+
     if (networkSpeed !== "Slow") {
       try {
         const response = await axios.get(`${baseURL}/api/transations/sales`);
@@ -252,41 +249,52 @@ const useStore = create((set, get) => ({
       console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
+
   fetchSalesById: async (salesId) => {
-    try {
-      const response = await axios.get(
-        `${baseURL}/api/transations/sales/${salesId}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Failed to fetch sale by ID:", error);
-      return null;
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.get(
+          `${baseURL}/api/transations/sales/${salesId}`
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Failed to fetch sale by ID:", error);
+        return null;
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
   addSale: async (sale) => {
-    try {
-      const response = await axios.post(
-        `${baseURL}/api/transations/sales/add`,
-        sale
-      );
-      const { sales_id } = response.data;
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.post(
+          `${baseURL}/api/transations/sales/add`,
+          sale
+        );
+        const { sales_id } = response.data;
 
-      if (sales_id) {
-        set((state) => ({
-          sales: [...state.sales, { ...sale, sales_id }],
-          currentSalesId: sales_id,
-        }));
+        if (sales_id) {
+          set((state) => ({
+            sales: [...state.sales, { ...sale, sales_id }],
+            currentSalesId: sales_id,
+          }));
 
-        return { sales_id };
-      } else {
-        console.error("No sales ID returned from the server.");
-        return { error: "Sale added but no sales ID received." };
+          return { sales_id };
+        } else {
+          console.error("No sales ID returned from the server.");
+          return { error: "Sale added but no sales ID received." };
+        }
+      } catch (error) {
+        return error.response
+          ? { error: error.response.data.error }
+          : { error: "An unknown error occurred. Please try again." };
       }
-    } catch (error) {
-      return error.response
-        ? { error: error.response.data.error }
-        : { error: "An unknown error occurred. Please try again." };
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
@@ -324,32 +332,42 @@ const useStore = create((set, get) => ({
   },
 
   addReturn: async (returnData) => {
-    try {
-      const response = await axios.post(
-        `${baseURL}/api/transations/returns/add`, // Adjust the API endpoint as needed
-        returnData
-      );
-      set((state) => ({
-        returns: [...state.returns, response.data],
-      }));
-    } catch (error) {
-      console.error("Failed to add return:", error);
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.post(
+          `${baseURL}/api/transations/returns/add`, // Adjust the API endpoint as needed
+          returnData
+        );
+        set((state) => ({
+          returns: [...state.returns, response.data],
+        }));
+      } catch (error) {
+        console.error("Failed to add return:", error);
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
   updateReturn: async (returnId, updatedData) => {
-    try {
-      const response = await axios.put(
-        `${baseURL}/api/transations/returns/${returnId}`, // Adjust the API endpoint as needed
-        updatedData
-      );
-      set((state) => ({
-        returns: state.returns.map((r) =>
-          r.id === returnId ? { ...r, ...response.data } : r
-        ),
-      }));
-    } catch (error) {
-      console.error("Failed to update return:", error);
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.put(
+          `${baseURL}/api/transations/returns/${returnId}`, // Adjust the API endpoint as needed
+          updatedData
+        );
+        set((state) => ({
+          returns: state.returns.map((r) =>
+            r.id === returnId ? { ...r, ...response.data } : r
+          ),
+        }));
+      } catch (error) {
+        console.error("Failed to update return:", error);
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
@@ -367,29 +385,41 @@ const useStore = create((set, get) => ({
   /** =============================== EXCHANGE SECTION ============================ */
 
   fetchExchanges: async () => {
-    try {
-      const response = await axios.get(`${baseURL}/api/transations/exchanges`); // Adjust the API endpoint as needed
-      console.log("Fetched Exchanges Data:", response.data);
-      set({ exchanges: response.data.exchanges }); // Adjust based on response structure
-    } catch (error) {
-      console.error(
-        "Failed to fetch exchanges:",
-        error.response?.data || error.message
-      );
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.get(
+          `${baseURL}/api/transations/exchanges`
+        ); // Adjust the API endpoint as needed
+        console.log("Fetched Exchanges Data:", response.data);
+        set({ exchanges: response.data.exchanges }); // Adjust based on response structure
+      } catch (error) {
+        console.error(
+          "Failed to fetch exchanges:",
+          error.response?.data || error.message
+        );
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
   addExchange: async (exchangeData) => {
-    try {
-      const response = await axios.post(
-        `${baseURL}/api/transations/exchanges/add`, // Adjust the API endpoint as needed
-        exchangeData
-      );
-      set((state) => ({
-        exchanges: [...state.exchanges, response.data],
-      }));
-    } catch (error) {
-      console.error("Failed to add exchange:", error);
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.post(
+          `${baseURL}/api/transations/exchanges/add`, // Adjust the API endpoint as needed
+          exchangeData
+        );
+        set((state) => ({
+          exchanges: [...state.exchanges, response.data],
+        }));
+      } catch (error) {
+        console.error("Failed to add exchange:", error);
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
@@ -422,79 +452,99 @@ const useStore = create((set, get) => ({
 
   /** =============================== AUTH SECTION ============================ */
   signup: async (userData) => {
-    try {
-      await axios.post(`${baseURL}/api/auth/signup`, userData);
-    } catch (error) {
-      console.error("Signup failed:", error);
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        await axios.post(`${baseURL}/api/auth/signup`, userData);
+      } catch (error) {
+        console.error("Signup failed:", error);
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
   /** =============================== RETURN SECTION ============================ */
   addReturn: async (returnData) => {
-    try {
-      const response = await axios.post(
-        `${baseURL}/api/transations/return`,
-        returnData
-      );
-      set((state) => ({
-        returns: [...state.returns, response.data],
-      }));
-    } catch (error) {
-      console.error("Failed to add return:", error);
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.post(
+          `${baseURL}/api/transations/return`,
+          returnData
+        );
+        set((state) => ({
+          returns: [...state.returns, response.data],
+        }));
+      } catch (error) {
+        console.error("Failed to add return:", error);
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
   /** =============================== EXCHANGE SECTION ============================ */
 
   addExchange: async (exchangeData) => {
-    try {
-      const response = await axios.post(
-        `${baseURL}/api/transations/exchange`,
-        exchangeData
-      );
-      set((state) => {
-        // Ensure that exchanges is always an array
-        const currentExchanges = Array.isArray(state.exchanges)
-          ? state.exchanges
-          : [];
-        return {
-          exchanges: [...currentExchanges, response.data],
-        };
-      });
-    } catch (error) {
-      console.error("Failed to add exchange:", error);
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.post(
+          `${baseURL}/api/transations/exchange`,
+          exchangeData
+        );
+        set((state) => {
+          // Ensure that exchanges is always an array
+          const currentExchanges = Array.isArray(state.exchanges)
+            ? state.exchanges
+            : [];
+          return {
+            exchanges: [...currentExchanges, response.data],
+          };
+        });
+      } catch (error) {
+        console.error("Failed to add exchange:", error);
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
   login: async (username, password, onSuccess) => {
-    try {
-      const response = await axios.post(
-        `${baseURL}/api/auth/login`,
-        { username, password },
-        { withCredentials: true } // Important for sending and receiving cookies
-      );
-
-      console.log("Login response:", response.data); // Log the response data
-
-      const { user } = response.data;
-
-      if (user) {
-        // Store user data (including role) in localStorage
-        localStorage.setItem(
-          "user",
-          JSON.stringify({ username: user.username, role: user.role })
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.post(
+          `${baseURL}/api/auth/login`,
+          { username, password },
+          { withCredentials: true } // Important for sending and receiving cookies
         );
 
-        // Update state with user and role
-        set({ user: user.username, role: user.role });
+        console.log("Login response:", response.data); // Log the response data
 
-        if (onSuccess) onSuccess(user.role);
-      } else {
-        throw new Error("Login failed. User or token not received.");
+        const { user } = response.data;
+
+        if (user) {
+          // Store user data (including role) in localStorage
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ username: user.username, role: user.role })
+          );
+
+          // Update state with user and role
+          set({ user: user.username, role: user.role });
+
+          if (onSuccess) onSuccess(user.role);
+        } else {
+          throw new Error("Login failed. User or token not received.");
+        }
+      } catch (error) {
+        console.error("Login failed:", error.response?.data || error.message);
+        throw new Error("Login failed.");
       }
-    } catch (error) {
-      console.error("Login failed:", error.response?.data || error.message);
-      throw new Error("Login failed.");
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
@@ -514,13 +564,18 @@ const useStore = create((set, get) => ({
   },
 
   logout: async () => {
-    try {
-      await axios.post(`${baseURL}/api/auth/logout`);
-      // Clear user info from localStorage
-      localStorage.removeItem("user");
-      set({ user: null, role: null });
-    } catch (error) {
-      console.error("Logout failed:", error);
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        await axios.post(`${baseURL}/api/auth/logout`);
+        // Clear user info from localStorage
+        localStorage.removeItem("user");
+        set({ user: null, role: null });
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
@@ -593,30 +648,40 @@ const useStore = create((set, get) => ({
   },
 
   checkLock: async () => {
-    try {
-      const response = await axios.get(`${baseURL}/api/auth/checklock`, {
-        withCredentials: true,
-      });
-      set({ isLocked: response.data.isLocked }); // Expecting a Boolean from the backend
-    } catch (error) {
-      console.error("Failed to fetch lock status:", error);
-      // You can decide how to handle errors here
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.get(`${baseURL}/api/auth/checklock`, {
+          withCredentials: true,
+        });
+        set({ isLocked: response.data.isLocked }); // Expecting a Boolean from the backend
+      } catch (error) {
+        console.error("Failed to fetch lock status:", error);
+        // You can decide how to handle errors here
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 
   toggleLock: async () => {
-    try {
-      const response = await axios.post(
-        `${baseURL}/api/auth/togglelock`,
-        {},
-        {
-          withCredentials: true, // Ensures cookies are sent with the request
-        }
-      );
-      set({ isLocked: response.data.lock_status === "locked" });
-    } catch (error) {
-      console.error("Failed to toggle lock status:", error);
-      // Handle errors accordingly
+    const { networkSpeed } = get(); // Access networkSpeed from the state
+    if (networkSpeed !== "Slow") {
+      try {
+        const response = await axios.post(
+          `${baseURL}/api/auth/togglelock`,
+          {},
+          {
+            withCredentials: true, // Ensures cookies are sent with the request
+          }
+        );
+        set({ isLocked: response.data.lock_status === "locked" });
+      } catch (error) {
+        console.error("Failed to toggle lock status:", error);
+        // Handle errors accordingly
+      }
+    } else {
+      console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
 

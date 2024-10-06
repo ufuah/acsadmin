@@ -1745,3 +1745,243 @@
 // }));
 
 // export default useStore;
+
+
+
+
+
+//   /** =============================== CATEGORY SECTION ============================ */
+//   fetchCategories: async () => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         const response = await axios.get(`${baseURL}/api/categories`);
+//         set({ categories: response.data });
+//       } catch (error) {
+//         console.error("Failed to fetch categories:", error);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying the category fetch.");
+//     }
+//   },
+
+//   addCategory: async (category) => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         const response = await axios.post(`${baseURL}/api/categories/add`, category);
+//         set((state) => ({
+//           categories: [...state.categories, response.data],
+//         }));
+//       } catch (error) {
+//         console.error("Failed to add category:", error);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying the category addition.");
+//     }
+//   },
+
+//   updateCategory: async (id, updatedCategory) => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         const response = await axios.put(`${baseURL}/api/categories/${id}`, updatedCategory);
+//         set((state) => ({
+//           categories: state.categories.map((cat) =>
+//             cat.id === id ? { ...cat, ...response.data } : cat
+//           ),
+//         }));
+//       } catch (error) {
+//         console.error("Failed to update category:", error);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying the category update.");
+//     }
+//   },
+
+//   deleteCategory: async (id) => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         await axios.delete(`${baseURL}/api/categories/${id}`);
+//         set((state) => ({
+//           categories: state.categories.filter((cat) => cat.id !== id),
+//         }));
+//       } catch (error) {
+//         console.error("Failed to delete category:", error);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying the category deletion.");
+//     }
+//   },
+
+//   /** =============================== STOCK SECTION ============================ */
+//   saveStock: async (stock) => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         if (stock.description) {
+//           await updateStock(stock);
+//         } else {
+//           await addStock(stock);
+//         }
+//       } catch (error) {
+//         console.error("Failed to save stock:", error);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying the stock save.");
+//     }
+//   },
+
+//   addStock: async (stock) => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         const response = await axios.post(`${baseURL}/api/stocks/add/`, stock);
+//         set((state) => ({
+//           stocks: [...state.stocks, response.data],
+//         }));
+//       } catch (error) {
+//         console.error("Failed to add stock:", error);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying the stock addition.");
+//     }
+//   },
+
+//   updateStock: async (stock) => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         const response = await axios.put(`${baseURL}/api/stocks/${stock.description}/`, stock);
+//         set((state) => ({
+//           stocks: [
+//             ...state.stocks.filter((s) => s.id !== stock.id),
+//             response.data,
+//           ],
+//         }));
+//       } catch (error) {
+//         console.error("Failed to update stock:", error);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying the stock update.");
+//     }
+//   },
+
+//   fetchStocks: async () => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         const response = await axios.get(`${baseURL}/api/stocks`);
+//         set({ stocks: response.data });
+//       } catch (error) {
+//         console.error("Failed to fetch stocks:", error);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying the stock fetch.");
+//     }
+//   },
+
+//   deleteStock: async (id) => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         await axios.delete(`${baseURL}/api/stocks/${id}/`);
+//         set((state) => ({
+//           stocks: state.stocks.filter((stock) => stock.id !== id),
+//         }));
+//       } catch (error) {
+//         console.error("Failed to delete stock:", error);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying the stock deletion.");
+//     }
+//   },
+
+//   /** =============================== SALES SECTION ============================ */
+//   fetchSales: async () => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         const response = await axios.get(`${baseURL}/api/transations/sales`);
+//         set({ sales: response.data.sales });
+//       } catch (error) {
+//         console.error("Failed to fetch sales:", error);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying the sales fetch.");
+//     }
+//   },
+
+//   addSale: async (sale) => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         const response = await axios.post(`${baseURL}/api/transations/sales/add`, sale);
+//         set((state) => ({
+//           sales: [...state.sales, { ...sale, sales_id: response.data.sales_id }],
+//         }));
+//       } catch (error) {
+//         console.error("Failed to add sale:", error);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying the sale addition.");
+//     }
+//   },
+
+//   updateSale: async (salesId, newStatus, supplier) => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         const response = await axios.put(`${baseURL}/api/transations/sales/${salesId}/status`, { status: newStatus, supplier });
+//         set((state) => ({
+//           sales: state.sales.map((sale) =>
+//             sale.id === salesId ? { ...sale, ...response.data } : sale
+//           ),
+//         }));
+//       } catch (error) {
+//         console.error("Failed to update sale:", error);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying the sale update.");
+//     }
+//   },
+
+//   /** =============================== AUTH SECTION ============================ */
+//   login: async (username, password, onSuccess) => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         const response = await axios.post(
+//           `${baseURL}/api/auth/login`,
+//           { username, password },
+//           { withCredentials: true }
+//         );
+//         const { user } = response.data;
+//         if (user) {
+//           localStorage.setItem("user", JSON.stringify({ username: user.username, role: user.role }));
+//           set({ user: user.username, role: user.role });
+//           if (onSuccess) onSuccess(user.role);
+//         }
+//       } catch (error) {
+//         console.error("Login failed:", error.response?.data || error.message);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying login.");
+//     }
+//   },
+
+//   logout: async () => {
+//     const { networkSpeed } = get();
+//     if (networkSpeed !== "Slow") {
+//       try {
+//         await axios.post(`${baseURL}/api/auth/logout`);
+//         localStorage.removeItem("user");
+//         set({ user: null, role: null });
+//       } catch (error) {
+//         console.error("Logout failed:", error);
+//       }
+//     } else {
+//       console.warn("Network is too slow, delaying logout.");
+//     }
+//   },
