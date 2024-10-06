@@ -1,6 +1,6 @@
-.container {
+.container { 
   width: 100%;
-  height: fit-content; /* Removed -moz-fit-content as it's outdated */
+  height: fit-content; 
   padding: 50px;
   opacity: 1;
   visibility: visible;
@@ -8,15 +8,8 @@
   transition: 0.5s ease-in-out;
 }
 
-.header {
-  font-size: 30px;
-  text-transform: capitalize;
-  color: var(--secondary-color);
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
-.stock_hearding span {
+/* Adjustments to header and stock headings */
+.header, .stock_hearding span {
   font-size: 30px;
   text-transform: capitalize;
   color: var(--secondary-color);
@@ -46,41 +39,37 @@
   background-color: var(--secondary-color);
 }
 
+/* Container adjustments for responsiveness */
 .table_container {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
   gap: 20px;
   padding: 20px;
 }
 
 .tableContainer {
   width: 100%;
-  table-layout: fixed;
+  overflow-x: auto; /* Allow horizontal scroll on small screens */
+  display: block;
   border-collapse: collapse;
-  -webkit-backdrop-filter: blur(25px) saturate(162%);
-  backdrop-filter: blur(25px) saturate(162%);
   background-color: var(--backdrop-color);
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
-  padding: 12px;
   border-radius: 20px;
+  padding: 12px;
 }
 
 .tableContainer table {
   width: 100%;
-  table-layout: fixed;
+  border-collapse: collapse;
+  table-layout: auto; /* Responsive, no fixed column width */
 }
 
 .tableContainer th,
 .tableContainer td {
-  padding: 4px 12px;
+  padding: 8px 12px;
   text-align: center;
-  white-space: break-spaces;
-  color: var(--secondary-color);
-  text-transform: capitalize;
   font-size: 16px;
 }
 
@@ -90,19 +79,6 @@
 
 .tableContainer tr:nth-child(even) {
   background-color: var(--main-brand-color);
-}
-
-.tableContainer tr {
-  padding-top: 8px;
-  cursor: pointer;
-}
-
-.tableContainer td img {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  border-radius: 40px;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
 }
 
 .totalLabel {
@@ -118,17 +94,10 @@
   height: 8px;
   border-radius: 50%;
   background-color: red;
-  margin-left: 5px; /* Adjusts spacing between number and dot */
+  margin-left: 5px;
 }
 
-.totalLabel {
-  font-size: 18px;
-  color: #ebebeb;
-  text-transform: capitalize;
-  font-weight: bold;
-}
-
-/* Media queries for responsiveness */
+/* Responsive styles */
 
 /* Large devices (desktops, 1200px and up) */
 @media (min-width: 1200px) {
@@ -219,5 +188,9 @@
   .buttonContainer {
     flex-direction: column;
     gap: 5px;
+  }
+
+  .tableContainer {
+    overflow-x: scroll; /* Enables horizontal scrolling */
   }
 }
