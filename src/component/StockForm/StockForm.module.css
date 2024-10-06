@@ -51,9 +51,20 @@
   gap: 50px;
 }
 
+.loading {
+  position: fixed;
+  top: 80px;
+  left: 45%;
+  background: var(--main-brand-color);
+  padding: 10px;
+  color: #fff;
+  border-radius: 20px;
+  transition: 0.5s ease-out;
+}
+
 .upload_btn {
   position: absolute;
-  top: 33px;
+  top: 55px;
   right: 51px;
   display: flex;
   justify-content: center;
@@ -70,6 +81,14 @@
   -moz-user-select: none;
   user-select: none;
   cursor: pointer;
+  visibility: visible;
+  opacity: 1;
+  transition: 0.5s ease-in-out;
+}
+
+.upload_btn.active {
+  visibility: hidden;
+  opacity: 0;
 }
 
 .upload_btn:hover {
@@ -168,7 +187,6 @@
     margin: 23px;
     height: 778px;
     gap: 73px;
-
   }
 
   .formGroup {
@@ -206,7 +224,7 @@
   .formGroup input {
     height: 70px;
     font-size: 16px;
-}
+  }
 }
 
 @media screen and (max-width: 475px) {
@@ -218,9 +236,9 @@
   }
 
   .upload_btn {
-    top: 42px;
-    right: 317px;
-    padding: 10px 20px;
+    top: 87px;
+    right: 252px;
+    padding: 7px 14px;
     border-radius: 30px;
   }
 
@@ -235,10 +253,15 @@
   }
 
   .upload_btn {
-    top: 43px;
-    right: 304px;
-    padding: 10px 20px;
+    top: 87px;
+    right: 306px;
+    padding: 7px 14px;
     border-radius: 30px;
+  }
+
+  .loading {
+    top: 80px;
+    left: 27%;
   }
 
   .formGroup label {
@@ -254,20 +277,33 @@
   .formGroup label {
     font-size: 15px;
   }
-
-  .upload_btn {
-    top: 43px;
-    right: 290px;
-    padding: 10px 20px;
-    border-radius: 30px;
-  }
-
 }
 
+@media screen and (max-width: 395px) {
+  .loading {
+    top: 87px;
+    left: 24%;
+  }
+
+  .upload_btn {
+    top: 87px;
+    right: 252px;
+    padding: 7px 14px;
+    border-radius: 30px;
+  }
+}
 @media screen and (max-width: 380px) {
+  .loading {
+    top: 87px;
+    left: 24%;
+  }
 }
 
 @media screen and (max-width: 375px) {
+  .loading {
+    top: 87px;
+    left: 24%;
+  }
 }
 
 @media screen and (max-width: 360px) {

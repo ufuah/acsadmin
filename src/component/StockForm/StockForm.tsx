@@ -244,6 +244,39 @@ const StockForm: React.FC<StockFormProps> = ({ stock, onSuccess, existingStocks 
   // };
 
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setError(null);
+  //   setLoading(true); // Start loading
+
+  //   const dataToSubmit = {
+  //     ...formData,
+  //     opening_qty: formData.opening_qty!,
+  //     purchase_qty: formData.purchase_qty!,
+  //     exchange_qty: formData.exchange_qty!,
+  //     return_qty: formData.return_qty!,
+  //     standard_price: formData.standard_price!,
+  //     closing_stock: formData.closing_stock!,
+  //     closing_value: formData.closing_value!,
+  //     category: formData.category!, // Pass category to backend
+  //   };
+
+  //   try {
+  //     if (selectedStockId) {
+  //       // If there's a selectedStockId, update the stock
+  //       await updateStock(dataToSubmit);
+  //     } else {
+  //       // If there's no selectedStockId, add a new stock
+  //       await addStock(dataToSubmit);
+  //     }
+  //     resetForm();
+  //     onSuccess();
+  //   } catch (error) {
+  //     setError("Failed to submit stock. Please try again.");
+  //   }
+  // };
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -273,8 +306,12 @@ const StockForm: React.FC<StockFormProps> = ({ stock, onSuccess, existingStocks 
       onSuccess();
     } catch (error) {
       setError("Failed to submit stock. Please try again.");
+    } finally {
+      setLoading(false); // End loading
     }
   };
+
+
   return (
     <div className={styles.container}>
       {error && <div style={{ color: "red" }}>{error}</div>}
@@ -381,7 +418,7 @@ const StockForm: React.FC<StockFormProps> = ({ stock, onSuccess, existingStocks 
             />
           </div>
 
-          <button className={styles.upload_btn} type="submit" disabled={loading}> {/* Disable button during loading */}
+          <button className={loading ? `${styles.upload_btn} ${styles.active}` : styles.upload_btn} type="submit" disabled={loading}> {/* Disable button during loading */}
             {loading ? "Submitting..." : "Submit"}
           </button>
         </form>
