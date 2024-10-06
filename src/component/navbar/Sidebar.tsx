@@ -108,6 +108,7 @@ import {
   faArrowRight,
   faRightFromBracket,
   faRecycle,
+  faBoxesStacked,
 } from "@fortawesome/free-solid-svg-icons";
 import useStore from "@/src/useStore/Store"; // Assuming the store contains the lock and role states
 
@@ -158,8 +159,8 @@ const Sidebar: React.FC = () => {
     { path: "/stock", icon: faWarehouse },
     { path: "/salesmanager", icon: faFolder },
     { path: "/return", icon: faRecycle },
+    { path: "/stock/addstocks", icon: faBoxesStacked },
   ];
-
 
   // Filter nav items based on role
   const filteredNavItems = allNavItems.filter((item) => {
