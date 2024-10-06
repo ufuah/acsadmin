@@ -4,18 +4,21 @@
 
 .topbar {
   width: 100%;
-  padding: 20px;
+  padding: 20px 70px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .greatings {
-  width: 100%;
+  width: fit-content;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 6px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 .greatings span {
@@ -47,7 +50,9 @@
 }
 
 .bell {
-  position: relative;
+  position: fixed;
+  top: 16px;
+  right: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,8 +63,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 50px;
-  width: 40px;
-  height: 40px;
+  width: 21px;
+  height: 21px;
   background: var(--main-brand-color);
   color: #f7f7f7;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
@@ -69,18 +74,25 @@
 
 .bell span {
   position: absolute;
-  top: -12px;
-  left: 31px;
+  top: -7px;
+  left: 13px;
+  width: 18px;
+  height: 18px;
+  font-size: 14px;
+  display: flex;
   color: var(--main-brand-color);
   background-color: #f7f7f7;
   padding: 4px;
   border-radius: 50px;
+  align-items: center;
+  justify-content: center;
 }
 
 @media screen and (max-width: 495px) {
   .topbar {
-    padding: 20px;
+    padding: 20px 10px;
     flex-direction: column;
+    align-items: flex-start;
   }
 
   .searcharea {
@@ -94,19 +106,15 @@
   }
 
   .bell {
-    position: fixed;
+    width: fit-content;
     top: 48px;
     left: 353px;
   }
 
-  .icon {
-    width: 30px;
-    height: 30px;
-  }
-
   .bell span {
-    top: -13px;
-    left: 25px;
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
   }
 
   .content span {
@@ -131,12 +139,40 @@
 }
 
 @media screen and (max-width: 475px) {
+  .greatings span {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .greatings p {
+    font-size: 14px;
+    font-weight: bold;
+  }
 }
 
 @media screen and (max-width: 440px) {
 }
 
 @media screen and (max-width: 428px) {
+  .icon {
+    width: 22px;
+    padding: 6px;
+    height: 22px;
+    font-size: 18px;
+  }
+
+  .bell {
+    width: -moz-fit-content;
+    width: fit-content;
+    top: 44px;
+    left: 378px;
+  }
+
+  .bell span {
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+  }
 }
 
 /* @media screen and (max-width: 414px) {
@@ -156,11 +192,72 @@
 @media screen and (max-width: 414px) {
 }
 
+@media screen and (max-width: 395px) {
+  .icon {
+    width: 22px;
+    padding: 6px;
+    height: 22px;
+    font-size: 18px;
+  }
+
+  .bell {
+    width: -moz-fit-content;
+    width: fit-content;
+    top: 44px;
+    left: 357px;
+  }
+
+  .bell span {
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+  }
+}
+
+
 @media screen and (max-width: 380px) {
+  .icon {
+    width: 22px;
+    padding: 6px;
+    height: 22px;
+    font-size: 14px;
+  }
+
+  .bell {
+    width: -moz-fit-content;
+    width: fit-content;
+    top: 44px;
+    left: 343px;
+  }
+
+  .bell span {
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+  }
 }
 
 @media screen and (max-width: 375px) {
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 365px) {
+  .icon {
+    width: 22px;
+    padding: 6px;
+    height: 22px;
+    font-size: 14px;
+  }
+
+  .bell {
+    width: -moz-fit-content;
+    width: fit-content;
+    top: 44px;
+    left: 328px;
+  }
+
+  .bell span {
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+  }
 }

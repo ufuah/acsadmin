@@ -1,5 +1,5 @@
 import React from "react";
-import img from "../../../public/profile_pic.jpg";
+import logo from "../../../public/logo.png";
 import styles from "./profile.module.css";
 import Image from "next/image";
 
@@ -8,7 +8,7 @@ const Profile = ({user}) => {
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.img}>
-          <Image src={img} alt="profile" />
+          <Image src={logo} alt="profile" />
         </div>
 
         {/* <div className={styles.greatings}>
@@ -18,7 +18,6 @@ const Profile = ({user}) => {
           <p>{user?.username}</p>
         </div> */}
 
-        <span>hi,{user}</span>
       </div>
     </div>
   );

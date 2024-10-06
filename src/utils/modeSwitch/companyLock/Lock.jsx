@@ -2,9 +2,9 @@
 
 import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faUnlock } from "@fortawesome/free-solid-svg-icons";
 import useStore from "@/src/useStore/Store";
 import styles from "./lockControl.module.css";
+import { faLock, faUnlock } from "@fortawesome/free-solid-svg-icons";
 
 const LockControl = () => {
   const { role, isLocked, checkLock, toggleLock } = useStore((state) => ({

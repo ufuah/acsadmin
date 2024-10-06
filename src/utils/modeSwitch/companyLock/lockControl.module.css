@@ -30,20 +30,20 @@
 
 @media (max-width: 428px) {
   .container {
-    top: 14px;
-    left: 369px;
-    width: 45px;
-    height: 45px;
+    top: 6px;
+    left: 287px;
+    width: 35px;
+    height: 35px;
     border-radius: 30px;
     justify-content: center;
   }
 }
 @media (max-width: 414px) {
   .container {
-    top: 14px;
-    left: 330px;
-    width: 40px;
-    height: 40px;
+    top: 7px;
+    left: 297px;
+    width: 35px;
+    height: 35px;
   }
 }
 
@@ -51,8 +51,5 @@
   .container {
     top: 14px;
     left: 297px;
-    width: 37px;
-    height: 37px;
-
   }
 }
