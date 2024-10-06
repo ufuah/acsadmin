@@ -43,6 +43,7 @@ const StockForm: React.FC<StockFormProps> = ({ stock, onSuccess, existingStocks 
   const [selectedStockId, setSelectedStockId] = useState<number | "">("");
   const [error, setError] = useState<string | null>(null);
   const [debouncedDescription, setDebouncedDescription] = useState(formData.description || "");
+  const [loading, setLoading] = useState(false); // Loading state
 
   useEffect(() => {
     if (stock) {
@@ -246,6 +247,7 @@ const StockForm: React.FC<StockFormProps> = ({ stock, onSuccess, existingStocks 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setLoading(true); // Start loading
 
     const dataToSubmit = {
       ...formData,
@@ -276,12 +278,13 @@ const StockForm: React.FC<StockFormProps> = ({ stock, onSuccess, existingStocks 
   return (
     <div className={styles.container}>
       {error && <div style={{ color: "red" }}>{error}</div>}
+      {loading && <div className={styles.loading}>Submitting, please wait...</div>} {/* Loading indicator */}
       <div className={styles.contents}>
         <h1>{selectedStockId ? "Update Stock" : "Add Stock"}</h1>
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label>Select Stock (Optional)</label>
-            <select value={selectedStockId || ""} onChange={handleSelectChange}>
+            <select value={selectedStockId || ""} onChange={handleSelectChange} disabled={loading}>
               <option value="">Add New Stock</option>
               {existingStocks?.map((stock) => (
                 <option key={stock.id} value={stock.id}>
@@ -300,6 +303,8 @@ const StockForm: React.FC<StockFormProps> = ({ stock, onSuccess, existingStocks 
               onChange={handleChange}
               placeholder="Description"
               required
+              disabled={loading} // Disable during loading
+
             />
           </div>
 
@@ -310,6 +315,8 @@ const StockForm: React.FC<StockFormProps> = ({ stock, onSuccess, existingStocks 
               value={formData.category || ""}
               onChange={handleChange}
               required
+              disabled={loading} // Disable during loading
+
             >
               <option value="">Select Category</option>
               <option value="roofing">Roofing</option>
@@ -335,6 +342,8 @@ const StockForm: React.FC<StockFormProps> = ({ stock, onSuccess, existingStocks 
               value={formData.purchase_qty || ""}
               onChange={handleChange}
               placeholder="Purchase Quantity"
+              disabled={loading} // Disable during loading
+
             />
           </div>
 
@@ -347,6 +356,8 @@ const StockForm: React.FC<StockFormProps> = ({ stock, onSuccess, existingStocks 
               onChange={handleChange}
               placeholder="Standard Price"
               required
+              disabled={loading} // Disable during loading
+
             />
           </div>
 
@@ -370,8 +381,8 @@ const StockForm: React.FC<StockFormProps> = ({ stock, onSuccess, existingStocks 
             />
           </div>
 
-          <button className={styles.upload_btn} type="submit">
-            Submit
+          <button className={styles.upload_btn} type="submit" disabled={loading}> {/* Disable button during loading */}
+            {loading ? "Submitting..." : "Submit"}
           </button>
         </form>
       </div>
