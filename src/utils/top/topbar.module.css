@@ -189,7 +189,13 @@
 }
 } */
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 418px) {
+  .bell {
+    width: -moz-fit-content;
+    width: fit-content;
+    top: 45px;
+    left: 372px;
+  }
 }
 
 @media screen and (max-width: 395px) {
@@ -213,7 +219,6 @@
     font-size: 12px;
   }
 }
-
 
 @media screen and (max-width: 380px) {
   .icon {
