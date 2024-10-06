@@ -20,9 +20,9 @@
 }
 
 .arrow {
-  position: absolute;
+  position: fixed;
   top: 8px;
-  left: 48%;
+  left: 49%;
   width: 30px;
   height: 30px;
   display: flex;
@@ -68,6 +68,7 @@
   font-size: 12px;
   font-weight: bold;
   text-transform: capitalize;
+  color: #353434;
 }
 
 .base {
@@ -91,10 +92,11 @@
   margin: 4px;
   border-radius: 10px;
   text-align: center;
+  font-size: 14px;
 }
 
 .quality.fast {
-  color: rgb(149, 247, 149);
+  color: rgb(62 129 62);
   background: rgba(7, 208, 34, 0.334);
 }
 
@@ -120,8 +122,12 @@
   border-radius: 50%;
 }
 
-
-
+.type span,.speed span {
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #353434;
+  font-weight: bold;
+}
 
 @media screen and (max-width: 428px) {
   .network_info {
@@ -131,13 +137,13 @@
 }
 
 @media screen and (max-width: 393px) {
-    .network_info {
-      left: 140px;
-    }
+  .network_info {
+    left: 140px;
   }
+}
 
 @media screen and (max-width: 380px) {
-    .network_info {
-      left: 130px;
-    }
+  .network_info {
+    left: 130px;
   }
+}
