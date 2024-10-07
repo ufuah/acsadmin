@@ -471,6 +471,7 @@ const StockForm: React.FC<StockFormProps> = ({
   const [selectedStockId, setSelectedStockId] = useState<number | "">("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false); // Loading state
+  const [fetching, setFetching] = useState(false); // Loading state for fetching stock
 
   useEffect(() => {
     if (stock) {
@@ -491,9 +492,29 @@ const StockForm: React.FC<StockFormProps> = ({
   }, [stock]);
 
   // Fetch stock on description field blur
-  const handleBlur = useCallback(async () => {
+  // const handleBlur = useCallback(async () => {
+  //   const description = formData.description?.trim();
+  //   if (description) {
+  //     try {
+  //       const fetchedStock = await fetchStockByDescription(description);
+  //       if (fetchedStock) {
+  //         setFormData((prevData) => ({
+  //           ...prevData,
+  //           ...fetchedStock,
+  //         }));
+  //         setSelectedStockId(fetchedStock.id!);
+  //       }
+  //     } catch (error) {
+  //       setError("Error fetching stock. Please try again.");
+  //     }
+  //   }
+  // }, [formData.description, fetchStockByDescription]);
+
+   // Fetch stock on description field blur
+   const handleBlur = useCallback(async () => {
     const description = formData.description?.trim();
     if (description) {
+      setFetching(true); // Start fetching state
       try {
         const fetchedStock = await fetchStockByDescription(description);
         if (fetchedStock) {
@@ -505,6 +526,8 @@ const StockForm: React.FC<StockFormProps> = ({
         }
       } catch (error) {
         setError("Error fetching stock. Please try again.");
+      } finally {
+        setFetching(false); // End fetching state
       }
     }
   }, [formData.description, fetchStockByDescription]);
@@ -626,6 +649,7 @@ const StockForm: React.FC<StockFormProps> = ({
       {loading && (
         <div className={styles.loading}>Submitting, please wait...</div>
       )}
+      {fetching && <div className={styles.loading}>Fetching stock details...</div>} {/* Loading indicator for fetching */}
       {/* Loading indicator */}
       <div className={styles.contents}>
         <h1>{selectedStockId ? "Update Stock" : "Add Stock"}</h1>
@@ -763,7 +787,7 @@ const StockForm: React.FC<StockFormProps> = ({
                   : styles.upload_btn
               }
               type="submit"
-              disabled={loading}
+              disabled={loading || fetching}
             >
               {" "}
               {/* Disable button during loading */}{" "}
