@@ -310,6 +310,15 @@
   background-color: var(--main-brand-color) !important;
 }
 
+@media screen and (max-width: 1285px) {
+
+
+  .itemscontainer {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+  }
+
+}
 @media screen and (max-width: 884px) {
   .form {
     flex-direction: column-reverse;

@@ -381,11 +381,11 @@ export default function AddSale() {
         <div className={styles.userbox}>
           <div className={styles.top}>
             <h1 className={styles.title}>Add Sale</h1>
-
-            <div
-              className={`${styles.category} ${
+            {/* className={`${styles.category} ${
                 scrolled ? styles.scrolled : ""
-              }`}
+              }`} */}
+            <div
+              className={styles.category}
             >
               <span className={styles.category_label}>Category:</span>
               <select
