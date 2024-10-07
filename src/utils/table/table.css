@@ -417,9 +417,24 @@ button:focus {
   font-weight: bold;
 }
 
+.type {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
 .type p {
   color: #ebebeb;
   font-size: 16px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+
+.type span {
+  color: #ebebeb;
+  font-size: 20px;
   font-weight: bold;
   text-transform: capitalize;
 }
@@ -800,7 +815,7 @@ td img {
   .filter_buttons {
     gap: 20px;
     margin-bottom: 10px;
-}
+  }
 
   .filt {
     width: 100%;

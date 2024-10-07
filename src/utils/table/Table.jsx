@@ -45,7 +45,7 @@ const Table = () => {
 
   // Added new state for transaction type
   const [selectedTransactionType, setSelectedTransactionType] =
-    useState("sales");
+    useState("all");
 
   const {
     sales,
@@ -187,38 +187,100 @@ const Table = () => {
 
   // Logging here after useEffect will also show the current value of returns
 
-  useEffect(() => {
-    console.log("Final Returns Data after Fetch:", returns);
-  }, [returns]); // This logs the 'returns' data when it changes
+  // useEffect(() => {
+  //   console.log("Final Returns Data after Fetch:", returns);
+  // }, [returns]); // This logs the 'returns' data when it changes
+  // const applyFilters = useCallback(() => {
+  //   let filtered = []; // Initialize filtered as an empty array
+  //   console.log("Filtered before date range:", filtered);
+  //   // Select data based on the selected transaction type
+  //   if (selectedTransactionType === "sales") {
+  //     filtered = Array.isArray(sales) ? [...sales] : []; // Ensure sales is an array
+  //   } else if (selectedTransactionType === "returns") {
+  //     filtered = Array.isArray(returns) ? [...returns] : []; // Ensure returns is an array
+  //   } else if (selectedTransactionType === "exchanges") {
+  //     filtered = Array.isArray(exchanges) ? [...exchanges] : []; // Ensure exchanges is an array
+  //   }
+
+  //   // Apply filters based on status
+  //   if (filterStatus !== "all") {
+  //     filtered = filtered.filter((order) => order.status === filterStatus);
+  //   }
+
+  //   // Apply filters based on transaction type
+  //   if (filterType !== "all") {
+  //     filtered = filtered.filter(
+  //       (order) => order.transaction_type === filterType
+  //     );
+  //   }
+
+  //   // Apply filters based on category
+  //   if (category !== "all") {
+  //     filtered = filtered.filter((order) => order.category === category);
+  //   }
+
+  //   // Apply filters based on date range
+  //   if (dateRange.startDate && dateRange.endDate) {
+  //     filtered = filtered.filter((order) => {
+  //       const orderDate = new Date(order.date).setHours(0, 0, 0, 0);
+  //       const startDate = new Date(dateRange.startDate).setHours(0, 0, 0, 0);
+  //       const endDate = new Date(dateRange.endDate).setHours(23, 59, 59, 999);
+  //       return orderDate >= startDate && orderDate <= endDate;
+  //     });
+  //   }
+
+  //   // Update the state with the filtered results
+  //   setFilteredSales(filtered);
+  //   setSearchResults(filtered);
+  // }, [
+  //   filterStatus,
+  //   filterType,
+  //   category,
+  //   dateRange,
+  //   sales,
+  //   returns,
+  //   exchanges,
+  //   selectedTransactionType,
+  // ]);
+
+  // console.log('Filtered before date range:', filtered);
+
+
   const applyFilters = useCallback(() => {
     let filtered = []; // Initialize filtered as an empty array
-    console.log("Filtered before date range:", filtered);
-    // Select data based on the selected transaction type
-    if (selectedTransactionType === "sales") {
-      filtered = Array.isArray(sales) ? [...sales] : []; // Ensure sales is an array
+  
+    // If "all" is selected, combine all records from sales, returns, and exchanges
+    if (selectedTransactionType === "all") {
+      filtered = [
+        ...(Array.isArray(sales) ? sales : []),
+        ...(Array.isArray(returns) ? returns : []),
+        ...(Array.isArray(exchanges) ? exchanges : []),
+      ]; // Combine all arrays into one
+    } else if (selectedTransactionType === "sales") {
+      filtered = Array.isArray(sales) ? [...sales] : [];
     } else if (selectedTransactionType === "returns") {
-      filtered = Array.isArray(returns) ? [...returns] : []; // Ensure returns is an array
+      filtered = Array.isArray(returns) ? [...returns] : [];
     } else if (selectedTransactionType === "exchanges") {
-      filtered = Array.isArray(exchanges) ? [...exchanges] : []; // Ensure exchanges is an array
+      filtered = Array.isArray(exchanges) ? [...exchanges] : [];
     }
-
+  
     // Apply filters based on status
     if (filterStatus !== "all") {
       filtered = filtered.filter((order) => order.status === filterStatus);
     }
-
+  
     // Apply filters based on transaction type
     if (filterType !== "all") {
       filtered = filtered.filter(
         (order) => order.transaction_type === filterType
       );
     }
-
+  
     // Apply filters based on category
     if (category !== "all") {
       filtered = filtered.filter((order) => order.category === category);
     }
-
+  
     // Apply filters based on date range
     if (dateRange.startDate && dateRange.endDate) {
       filtered = filtered.filter((order) => {
@@ -228,7 +290,7 @@ const Table = () => {
         return orderDate >= startDate && orderDate <= endDate;
       });
     }
-
+  
     // Update the state with the filtered results
     setFilteredSales(filtered);
     setSearchResults(filtered);
@@ -242,8 +304,8 @@ const Table = () => {
     exchanges,
     selectedTransactionType,
   ]);
+  
 
-  // console.log('Filtered before date range:', filtered);
 
   useEffect(() => {
     applyFilters();
@@ -302,6 +364,7 @@ const Table = () => {
           orderId: order.sales_id,
           date: order.date,
           methodOfPayment: order.bank_or_pos,
+          transaction_type: order.transaction_type,
         };
       }
       
