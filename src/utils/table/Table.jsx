@@ -259,6 +259,32 @@ const Table = () => {
     applyFilters,
   ]);
 
+  // const groupedOrders = useMemo(() => {
+  //   const salesData = searchResults.length > 0 ? searchResults : filteredSales;
+  //   return salesData.reduce((acc, order) => {
+  //     if (!acc[order.customer_name]) {
+  //       acc[order.customer_name] = {};
+  //     }
+  //     if (!acc[order.customer_name][order.sales_id]) {
+  //       acc[order.customer_name][order.sales_id] = {
+  //         orders: [],
+  //         totalAmount: 0,
+  //         totalPaid: 0,
+  //         status: order.status,
+  //         suppliedBy: order.supplied_by || "",
+  //         customerImage: order.customer_image || logo,
+  //         orderId: order.sales_id,
+  //         date: order.date,
+  //         methodOfPayment: order.bank_or_pos,
+  //       };
+  //     }
+  //     acc[order.customer_name][order.sales_id].orders.push(order);
+  //     acc[order.customer_name][order.sales_id].totalAmount += order.amount_paid;
+  //     acc[order.customer_name][order.sales_id].totalPaid += order.amount_paid;
+  //     return acc;
+  //   }, {});
+  // }, [searchResults, filteredSales]);
+
   const groupedOrders = useMemo(() => {
     const salesData = searchResults.length > 0 ? searchResults : filteredSales;
     return salesData.reduce((acc, order) => {
@@ -278,13 +304,18 @@ const Table = () => {
           methodOfPayment: order.bank_or_pos,
         };
       }
+      
+      // Ensure `order.amount_paid` is a number before adding
+      const amountPaid = parseFloat(order.amount_paid) || 0;
+      
       acc[order.customer_name][order.sales_id].orders.push(order);
-      acc[order.customer_name][order.sales_id].totalAmount += order.amount_paid;
-      acc[order.customer_name][order.sales_id].totalPaid += order.amount_paid;
+      acc[order.customer_name][order.sales_id].totalAmount += amountPaid;
+      acc[order.customer_name][order.sales_id].totalPaid += amountPaid;
+      
       return acc;
     }, {});
   }, [searchResults, filteredSales]);
-
+  
   const handleFilterChange = (event) => {
     setFilterType(event.target.value);
   };
