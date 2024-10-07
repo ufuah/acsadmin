@@ -97,45 +97,45 @@ const StockForm: React.FC<StockFormProps> = ({
     }
   }, [formData.description, fetchStockByDescription]);
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedDescription(formData.description || "");
-    }, 500); // 500ms debounce delay
+  // useEffect(() => {
+  //   const handler = setTimeout(() => {
+  //     setDebouncedDescription(formData.description || "");
+  //   }, 500); // 500ms debounce delay
 
-    return () => clearTimeout(handler);
-  }, [formData.description]);
+  //   return () => clearTimeout(handler);
+  // }, [formData.description]);
 
   // Memoize fetchStockByDescription using useCallback
-  const memoizedFetchStockByDescription = useCallback(
-    async (description: string) => {
-      return await fetchStockByDescription(description);
-    },
-    [fetchStockByDescription]
-  );
+  // const memoizedFetchStockByDescription = useCallback(
+  //   async (description: string) => {
+  //     return await fetchStockByDescription(description);
+  //   },
+  //   [fetchStockByDescription]
+  // );
 
   // Fetch stock by debounced description
-  useEffect(() => {
-    const fetchStock = async () => {
-      if (debouncedDescription.trim()) {
-        try {
-          const fetchedStock = await memoizedFetchStockByDescription(
-            debouncedDescription.trim()
-          );
-          if (fetchedStock) {
-            setFormData((prevData) => ({
-              ...prevData,
-              ...fetchedStock,
-            }));
-            setSelectedStockId(fetchedStock.id!);
-          }
-        } catch (error) {
-          setError("Error fetching stock. Please check console for details.");
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchStock = async () => {
+  //     if (debouncedDescription.trim()) {
+  //       try {
+  //         const fetchedStock = await memoizedFetchStockByDescription(
+  //           debouncedDescription.trim()
+  //         );
+  //         if (fetchedStock) {
+  //           setFormData((prevData) => ({
+  //             ...prevData,
+  //             ...fetchedStock,
+  //           }));
+  //           setSelectedStockId(fetchedStock.id!);
+  //         }
+  //       } catch (error) {
+  //         setError("Error fetching stock. Please check console for details.");
+  //       }
+  //     }
+  //   };
 
-    fetchStock();
-  }, [debouncedDescription, memoizedFetchStockByDescription]); // Include memoizedFetchStockByDescription in dependencies
+  //   fetchStock();
+  // }, [debouncedDescription, memoizedFetchStockByDescription]); // Include memoizedFetchStockByDescription in dependencies
 
   // useEffect(() => {
   //   const fetchStock = async () => {
