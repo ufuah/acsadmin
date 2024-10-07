@@ -685,7 +685,7 @@ const StockForm: React.FC<StockFormProps> = ({
             />
           </div>
 
-          <div className={styles.formGroup}>
+          {/* <div className={styles.formGroup}>
             <label>Purchase Quantity</label>
             <input
               type="number"
@@ -695,9 +695,9 @@ const StockForm: React.FC<StockFormProps> = ({
               required
               disabled={loading} // Disable during loading
             />
-          </div>
+          </div> */}
 
-          <div className={styles.formGroup}>
+          {/* <div className={styles.formGroup}>
             <label>Exchange Quantity</label>
             <input
               type="number"
@@ -707,9 +707,9 @@ const StockForm: React.FC<StockFormProps> = ({
               required
               disabled={loading} // Disable during loading
             />
-          </div>
+          </div> */}
 
-          <div className={styles.formGroup}>
+          {/* <div className={styles.formGroup}>
             <label>Return Quantity</label>
             <input
               type="number"
@@ -719,7 +719,7 @@ const StockForm: React.FC<StockFormProps> = ({
               required
               disabled={loading} // Disable during loading
             />
-          </div>
+          </div> */}
 
           <div className={styles.formGroup}>
             <label>Standard Price</label>
