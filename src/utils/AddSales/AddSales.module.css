@@ -14,14 +14,14 @@
 }
 
 .form {
-  width: 100%;
+  width: -webkit-fill-available;
   padding: 20px;
   display: flex;
-  /* flex-direction: column; */
+  flex-direction: row-reverse;
   gap: 1rem;
   align-items: flex-start;
   justify-content: center;
-  gap: 30px;
+  gap: 56px;
 }
 
 .userbox {
@@ -312,7 +312,7 @@
 
 @media screen and (max-width: 884px) {
   .form {
-    flex-direction: column;
+    flex-direction: column-reverse;
     padding: 30px;
   }
 
@@ -340,7 +340,7 @@
 
 @media screen and (max-width: 800px) {
   .form {
-    flex-direction: column;
+    flex-direction: column-reverse;
     padding: 10px;
   }
 
@@ -364,7 +364,6 @@
 
 @media screen and (max-width: 834px) {
   .form {
-    flex-direction: column;
     padding: 31px;
   }
 
@@ -388,7 +387,7 @@
 
 @media screen and (max-width: 493px) {
   .form {
-    flex-direction: column;
+    flex-direction: column-reverse;
     padding: 6px;
     gap: 10px;
   }
@@ -594,7 +593,7 @@
 
 @media screen and (max-width: 445px) {
   .form {
-    flex-direction: column;
+    flex-direction: column-reverse;
     padding: 6px;
     gap: 10px;
   }
@@ -699,7 +698,7 @@
 }
 @media screen and (max-width: 430px) {
   .form {
-    flex-direction: column;
+    flex-direction: column-reverse;
     padding: 6px;
     gap: 10px;
   }
@@ -799,7 +798,7 @@
 @media screen and (max-width: 418px) {
   .form {
     width: -webkit-fill-available;
-    flex-direction: column;
+    flex-direction: column-reverse;
     padding: 6px;
   }
 
@@ -887,7 +886,6 @@
 @media screen and (max-width: 380px) {
   .form {
     width: -webkit-fill-available;
-    flex-direction: column;
     padding: 6px;
   }
 
@@ -977,7 +975,6 @@
 @media screen and (max-width: 360px) {
   .form {
     width: -webkit-fill-available;
-    flex-direction: column;
     padding: 6px;
   }
 
