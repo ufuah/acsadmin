@@ -75,9 +75,10 @@ const ReturnExchange = () => {
   const handlePrint = useReactToPrint({
     content: () => receiptRef.current, // Refers to the SalePreview component
   });
-
+  console.log(stocks);
   useEffect(() => {
     fetchStocks();
+    
   }, [fetchStocks]);
 
   useEffect(() => {
@@ -368,7 +369,7 @@ const ReturnExchange = () => {
           });
         }
 
-        handlePrint();
+       
 
         // Clear the balance message
         // setBalanceMessage("");
@@ -377,6 +378,7 @@ const ReturnExchange = () => {
         console.log("Customer Information:", customer);
         console.log("Return Items:", returnItems);
         console.log("Exchange Items:", exchangeItems);
+        handlePrint();
       } catch (error) {
         console.error("Failed to process returns and/or exchanges:", error);
       }

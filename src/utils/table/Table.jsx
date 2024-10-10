@@ -246,8 +246,84 @@ const Table = () => {
   // console.log('Filtered before date range:', filtered);
 
 
+  // const applyFilters = useCallback(() => {
+  //   console.log("Category:", category); // Log the category for debugging
+  //   let filtered = []; // Initialize filtered as an empty array
+  
+  //   // If "all" is selected, combine all records from sales, returns, and exchanges
+  //   if (selectedTransactionType === "all") {
+  //     filtered = [
+  //       ...(Array.isArray(sales) ? sales : []),
+  //       ...(Array.isArray(returns) ? returns : []),
+  //       ...(Array.isArray(exchanges) ? exchanges : []),
+  //     ]; // Combine all arrays into one
+  //   } else if (selectedTransactionType === "sales") {
+  //     filtered = Array.isArray(sales) ? [...sales] : [];
+  //   } else if (selectedTransactionType === "returns") {
+  //     filtered = Array.isArray(returns) ? [...returns] : [];
+  //   } else if (selectedTransactionType === "exchanges") {
+  //     filtered = Array.isArray(exchanges) ? [...exchanges] : [];
+  //   }
+  
+  //   // Apply filters based on status
+  //   if (filterStatus !== "all") {
+  //     filtered = filtered.filter((order) => order.status === filterStatus);
+  //   }
+  
+  //   // Apply filters based on transaction type
+  //   if (filterType !== "all") {
+  //     filtered = filtered.filter(
+  //       (order) => order.transaction_type === filterType
+  //     );
+  //   }
+  
+  //   // Apply filters based on category
+  //   // if (category !== "all") {
+  //   //   console.log("Order Category:", order.category); // Log the category of each order
+  //   //   filtered = filtered.filter((order) => order.category === category);
+  //   // }
+
+  //   if (category !== "all") {
+  //     filtered = filtered.filter((order) => {
+  //       console.log("Order Category:", order.category); // Log the category of each order
+  //       return order.category === category;
+  //     });
+  //   }
+  
+  //   // Apply filters based on date range
+  //   if (dateRange.startDate && dateRange.endDate) {
+  //     filtered = filtered.filter((order) => {
+  //       const orderDate = new Date(order.date).setHours(0, 0, 0, 0);
+  //       const startDate = new Date(dateRange.startDate).setHours(0, 0, 0, 0);
+  //       const endDate = new Date(dateRange.endDate).setHours(23, 59, 59, 999);
+  //       return orderDate >= startDate && orderDate <= endDate;
+  //     });
+  //   }
+  
+  //   // Update the state with the filtered results
+  //   setFilteredSales(filtered);
+  //   setSearchResults(filtered);
+  // }, [
+  //   filterStatus,
+  //   filterType,
+  //   category,
+  //   dateRange,
+  //   sales,
+  //   returns,
+  //   exchanges,
+  //   selectedTransactionType,
+  // ]);
+  
+
   const applyFilters = useCallback(() => {
+    console.log("Selected Category Filter:", category); // Log the selected category for filtering
+    
     let filtered = []; // Initialize filtered as an empty array
+  
+    // Log the arrays for sales, returns, and exchanges to see if they have the expected structure
+    console.log("Sales Array:", sales);
+    console.log("Returns Array:", returns);
+    console.log("Exchanges Array:", exchanges);
   
     // If "all" is selected, combine all records from sales, returns, and exchanges
     if (selectedTransactionType === "all") {
@@ -264,21 +340,35 @@ const Table = () => {
       filtered = Array.isArray(exchanges) ? [...exchanges] : [];
     }
   
+    console.log("Combined Filtered Data (Before Filters):", filtered); // Log the combined array before applying filters
+  
     // Apply filters based on status
     if (filterStatus !== "all") {
-      filtered = filtered.filter((order) => order.status === filterStatus);
+      filtered = filtered.filter((order) => {
+        console.log("Order Status:", order.status); // Log each order's status before filtering by status
+        return order.status === filterStatus;
+      });
     }
   
     // Apply filters based on transaction type
     if (filterType !== "all") {
-      filtered = filtered.filter(
-        (order) => order.transaction_type === filterType
-      );
+      filtered = filtered.filter((order) => {
+        console.log("Order Transaction Type:", order.transaction_type); // Log the transaction type of each order
+        return order.transaction_type === filterType;
+      });
     }
   
-    // Apply filters based on category
+    // Apply filters based on category, and log order.category for each item
     if (category !== "all") {
-      filtered = filtered.filter((order) => order.category === category);
+      filtered = filtered.filter((order) => {
+        console.log("Order Object:", order); // Log the entire order object
+        console.log("Order Category:", order?.category); // Log the order category (if it exists)
+        if (!order.category) {
+          console.warn("Order missing category:", order); // Warn if the category field is missing
+          return false; // Skip the order if it doesn't have a category
+        }
+        return order.category === category;
+      });
     }
   
     // Apply filters based on date range
@@ -287,9 +377,13 @@ const Table = () => {
         const orderDate = new Date(order.date).setHours(0, 0, 0, 0);
         const startDate = new Date(dateRange.startDate).setHours(0, 0, 0, 0);
         const endDate = new Date(dateRange.endDate).setHours(23, 59, 59, 999);
+        console.log("Order Date:", order.date, "Start Date:", startDate, "End Date:", endDate); // Log date comparison details
         return orderDate >= startDate && orderDate <= endDate;
       });
     }
+  
+    // Log the filtered result
+    console.log("Filtered Sales After All Filters:", filtered);
   
     // Update the state with the filtered results
     setFilteredSales(filtered);
@@ -305,7 +399,6 @@ const Table = () => {
     selectedTransactionType,
   ]);
   
-
 
   useEffect(() => {
     applyFilters();
@@ -365,6 +458,7 @@ const Table = () => {
           date: order.date,
           methodOfPayment: order.bank_or_pos,
           transaction_type: order.transaction_type,
+          category: order.category,
         };
       }
       
@@ -500,9 +594,9 @@ const Table = () => {
                 >
                   <option value="all">All</option>
                   <option value="sales">Sales</option>
-                  <option value="return">Returns</option>{" "}
+                  <option value="returns">Returns</option>{" "}
                   {/* Corrected to "returns" */}
-                  <option value="exchange">Exchanges</option>
+                  <option value="exchanges">Exchanges</option>
                 </select>
               </div>
 

@@ -465,52 +465,57 @@ const useStore = create((set, get) => ({
   },
 
   /** =============================== RETURN SECTION ============================ */
-  addReturn: async (returnData) => {
-    const { networkSpeed } = get(); // Access networkSpeed from the state
-    if (networkSpeed !== "Slow") {
-      try {
-        const response = await axios.post(
-          `${baseURL}/api/transations/return`,
-          returnData
-        );
-        set((state) => ({
-          returns: [...state.returns, response.data],
-        }));
-      } catch (error) {
-        console.error("Failed to add return:", error);
-      }
-    } else {
-      console.warn("Network is too slow, delaying the sales data fetch.");
-    }
-  },
+  // addReturn: async (returnData) => {
+  //   const { networkSpeed } = get(); // Access networkSpeed from the state
+  //   if (networkSpeed !== "Slow") {
+  //     try {
+  //       const response = await axios.post(
+  //         `${baseURL}/api/transations/return`,
+  //         returnData
+  //       );
+  //       set((state) => ({
+  //         returns: [...state.returns, response.data],
+  //       }));
+  //     } catch (error) {
+  //       console.error("Failed to add return:", error);
+  //     }
+  //   } else {
+  //     console.warn("Network is too slow, delaying the sales data fetch.");
+  //   }
+  // },
+
+
 
   /** =============================== EXCHANGE SECTION ============================ */
 
-  addExchange: async (exchangeData) => {
-    const { networkSpeed } = get(); // Access networkSpeed from the state
-    if (networkSpeed !== "Slow") {
-      try {
-        const response = await axios.post(
-          `${baseURL}/api/transations/exchange`,
-          exchangeData
-        );
-        set((state) => {
-          // Ensure that exchanges is always an array
-          const currentExchanges = Array.isArray(state.exchanges)
-            ? state.exchanges
-            : [];
-          return {
-            exchanges: [...currentExchanges, response.data],
-          };
-        });
-      } catch (error) {
-        console.error("Failed to add exchange:", error);
-      }
-    } else {
-      console.warn("Network is too slow, delaying the sales data fetch.");
-    }
-  },
+  // addExchange: async (exchangeData) => {
+  //   const { networkSpeed } = get(); // Access networkSpeed from the state
+  //   if (networkSpeed !== "Slow") {
+  //     try {
+  //       const response = await axios.post(
+  //         `${baseURL}/api/transations/exchange`,
+  //         exchangeData
+  //       );
+  //       set((state) => {
+  //         // Ensure that exchanges is always an array
+  //         const currentExchanges = Array.isArray(state.exchanges)
+  //           ? state.exchanges
+  //           : [];
+  //         return {
+  //           exchanges: [...currentExchanges, response.data],
+  //         };
+  //       });
+  //     } catch (error) {
+  //       console.error("Failed to add exchange:", error);
+  //     }
+  //   } else {
+  //     console.warn("Network is too slow, delaying the sales data fetch.");
+  //   }
+  // },
 
+
+
+  /** =============================== CUSTOMER SECTION ============================ */
   login: async (username, password, onSuccess) => {
     const { networkSpeed } = get(); // Access networkSpeed from the state
     if (networkSpeed !== "Slow") {
@@ -548,7 +553,6 @@ const useStore = create((set, get) => ({
     }
   },
 
-  /** =============================== CUSTOMER SECTION ============================ */
   getCustomerDetails: async (customer_name) => {
     try {
       const response = await axios.get(
