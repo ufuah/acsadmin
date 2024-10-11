@@ -236,7 +236,7 @@ const useStore = create((set, get) => ({
 
     if (networkSpeed !== "Slow") {
       try {
-        const response = await axios.get(`${baseURL}/api/transations/sales`);
+        const response = await axios.get(`${baseURL}/api/transactions/sales`);
         console.log("Fetched Sales Data:", response.data);
         set({ sales: response.data.sales });
       } catch (error) {
@@ -255,7 +255,7 @@ const useStore = create((set, get) => ({
     if (networkSpeed !== "Slow") {
       try {
         const response = await axios.get(
-          `${baseURL}/api/transations/sales/${salesId}`
+          `${baseURL}/api/transactions/sales/${salesId}`
         );
         return response.data;
       } catch (error) {
@@ -272,7 +272,7 @@ const useStore = create((set, get) => ({
     if (networkSpeed !== "Slow") {
       try {
         const response = await axios.post(
-          `${baseURL}/api/transations/sales/add`,
+          `${baseURL}/api/transactions/sales/add`,
           sale
         );
         const { sales_id } = response.data;
@@ -298,9 +298,9 @@ const useStore = create((set, get) => ({
     }
   },
 
-  updateSale: async (salesId, newStatus, supplier) => {
+  updateSale: async (orderId, newStatus, supplier) => {
     try {
-      const url = `${baseURL}/api/transations/sales/${salesId}/status`;
+      const url = `${baseURL}/api/transactions/sales/${orderId}/status`;
 
       // Send the new status and supplier in the request body
       const response = await axios.put(url, { status: newStatus, supplier });
@@ -308,19 +308,21 @@ const useStore = create((set, get) => ({
       // Update the state with the new data returned from the API
       set((state) => ({
         sales: state.sales.map((sale) =>
-          sale.id === salesId ? { ...sale, ...response.data } : sale
+          sale.sales_id === orderId ? { ...sale, ...response.data } : sale
         ),
       }));
     } catch (error) {
       console.error("Failed to update sale:", error);
     }
+
+
   },
 
   /** =============================== RETURN SECTION ============================ */
 
   fetchReturns: async () => {
     try {
-      const response = await axios.get(`${baseURL}/api/transations/returns`); // Adjust the API endpoint as needed
+      const response = await axios.get(`${baseURL}/api/transactions/returns`); // Adjust the API endpoint as needed
       console.log("Fetched Returns Data:", response.data);
       set({ returns: response.data.returns }); // Adjust based on response structure
     } catch (error) {
@@ -336,7 +338,7 @@ const useStore = create((set, get) => ({
     if (networkSpeed !== "Slow") {
       try {
         const response = await axios.post(
-          `${baseURL}/api/transations/returns/add`, // Adjust the API endpoint as needed
+          `${baseURL}/api/transactions/returns/add`, // Adjust the API endpoint as needed
           returnData
         );
         set((state) => ({
@@ -355,7 +357,7 @@ const useStore = create((set, get) => ({
     if (networkSpeed !== "Slow") {
       try {
         const response = await axios.put(
-          `${baseURL}/api/transations/returns/${returnId}`, // Adjust the API endpoint as needed
+          `${baseURL}/api/transactions/returns/${returnId}`, // Adjust the API endpoint as needed
           updatedData
         );
         set((state) => ({
@@ -373,7 +375,7 @@ const useStore = create((set, get) => ({
 
   deleteReturn: async (returnId) => {
     try {
-      await axios.delete(`${baseURL}/api/transations/returns/${returnId}`); // Adjust the API endpoint as needed
+      await axios.delete(`${baseURL}/api/transactions/returns/${returnId}`); // Adjust the API endpoint as needed
       set((state) => ({
         returns: state.returns.filter((r) => r.id !== returnId),
       }));
@@ -389,7 +391,7 @@ const useStore = create((set, get) => ({
     if (networkSpeed !== "Slow") {
       try {
         const response = await axios.get(
-          `${baseURL}/api/transations/exchanges`
+          `${baseURL}/api/transactions/exchanges`
         ); // Adjust the API endpoint as needed
         console.log("Fetched Exchanges Data:", response.data);
         set({ exchanges: response.data.exchanges }); // Adjust based on response structure
@@ -409,7 +411,7 @@ const useStore = create((set, get) => ({
     if (networkSpeed !== "Slow") {
       try {
         const response = await axios.post(
-          `${baseURL}/api/transations/exchanges/add`, // Adjust the API endpoint as needed
+          `${baseURL}/api/transactions/exchanges/add`, // Adjust the API endpoint as needed
           exchangeData
         );
         set((state) => ({
@@ -426,7 +428,7 @@ const useStore = create((set, get) => ({
   updateExchange: async (exchangeId, updatedData) => {
     try {
       const response = await axios.put(
-        `${baseURL}/api/transations/exchanges/${exchangeId}`, // Adjust the API endpoint as needed
+        `${baseURL}/api/transactions/exchanges/${exchangeId}`, // Adjust the API endpoint as needed
         updatedData
       );
       set((state) => ({
@@ -441,7 +443,7 @@ const useStore = create((set, get) => ({
 
   deleteExchange: async (exchangeId) => {
     try {
-      await axios.delete(`${baseURL}/api/transations/exchanges/${exchangeId}`); // Adjust the API endpoint as needed
+      await axios.delete(`${baseURL}/api/transactions/exchanges/${exchangeId}`); // Adjust the API endpoint as needed
       set((state) => ({
         exchanges: state.exchanges.filter((e) => e.id !== exchangeId),
       }));
@@ -470,7 +472,7 @@ const useStore = create((set, get) => ({
   //   if (networkSpeed !== "Slow") {
   //     try {
   //       const response = await axios.post(
-  //         `${baseURL}/api/transations/return`,
+  //         `${baseURL}/api/transactions/return`,
   //         returnData
   //       );
   //       set((state) => ({
@@ -493,7 +495,7 @@ const useStore = create((set, get) => ({
   //   if (networkSpeed !== "Slow") {
   //     try {
   //       const response = await axios.post(
-  //         `${baseURL}/api/transations/exchange`,
+  //         `${baseURL}/api/transactions/exchange`,
   //         exchangeData
   //       );
   //       set((state) => {
@@ -556,7 +558,7 @@ const useStore = create((set, get) => ({
   getCustomerDetails: async (customer_name) => {
     try {
       const response = await axios.get(
-        `${baseURL}/api/transations/customers/${encodeURIComponent(
+        `${baseURL}/api/transactions/customers/${encodeURIComponent(
           customer_name
         )}`
       );

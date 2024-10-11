@@ -44,8 +44,7 @@ const Table = () => {
   const receiptRef = useRef({});
 
   // Added new state for transaction type
-  const [selectedTransactionType, setSelectedTransactionType] =
-    useState("all");
+  const [selectedTransactionType, setSelectedTransactionType] = useState("all");
 
   const {
     sales,
@@ -245,11 +244,10 @@ const Table = () => {
 
   // console.log('Filtered before date range:', filtered);
 
-
   // const applyFilters = useCallback(() => {
   //   console.log("Category:", category); // Log the category for debugging
   //   let filtered = []; // Initialize filtered as an empty array
-  
+
   //   // If "all" is selected, combine all records from sales, returns, and exchanges
   //   if (selectedTransactionType === "all") {
   //     filtered = [
@@ -264,19 +262,19 @@ const Table = () => {
   //   } else if (selectedTransactionType === "exchanges") {
   //     filtered = Array.isArray(exchanges) ? [...exchanges] : [];
   //   }
-  
+
   //   // Apply filters based on status
   //   if (filterStatus !== "all") {
   //     filtered = filtered.filter((order) => order.status === filterStatus);
   //   }
-  
+
   //   // Apply filters based on transaction type
   //   if (filterType !== "all") {
   //     filtered = filtered.filter(
   //       (order) => order.transaction_type === filterType
   //     );
   //   }
-  
+
   //   // Apply filters based on category
   //   // if (category !== "all") {
   //   //   console.log("Order Category:", order.category); // Log the category of each order
@@ -289,7 +287,7 @@ const Table = () => {
   //       return order.category === category;
   //     });
   //   }
-  
+
   //   // Apply filters based on date range
   //   if (dateRange.startDate && dateRange.endDate) {
   //     filtered = filtered.filter((order) => {
@@ -299,7 +297,7 @@ const Table = () => {
   //       return orderDate >= startDate && orderDate <= endDate;
   //     });
   //   }
-  
+
   //   // Update the state with the filtered results
   //   setFilteredSales(filtered);
   //   setSearchResults(filtered);
@@ -313,18 +311,17 @@ const Table = () => {
   //   exchanges,
   //   selectedTransactionType,
   // ]);
-  
 
   const applyFilters = useCallback(() => {
     console.log("Selected Category Filter:", category); // Log the selected category for filtering
-    
+
     let filtered = []; // Initialize filtered as an empty array
-  
+
     // Log the arrays for sales, returns, and exchanges to see if they have the expected structure
     console.log("Sales Array:", sales);
     console.log("Returns Array:", returns);
     console.log("Exchanges Array:", exchanges);
-  
+
     // If "all" is selected, combine all records from sales, returns, and exchanges
     if (selectedTransactionType === "all") {
       filtered = [
@@ -339,9 +336,9 @@ const Table = () => {
     } else if (selectedTransactionType === "exchanges") {
       filtered = Array.isArray(exchanges) ? [...exchanges] : [];
     }
-  
+
     console.log("Combined Filtered Data (Before Filters):", filtered); // Log the combined array before applying filters
-  
+
     // Apply filters based on status
     if (filterStatus !== "all") {
       filtered = filtered.filter((order) => {
@@ -349,7 +346,7 @@ const Table = () => {
         return order.status === filterStatus;
       });
     }
-  
+
     // Apply filters based on transaction type
     if (filterType !== "all") {
       filtered = filtered.filter((order) => {
@@ -357,7 +354,7 @@ const Table = () => {
         return order.transaction_type === filterType;
       });
     }
-  
+
     // Apply filters based on category, and log order.category for each item
     if (category !== "all") {
       filtered = filtered.filter((order) => {
@@ -370,21 +367,28 @@ const Table = () => {
         return order.category === category;
       });
     }
-  
+
     // Apply filters based on date range
     if (dateRange.startDate && dateRange.endDate) {
       filtered = filtered.filter((order) => {
         const orderDate = new Date(order.date).setHours(0, 0, 0, 0);
         const startDate = new Date(dateRange.startDate).setHours(0, 0, 0, 0);
         const endDate = new Date(dateRange.endDate).setHours(23, 59, 59, 999);
-        console.log("Order Date:", order.date, "Start Date:", startDate, "End Date:", endDate); // Log date comparison details
+        console.log(
+          "Order Date:",
+          order.date,
+          "Start Date:",
+          startDate,
+          "End Date:",
+          endDate
+        ); // Log date comparison details
         return orderDate >= startDate && orderDate <= endDate;
       });
     }
-  
+
     // Log the filtered result
     console.log("Filtered Sales After All Filters:", filtered);
-  
+
     // Update the state with the filtered results
     setFilteredSales(filtered);
     setSearchResults(filtered);
@@ -398,7 +402,6 @@ const Table = () => {
     exchanges,
     selectedTransactionType,
   ]);
-  
 
   useEffect(() => {
     applyFilters();
@@ -461,18 +464,18 @@ const Table = () => {
           category: order.category,
         };
       }
-      
+
       // Ensure `order.amount_paid` is a number before adding
       const amountPaid = parseFloat(order.amount_paid) || 0;
-      
+
       acc[order.customer_name][order.sales_id].orders.push(order);
       acc[order.customer_name][order.sales_id].totalAmount += amountPaid;
       acc[order.customer_name][order.sales_id].totalPaid += amountPaid;
-      
+
       return acc;
     }, {});
   }, [searchResults, filteredSales]);
-  
+
   const handleFilterChange = (event) => {
     setFilterType(event.target.value);
   };
@@ -499,12 +502,50 @@ const Table = () => {
       });
   };
 
+  // const handleStatusChange = async (
+  //   customerName,
+  //   salesId,
+  //   newStatus,
+  //   supplier
+  // ) => {
+  //   if (newStatus === "supplied" && supplier) {
+  //     const confirm = window.confirm(
+  //       `Are you sure you want to mark this sale as "Supplied" with ${supplier}? This action cannot be undone.`
+  //     );
+  //     if (!confirm) {
+  //       return;
+  //     }
+  //   }
+  //   try {
+  //     await updateSale(salesId.toString(), newStatus, {
+  //       supplier: selectedSupplier,
+  //     });
+  //     await fetchSales();
+  //     showNotification(
+  //       "Sale status and supplier updated successfully!",
+  //       "success"
+  //     );
+  //   } catch (error) {
+  //     console.error("Failed to update status and supplier:", error);
+  //     showNotification("Failed to update sale status and supplier!", "error");
+  //   }
+  // };
+
   const handleStatusChange = async (
     customerName,
     salesId,
     newStatus,
     supplier
   ) => {
+    // Ensure salesId contains the correct orderId field
+    const orderId = salesId.orderId;
+    if (!orderId) {
+      console.error("No orderId found in salesId object.");
+      return;
+    }
+
+    console.log("Sales ID (orderId):", orderId); // Logging to check the correct ID
+
     if (newStatus === "supplied" && supplier) {
       const confirm = window.confirm(
         `Are you sure you want to mark this sale as "Supplied" with ${supplier}? This action cannot be undone.`
@@ -513,11 +554,24 @@ const Table = () => {
         return;
       }
     }
+
     try {
-      await updateSale(salesId.toString(), newStatus, {
-        supplier: selectedSupplier,
+      // Use orderId instead of salesId
+      console.log(
+        "Updating sale with Sales ID:",
+        orderId,
+        "New Status:",
+        newStatus,
+        "Supplier:",
+        supplier
+      );
+
+      // Passing orderId as a string, new status, and supplier
+      await updateSale(orderId.toString(), newStatus, {
+        supplier: selectedSupplier, // Ensure selectedSupplier is available in scope
       });
-      await fetchSales();
+
+      await fetchSales(); // Fetch updated sales
       showNotification(
         "Sale status and supplier updated successfully!",
         "success"
