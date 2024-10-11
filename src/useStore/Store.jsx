@@ -300,7 +300,7 @@ const useStore = create((set, get) => ({
 
   updateSale: async (orderId, newStatus, supplier) => {
     try {
-      const url = `${baseURL}/api/transactions/sales/${orderId}/status`;
+      const url = `${baseURL}/api/transactions/sales/status/${orderId}`;
 
       // Send the new status and supplier in the request body
       const response = await axios.put(url, { status: newStatus, supplier });

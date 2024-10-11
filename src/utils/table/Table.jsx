@@ -537,24 +537,23 @@ const Table = () => {
     newStatus,
     supplier
   ) => {
-    // Ensure salesId contains the correct orderId field
-    const orderId = salesId.orderId;
+    const orderId = salesId.orderId; // Ensure salesId contains the correct orderId field
     if (!orderId) {
       console.error("No orderId found in salesId object.");
       return;
     }
-
+  
     console.log("Sales ID (orderId):", orderId); // Logging to check the correct ID
-
-    if (newStatus === "supplied" && supplier) {
+  
+    if (newStatus === "supplied" && selectedSupplier) { // Make sure you are checking the correct variable
       const confirm = window.confirm(
-        `Are you sure you want to mark this sale as "Supplied" with ${supplier}? This action cannot be undone.`
+        `Are you sure you want to mark this sale as "Supplied" with ${selectedSupplier}? This action cannot be undone.`
       );
       if (!confirm) {
         return;
       }
     }
-
+  
     try {
       // Use orderId instead of salesId
       console.log(
@@ -563,14 +562,12 @@ const Table = () => {
         "New Status:",
         newStatus,
         "Supplier:",
-        supplier
+        selectedSupplier // Use selectedSupplier directly
       );
-
-      // Passing orderId as a string, new status, and supplier
-      await updateSale(orderId.toString(), newStatus, {
-        supplier: selectedSupplier, // Ensure selectedSupplier is available in scope
-      });
-
+  
+      // Correct call to updateSale
+      await updateSale(orderId.toString(), newStatus, selectedSupplier); 
+  
       await fetchSales(); // Fetch updated sales
       showNotification(
         "Sale status and supplier updated successfully!",
@@ -581,6 +578,7 @@ const Table = () => {
       showNotification("Failed to update sale status and supplier!", "error");
     }
   };
+  
 
   const handleSearch = (query) => {
     if (query.trim() === "") {
