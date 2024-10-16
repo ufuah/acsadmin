@@ -34,6 +34,15 @@
   font-size: 1.5rem;
 }
 
+.autoModeButton {
+  position: absolute;
+  top: 141px;
+  left: 183px;
+  z-index: 2;
+  cursor: pointer;
+  user-select: none;
+}
+
 @media (max-width: 428px) {
   .container {
     top: 6px;

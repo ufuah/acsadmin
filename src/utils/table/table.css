@@ -108,6 +108,30 @@
   border-radius: 20px;
 }
 
+.pending_btn {
+  position: relative;
+}
+
+.number_pending {
+  position: absolute;
+  top: -8px;
+  right: -4px;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  z-index: 2;
+  background-color: var(--main-brand-color);
+  color: #ebebeb;
+  text-align: center;
+  border-radius: 50px;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+  border: 2px solid #ebebeb;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
 .btn_shift:hover {
   background-color: #ccc;
   transform: translateY(-3px);
@@ -229,6 +253,7 @@ button:focus {
   justify-content: center;
   align-items: flex-start !important;
   gap: 10px;
+  user-select: none;
 }
 
 .monitor {
@@ -246,6 +271,7 @@ button:focus {
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+  user-select: none;
 }
 
 .sumTotal {
@@ -439,7 +465,19 @@ button:focus {
   text-transform: capitalize;
 }
 
+
+
 .payment span {
+  color: #ebebeb;
+  font-size: 20px;
+}
+.status p {
+  color: #ebebeb;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+.status span {
   color: #ebebeb;
   font-size: 20px;
 }

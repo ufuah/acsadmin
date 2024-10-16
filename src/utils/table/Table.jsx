@@ -542,9 +542,9 @@ const Table = () => {
   //     console.error("No orderId found in salesId object.");
   //     return;
   //   }
-  
+
   //   console.log("Sales ID (orderId):", orderId); // Logging to check the correct ID
-  
+
   //   if (newStatus === "supplied" && selectedSupplier) { // Make sure you are checking the correct variable
   //     const confirm = window.confirm(
   //       `Are you sure you want to mark this sale as "Supplied" with ${selectedSupplier}? This action cannot be undone.`
@@ -553,7 +553,7 @@ const Table = () => {
   //       return;
   //     }
   //   }
-  
+
   //   try {
   //     // Use orderId instead of salesId
   //     console.log(
@@ -564,10 +564,10 @@ const Table = () => {
   //       "Supplier:",
   //       selectedSupplier // Use selectedSupplier directly
   //     );
-  
+
   //     // Correct call to updateSale
-  //     await updateSale(orderId.toString(), newStatus, selectedSupplier); 
-  
+  //     await updateSale(orderId.toString(), newStatus, selectedSupplier);
+
   //     await fetchSales(); // Fetch updated sales
   //     showNotification(
   //       "Sale status and supplier updated successfully!",
@@ -591,16 +591,19 @@ const Table = () => {
       showNotification("No orderId found. Please try again.", "error");
       return;
     }
-  
+
     console.log("Sales ID (orderId):", orderId); // Logging to check the correct ID
-  
+
     // If the newStatus is "supplied" but no supplier is selected, show an error message
     if (newStatus === "supplied" && !selectedSupplier) {
-      showNotification("Please select a supplier before marking as 'supplied'.", "error");
+      showNotification(
+        "Please select a supplier before marking as 'supplied'.",
+        "error"
+      );
       console.error("No supplier selected.");
       return;
     }
-  
+
     // Confirm action if status is "supplied" and selectedSupplier is set
     if (newStatus === "supplied" && selectedSupplier) {
       const confirm = window.confirm(
@@ -610,7 +613,7 @@ const Table = () => {
         return;
       }
     }
-  
+
     try {
       // Logging the update details
       console.log(
@@ -621,26 +624,27 @@ const Table = () => {
         "Supplier:",
         selectedSupplier // Use selectedSupplier directly
       );
-  
+
       // Correct call to updateSale
-      const result = await updateSale(orderId.toString(), newStatus, selectedSupplier);
-  
+      const result = await updateSale(
+        orderId.toString(),
+        newStatus,
+        selectedSupplier
+      );
+
       // If result contains success messages, show them
       if (result && result.message && result.stockUpdateMessage) {
         showNotification(result.message, "success");
         showNotification(result.stockUpdateMessage, "info");
       }
-  
+
       // Fetch updated sales data after successful update
       await fetchSales();
-  
     } catch (error) {
       console.error("Failed to update status and supplier:", error);
       showNotification("Failed to update sale status and supplier!", "error");
     }
   };
-  
-  
 
   const handleSearch = (query) => {
     if (query.trim() === "") {
@@ -671,6 +675,28 @@ const Table = () => {
       <span>Loading...</span>
     </div>
   );
+
+  // Function to count pending orders
+  const countPendingOrders = (groupedOrders) => {
+    let pendingCount = 0;
+
+    // Loop through each customerName in groupedOrders
+    Object.keys(groupedOrders).forEach((customerName) => {
+      // Loop through each salesId for the customer
+      Object.keys(groupedOrders[customerName]).forEach((salesId) => {
+        // Check if the status is "pending"
+        if (groupedOrders[customerName][salesId].status === "pending") {
+          pendingCount++;
+        }
+      });
+    });
+
+    return pendingCount;
+  };
+
+  // Example usage
+  const pendingOrders = countPendingOrders(groupedOrders);
+  console.log(`Number of pending orders: ${pendingOrders}`);
 
   return (
     <div className="container">
@@ -745,6 +771,10 @@ const Table = () => {
             >
               All Sales
             </button>
+            <div className="pending_btn">
+              <div className="number_pending">
+                <span>{countPendingOrders(groupedOrders)}</span>
+              </div>
             <button
               onClick={() => filterSalesByStatus("pending")}
               className={`btn_shift ${
@@ -753,6 +783,10 @@ const Table = () => {
             >
               Pending Sales
             </button>
+
+            </div>
+          
+
             <button
               onClick={() => filterSalesByStatus("supplied")}
               className={`btn_shift ${
@@ -834,74 +868,188 @@ const Table = () => {
                                       </div>
                                     </div>
 
-                                    <div className="status-dropdown">
-                                      <select
-                                        value={
-                                          groupedOrders[customerName][salesId]
-                                            .status
-                                        }
-                                        onChange={(e) => {
-                                          handleStatusChange(
-                                            customerName,
-                                            groupedOrders[customerName][
-                                              salesId
-                                            ],
-                                            e.target.value,
-                                            selectedSupplier // Pass the supplier value
-                                          );
-                                        }}
-                                      >
-                                        <option value="pending">Pending</option>
-                                        <option value="supplied">
-                                          Supplied
-                                        </option>
-                                      </select>
-                                    </div>
-
-                                    {groupedOrders[customerName][salesId]
-                                      .status !== "supplied" && ( // Check the status
-                                      <div className="formField">
-                                        <label
-                                          htmlFor="supplied_by"
-                                          className="label"
-                                        >
-                                          Supplied By
-                                        </label>
+                                    {/* <div className="div">
+                                      <div className="status-dropdown">
                                         <select
-                                          name="supplied_by"
-                                          id="supplied_by"
-                                          value={selectedSupplier} // The supplier value you are managing in state
-                                          onChange={(e) =>
-                                            setSelectedSupplier(e.target.value)
-                                          } // Handle the change event
-                                          className="input"
-                                          required
+                                          value={
+                                            groupedOrders[customerName][salesId]
+                                              .status
+                                          }
+                                          onChange={(e) => {
+                                            handleStatusChange(
+                                              customerName,
+                                              groupedOrders[customerName][
+                                                salesId
+                                              ],
+                                              e.target.value,
+                                              selectedSupplier // Pass the supplier value
+                                            );
+                                          }}
                                         >
-                                          <option value="">
-                                            Select a supplier
+                                          <option value="pending">
+                                            Pending
                                           </option>
-                                          <option value="Cyprian">
-                                            Cyprian
-                                          </option>
-                                          <option value="Stelle">Stelle</option>
-                                          <option value="Juliana">
-                                            Juliana
-                                          </option>
-                                          <option value="Comfort">
-                                            Comfort
+                                          <option value="supplied">
+                                            Supplied
                                           </option>
                                         </select>
                                       </div>
-                                    )}
 
-                                    <div className="supplied_">
-                                      <span>Supplied by:</span>
-                                      <p>
-                                        {
-                                          groupedOrders[customerName][salesId]
-                                            .suppliedBy
-                                        }
-                                      </p>
+                                      {groupedOrders[customerName][salesId]
+                                        .status !== "supplied" && ( // Check the status
+                                        <div className="formField">
+                                          <label
+                                            htmlFor="supplied_by"
+                                            className="label"
+                                          >
+                                            Supplied By
+                                          </label>
+                                          <select
+                                            name="supplied_by"
+                                            id="supplied_by"
+                                            value={selectedSupplier} // The supplier value you are managing in state
+                                            onChange={(e) =>
+                                              setSelectedSupplier(
+                                                e.target.value
+                                              )
+                                            } // Handle the change event
+                                            className="input"
+                                            required
+                                          >
+                                            <option value="">
+                                              Select a supplier
+                                            </option>
+                                            <option value="Cyprian">
+                                              Cyprian
+                                            </option>
+                                            <option value="Stelle">
+                                              Stelle
+                                            </option>
+                                            <option value="Juliana">
+                                              Juliana
+                                            </option>
+                                            <option value="Comfort">
+                                              Comfort
+                                            </option>
+                                          </select>
+                                        </div>
+                                      )}
+
+                                      <div className="supplied_">
+                                        <span>Supplied by:</span>
+                                        <p>
+                                          {
+                                            groupedOrders[customerName][salesId]
+                                              .suppliedBy
+                                          }
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    <div className="status">
+                                      <span>{groupedOrders[customerName][
+                                            salesId
+                                          ].status}</span>
+                                    </div> */}
+
+                                    <div className="div">
+                                      {groupedOrders[customerName][salesId]
+                                        .status === "pending" ? (
+                                        // Render this block when status is "pending"
+                                        <>
+                                          <div className="status-dropdown">
+                                            <select
+                                              value={
+                                                groupedOrders[customerName][
+                                                  salesId
+                                                ].status
+                                              }
+                                              onChange={(e) => {
+                                                handleStatusChange(
+                                                  customerName,
+                                                  groupedOrders[customerName][
+                                                    salesId
+                                                  ],
+                                                  e.target.value,
+                                                  selectedSupplier // Pass the supplier value
+                                                );
+                                              }}
+                                            >
+                                              <option value="pending">
+                                                Pending
+                                              </option>
+                                              <option value="supplied">
+                                                Supplied
+                                              </option>
+                                            </select>
+                                          </div>
+
+                                          {/* Render supplier selection only when status is pending */}
+                                          <div className="formField">
+                                            <label
+                                              htmlFor="supplied_by"
+                                              className="label"
+                                            >
+                                              Supplied By
+                                            </label>
+                                            <select
+                                              name="supplied_by"
+                                              id="supplied_by"
+                                              value={selectedSupplier} // The supplier value you are managing in state
+                                              onChange={(e) =>
+                                                setSelectedSupplier(
+                                                  e.target.value
+                                                )
+                                              } // Handle the change event
+                                              className="input"
+                                              required
+                                            >
+                                              <option value="">
+                                                Select a supplier
+                                              </option>
+                                              <option value="Cyprian">
+                                                Cyprian
+                                              </option>
+                                              <option value="Stelle">
+                                                Stelle
+                                              </option>
+                                              <option value="Juliana">
+                                                Juliana
+                                              </option>
+                                              <option value="Comfort">
+                                                Comfort
+                                              </option>
+                                            </select>
+                                          </div>
+                                        </>
+                                      ) : (
+                                        // Render this block when status is "supplied"
+                                        <div className="status">
+                                          <span>status:</span>
+                                          <p>
+                                            {
+                                              groupedOrders[customerName][
+                                                salesId
+                                              ].status
+                                            }
+                                          </p>
+                                        </div>
+                                      )}
+
+                                      {/* Display the supplied by information if it exists */}
+                                      {groupedOrders[customerName][salesId]
+                                        .suppliedBy && (
+                                        <div className="supplied_">
+                                          <span>Supplied by:</span>
+                                          <p>
+                                            {
+                                              groupedOrders[customerName][
+                                                salesId
+                                              ].suppliedBy
+                                            }
+                                          </p>
+                                        </div>
+                                      )}
                                     </div>
 
                                     <div
