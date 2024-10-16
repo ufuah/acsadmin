@@ -35,12 +35,65 @@
 }
 
 .autoModeButton {
-  position: absolute;
+  position: fixed;
+  width: 155px;
+  height: max-content;
+  background: #f0f0f0;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+  padding: 15px;
+  display: flex;
   top: 141px;
   left: 183px;
   z-index: 2;
   cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
   user-select: none;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 5px;
+}
+
+.switch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.autoModeButton p {
+ font-size: 12px;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  color: var(--main-brand-color);
+  border: 2px solid var(--main-brand-color);
+  gap: 10px;
+  border-radius: 50px;
+  transition: 0.5s ease;
+}
+
+.icon:hover {
+  background: var(--main-brand-color);
+  color: #f0f0f0;
+  border: 2px solid #f0f0f0;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+}
+
+.icon.active {
+  background: var(--main-brand-color);
+  color: #f0f0f0;
+  border: 2px solid #f0f0f0;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
 }
 
 @media (max-width: 428px) {

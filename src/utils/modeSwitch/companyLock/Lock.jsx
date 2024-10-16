@@ -77,7 +77,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useStore from "@/src/useStore/Store";
 import styles from "./lockControl.module.css";
-import { faLock, faUnlock } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHourglass,
+  faHourglassHalf,
+  faHourglassStart,
+  faLock,
+  faUnlock,
+} from "@fortawesome/free-solid-svg-icons";
 
 const LockControl = () => {
   const { role, isLocked, checkLock, toggleLock } = useStore((state) => ({
@@ -160,6 +166,7 @@ const LockControl = () => {
   }
 
   const icon = isLocked ? faLock : faUnlock;
+  const Autoicon = isAutoMode ? faHourglassHalf : faHourglass;
 
   return (
     <div>
@@ -179,9 +186,21 @@ const LockControl = () => {
       {/* Button to enable/disable auto mode, shown after long press */}
       {showAutoModeButton && (
         <div className={styles.autoModeButton} onClick={handleToggleAutoMode}>
-          <button>
-            {isAutoMode ? "Disable Auto Mode" : "Enable Auto Mode"}
-          </button>
+          <p>{isAutoMode ? "Auto Mode Enabled": "Auto Mode Disabled" }</p>
+          <div className={styles.switch}>
+            {/* Icon for enabling auto mode */}
+            <div
+              className={`${styles.icon} ${isAutoMode ? styles.active : ""}`}
+            >
+              <FontAwesomeIcon icon={faHourglassHalf} />
+            </div>
+            {/* Icon for manual mode */}
+            <div
+              className={`${styles.icon} ${!isAutoMode ? styles.active : ""}`}
+            >
+              <FontAwesomeIcon icon={faHourglass} />
+            </div>
+          </div>
         </div>
       )}
     </div>
