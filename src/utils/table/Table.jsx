@@ -531,21 +531,78 @@ const Table = () => {
   //   }
   // };
 
+  // const handleStatusChange = async (
+  //   customerName,
+  //   salesId,
+  //   newStatus,
+  //   supplier
+  // ) => {
+  //   const orderId = salesId.orderId; // Ensure salesId contains the correct orderId field
+  //   if (!orderId) {
+  //     console.error("No orderId found in salesId object.");
+  //     return;
+  //   }
+  
+  //   console.log("Sales ID (orderId):", orderId); // Logging to check the correct ID
+  
+  //   if (newStatus === "supplied" && selectedSupplier) { // Make sure you are checking the correct variable
+  //     const confirm = window.confirm(
+  //       `Are you sure you want to mark this sale as "Supplied" with ${selectedSupplier}? This action cannot be undone.`
+  //     );
+  //     if (!confirm) {
+  //       return;
+  //     }
+  //   }
+  
+  //   try {
+  //     // Use orderId instead of salesId
+  //     console.log(
+  //       "Updating sale with Sales ID:",
+  //       orderId,
+  //       "New Status:",
+  //       newStatus,
+  //       "Supplier:",
+  //       selectedSupplier // Use selectedSupplier directly
+  //     );
+  
+  //     // Correct call to updateSale
+  //     await updateSale(orderId.toString(), newStatus, selectedSupplier); 
+  
+  //     await fetchSales(); // Fetch updated sales
+  //     showNotification(
+  //       "Sale status and supplier updated successfully!",
+  //       "success"
+  //     );
+  //   } catch (error) {
+  //     console.error("Failed to update status and supplier:", error);
+  //     showNotification("Failed to update sale status and supplier!", "error");
+  //   }
+  // };
+
   const handleStatusChange = async (
     customerName,
     salesId,
     newStatus,
-    supplier
+    selectedSupplier // Use selectedSupplier directly in the parameters
   ) => {
-    const orderId = salesId.orderId; // Ensure salesId contains the correct orderId field
+    const orderId = salesId?.orderId; // Ensure salesId contains the correct orderId field
     if (!orderId) {
       console.error("No orderId found in salesId object.");
+      showNotification("No orderId found. Please try again.", "error");
       return;
     }
   
     console.log("Sales ID (orderId):", orderId); // Logging to check the correct ID
   
-    if (newStatus === "supplied" && selectedSupplier) { // Make sure you are checking the correct variable
+    // If the newStatus is "supplied" but no supplier is selected, show an error message
+    if (newStatus === "supplied" && !selectedSupplier) {
+      showNotification("Please select a supplier before marking as 'supplied'.", "error");
+      console.error("No supplier selected.");
+      return;
+    }
+  
+    // Confirm action if status is "supplied" and selectedSupplier is set
+    if (newStatus === "supplied" && selectedSupplier) {
       const confirm = window.confirm(
         `Are you sure you want to mark this sale as "Supplied" with ${selectedSupplier}? This action cannot be undone.`
       );
@@ -555,7 +612,7 @@ const Table = () => {
     }
   
     try {
-      // Use orderId instead of salesId
+      // Logging the update details
       console.log(
         "Updating sale with Sales ID:",
         orderId,
@@ -566,18 +623,23 @@ const Table = () => {
       );
   
       // Correct call to updateSale
-      await updateSale(orderId.toString(), newStatus, selectedSupplier); 
+      const result = await updateSale(orderId.toString(), newStatus, selectedSupplier);
   
-      await fetchSales(); // Fetch updated sales
-      showNotification(
-        "Sale status and supplier updated successfully!",
-        "success"
-      );
+      // If result contains success messages, show them
+      if (result && result.message && result.stockUpdateMessage) {
+        showNotification(result.message, "success");
+        showNotification(result.stockUpdateMessage, "info");
+      }
+  
+      // Fetch updated sales data after successful update
+      await fetchSales();
+  
     } catch (error) {
       console.error("Failed to update status and supplier:", error);
       showNotification("Failed to update sale status and supplier!", "error");
     }
   };
+  
   
 
   const handleSearch = (query) => {

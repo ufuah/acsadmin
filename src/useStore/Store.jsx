@@ -298,26 +298,54 @@ const useStore = create((set, get) => ({
     }
   },
 
+  // updateSale: async (orderId, newStatus, supplier) => {
+  //   try {
+  //     const url = `${baseURL}/api/transactions/sales/status/${orderId}`;
+
+  //     // Send the new status and supplier in the request body
+  //     const response = await axios.put(url, { status: newStatus, supplier });
+
+  //     // Update the state with the new data returned from the API
+  //     set((state) => ({
+  //       sales: state.sales.map((sale) =>
+  //         sale.sales_id === orderId ? { ...sale, ...response.data } : sale
+  //       ),
+  //     }));
+  //   } catch (error) {
+  //     console.error("Failed to update sale:", error);
+  //   }
+
+
+  // },
+
+
   updateSale: async (orderId, newStatus, supplier) => {
     try {
       const url = `${baseURL}/api/transactions/sales/status/${orderId}`;
-
+  
       // Send the new status and supplier in the request body
       const response = await axios.put(url, { status: newStatus, supplier });
-
+  
+      // Extract the messages from the response
+      const { message, stockUpdateMessage } = response.data;
+  
+      // Optionally, display or log the messages
+      console.log("Success Message:", message);
+      console.log("Stock Update Message:", stockUpdateMessage);
+  
       // Update the state with the new data returned from the API
       set((state) => ({
         sales: state.sales.map((sale) =>
           sale.sales_id === orderId ? { ...sale, ...response.data } : sale
         ),
       }));
+  
+      // You can also add code here to display the messages to the user (e.g., using a notification system)
     } catch (error) {
       console.error("Failed to update sale:", error);
     }
-
-
   },
-
+  
   /** =============================== RETURN SECTION ============================ */
 
   fetchReturns: async () => {
