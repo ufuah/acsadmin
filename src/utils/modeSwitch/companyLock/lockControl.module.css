@@ -64,7 +64,7 @@
 }
 
 .autoModeButton p {
- font-size: 12px;
+  font-size: 12px;
 }
 
 .icon {
@@ -105,6 +105,11 @@
     border-radius: 30px;
     justify-content: center;
   }
+
+  .autoModeButton {
+    top: 56px;
+    left: 164px;
+  }
 }
 @media (max-width: 414px) {
   .container {
@@ -115,9 +120,25 @@
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 385px) {
   .container {
     top: 14px;
     left: 297px;
+  }
+
+  .autoModeButton {
+    top: 56px;
+    left: 164px;
+  }
+}
+@media (max-width: 395px) {
+  .container {
+    top: 14px;
+    left: 297px;
+  }
+
+  .autoModeButton {
+    top: 56px;
+    left: 164px;
   }
 }
