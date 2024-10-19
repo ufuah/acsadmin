@@ -775,17 +775,15 @@ const Table = () => {
               <div className="number_pending">
                 <span>{countPendingOrders(groupedOrders)}</span>
               </div>
-            <button
-              onClick={() => filterSalesByStatus("pending")}
-              className={`btn_shift ${
-                filterStatus === "pending" ? "active" : ""
-              }`}
-            >
-              Pending Sales
-            </button>
-
+              <button
+                onClick={() => filterSalesByStatus("pending")}
+                className={`btn_shift ${
+                  filterStatus === "pending" ? "active" : ""
+                }`}
+              >
+                Pending Sales
+              </button>
             </div>
-          
 
             <button
               onClick={() => filterSalesByStatus("supplied")}
@@ -1125,7 +1123,14 @@ const Table = () => {
                                               amount={order.amount_per_item}
                                             />
                                           </td>
-                                          <td>{order.quantity_purchased}</td>
+                                          {/* <td>{order.quantity_purchased}</td> */}
+                                          <td>
+                                            {groupedOrders[customerName][
+                                              salesId
+                                            ].transaction_type === "sales"
+                                              ? order.quantity_purchased
+                                              : order.quantity}
+                                          </td>
                                           <td>
                                             <CurrencyFormatter
                                               amount={order.amount_paid}
