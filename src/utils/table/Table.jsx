@@ -136,191 +136,9 @@ const Table = () => {
     testFetchReturns();
   }, []);
 
-  // const applyFilters = useCallback(() => {
-  //   let filtered = [];
-
-  //   // Select data based on the selected transaction type
-  //   if (selectedTransactionType === "sales") {
-  //     filtered = [...sales];
-  //   } else if (selectedTransactionType === "returns") {
-  //     filtered = [...returns];
-  //   } else if (selectedTransactionType === "exchanges") {
-  //     filtered = [...exchanges];
-  //   }
-
-  //   if (filterStatus !== "all") {
-  //     filtered = filtered.filter((order) => order.status === filterStatus);
-  //   }
-
-  //   if (filterType !== "all") {
-  //     filtered = filtered.filter(
-  //       (order) => order.transaction_type === filterType
-  //     );
-  //   }
-
-  //   if (category !== "all") {
-  //     filtered = filtered.filter((order) => order.category === category);
-  //   }
-
-  //   if (dateRange.startDate && dateRange.endDate) {
-  //     filtered = filtered.filter((order) => {
-  //       const orderDate = new Date(order.date).setHours(0, 0, 0, 0);
-  //       const startDate = new Date(dateRange.startDate).setHours(0, 0, 0, 0);
-  //       const endDate = new Date(dateRange.endDate).setHours(23, 59, 59, 999);
-  //       return orderDate >= startDate && orderDate <= endDate;
-  //     });
-  //   }
-
-  //   setFilteredSales(filtered);
-  //   setSearchResults(filtered);
-  // }, [
-  //   filterStatus,
-  //   filterType,
-  //   category,
-  //   dateRange,
-  //   sales,
-  //   returns,
-  //   exchanges,
-  //   selectedTransactionType,
-  // ]);
-
-  // Logging here after useEffect will also show the current value of returns
-
-  // useEffect(() => {
-  //   console.log("Final Returns Data after Fetch:", returns);
-  // }, [returns]); // This logs the 'returns' data when it changes
-  // const applyFilters = useCallback(() => {
-  //   let filtered = []; // Initialize filtered as an empty array
-  //   console.log("Filtered before date range:", filtered);
-  //   // Select data based on the selected transaction type
-  //   if (selectedTransactionType === "sales") {
-  //     filtered = Array.isArray(sales) ? [...sales] : []; // Ensure sales is an array
-  //   } else if (selectedTransactionType === "returns") {
-  //     filtered = Array.isArray(returns) ? [...returns] : []; // Ensure returns is an array
-  //   } else if (selectedTransactionType === "exchanges") {
-  //     filtered = Array.isArray(exchanges) ? [...exchanges] : []; // Ensure exchanges is an array
-  //   }
-
-  //   // Apply filters based on status
-  //   if (filterStatus !== "all") {
-  //     filtered = filtered.filter((order) => order.status === filterStatus);
-  //   }
-
-  //   // Apply filters based on transaction type
-  //   if (filterType !== "all") {
-  //     filtered = filtered.filter(
-  //       (order) => order.transaction_type === filterType
-  //     );
-  //   }
-
-  //   // Apply filters based on category
-  //   if (category !== "all") {
-  //     filtered = filtered.filter((order) => order.category === category);
-  //   }
-
-  //   // Apply filters based on date range
-  //   if (dateRange.startDate && dateRange.endDate) {
-  //     filtered = filtered.filter((order) => {
-  //       const orderDate = new Date(order.date).setHours(0, 0, 0, 0);
-  //       const startDate = new Date(dateRange.startDate).setHours(0, 0, 0, 0);
-  //       const endDate = new Date(dateRange.endDate).setHours(23, 59, 59, 999);
-  //       return orderDate >= startDate && orderDate <= endDate;
-  //     });
-  //   }
-
-  //   // Update the state with the filtered results
-  //   setFilteredSales(filtered);
-  //   setSearchResults(filtered);
-  // }, [
-  //   filterStatus,
-  //   filterType,
-  //   category,
-  //   dateRange,
-  //   sales,
-  //   returns,
-  //   exchanges,
-  //   selectedTransactionType,
-  // ]);
-
-  // console.log('Filtered before date range:', filtered);
-
-  // const applyFilters = useCallback(() => {
-  //   console.log("Category:", category); // Log the category for debugging
-  //   let filtered = []; // Initialize filtered as an empty array
-
-  //   // If "all" is selected, combine all records from sales, returns, and exchanges
-  //   if (selectedTransactionType === "all") {
-  //     filtered = [
-  //       ...(Array.isArray(sales) ? sales : []),
-  //       ...(Array.isArray(returns) ? returns : []),
-  //       ...(Array.isArray(exchanges) ? exchanges : []),
-  //     ]; // Combine all arrays into one
-  //   } else if (selectedTransactionType === "sales") {
-  //     filtered = Array.isArray(sales) ? [...sales] : [];
-  //   } else if (selectedTransactionType === "returns") {
-  //     filtered = Array.isArray(returns) ? [...returns] : [];
-  //   } else if (selectedTransactionType === "exchanges") {
-  //     filtered = Array.isArray(exchanges) ? [...exchanges] : [];
-  //   }
-
-  //   // Apply filters based on status
-  //   if (filterStatus !== "all") {
-  //     filtered = filtered.filter((order) => order.status === filterStatus);
-  //   }
-
-  //   // Apply filters based on transaction type
-  //   if (filterType !== "all") {
-  //     filtered = filtered.filter(
-  //       (order) => order.transaction_type === filterType
-  //     );
-  //   }
-
-  //   // Apply filters based on category
-  //   // if (category !== "all") {
-  //   //   console.log("Order Category:", order.category); // Log the category of each order
-  //   //   filtered = filtered.filter((order) => order.category === category);
-  //   // }
-
-  //   if (category !== "all") {
-  //     filtered = filtered.filter((order) => {
-  //       console.log("Order Category:", order.category); // Log the category of each order
-  //       return order.category === category;
-  //     });
-  //   }
-
-  //   // Apply filters based on date range
-  //   if (dateRange.startDate && dateRange.endDate) {
-  //     filtered = filtered.filter((order) => {
-  //       const orderDate = new Date(order.date).setHours(0, 0, 0, 0);
-  //       const startDate = new Date(dateRange.startDate).setHours(0, 0, 0, 0);
-  //       const endDate = new Date(dateRange.endDate).setHours(23, 59, 59, 999);
-  //       return orderDate >= startDate && orderDate <= endDate;
-  //     });
-  //   }
-
-  //   // Update the state with the filtered results
-  //   setFilteredSales(filtered);
-  //   setSearchResults(filtered);
-  // }, [
-  //   filterStatus,
-  //   filterType,
-  //   category,
-  //   dateRange,
-  //   sales,
-  //   returns,
-  //   exchanges,
-  //   selectedTransactionType,
-  // ]);
-
   const applyFilters = useCallback(() => {
-    console.log("Selected Category Filter:", category); // Log the selected category for filtering
-
+    console.log("Category:", category); // Log the category for debugging
     let filtered = []; // Initialize filtered as an empty array
-
-    // Log the arrays for sales, returns, and exchanges to see if they have the expected structure
-    console.log("Sales Array:", sales);
-    console.log("Returns Array:", returns);
-    console.log("Exchanges Array:", exchanges);
 
     // If "all" is selected, combine all records from sales, returns, and exchanges
     if (selectedTransactionType === "all") {
@@ -337,33 +155,27 @@ const Table = () => {
       filtered = Array.isArray(exchanges) ? [...exchanges] : [];
     }
 
-    console.log("Combined Filtered Data (Before Filters):", filtered); // Log the combined array before applying filters
-
     // Apply filters based on status
     if (filterStatus !== "all") {
-      filtered = filtered.filter((order) => {
-        console.log("Order Status:", order.status); // Log each order's status before filtering by status
-        return order.status === filterStatus;
-      });
+      filtered = filtered.filter((order) => order.status === filterStatus);
     }
 
     // Apply filters based on transaction type
     if (filterType !== "all") {
-      filtered = filtered.filter((order) => {
-        console.log("Order Transaction Type:", order.transaction_type); // Log the transaction type of each order
-        return order.transaction_type === filterType;
-      });
+      filtered = filtered.filter(
+        (order) => order.transaction_type === filterType
+      );
     }
 
-    // Apply filters based on category, and log order.category for each item
+    // Apply filters based on category
+    // if (category !== "all") {
+    //   console.log("Order Category:", order.category); // Log the category of each order
+    //   filtered = filtered.filter((order) => order.category === category);
+    // }
+
     if (category !== "all") {
       filtered = filtered.filter((order) => {
-        console.log("Order Object:", order); // Log the entire order object
-        console.log("Order Category:", order?.category); // Log the order category (if it exists)
-        if (!order.category) {
-          console.warn("Order missing category:", order); // Warn if the category field is missing
-          return false; // Skip the order if it doesn't have a category
-        }
+        console.log("Order Category:", order.category); // Log the category of each order
         return order.category === category;
       });
     }
@@ -374,20 +186,9 @@ const Table = () => {
         const orderDate = new Date(order.date).setHours(0, 0, 0, 0);
         const startDate = new Date(dateRange.startDate).setHours(0, 0, 0, 0);
         const endDate = new Date(dateRange.endDate).setHours(23, 59, 59, 999);
-        console.log(
-          "Order Date:",
-          order.date,
-          "Start Date:",
-          startDate,
-          "End Date:",
-          endDate
-        ); // Log date comparison details
         return orderDate >= startDate && orderDate <= endDate;
       });
     }
-
-    // Log the filtered result
-    console.log("Filtered Sales After All Filters:", filtered);
 
     // Update the state with the filtered results
     setFilteredSales(filtered);
@@ -402,6 +203,149 @@ const Table = () => {
     exchanges,
     selectedTransactionType,
   ]);
+
+  //main
+
+  // const applyFilters = useCallback(() => {
+  //   console.log("Selected Category Filter:", category); // Log the selected category for filtering
+
+  //   let filtered = []; // Initialize filtered as an empty array
+
+  //   // Log the arrays for sales, returns, and exchanges to see if they have the expected structure
+  //   console.log("Sales Array:", sales);
+  //   console.log("Returns Array:", returns);
+  //   console.log("Exchanges Array:", exchanges);
+
+  //   // If "all" is selected, combine all records from sales, returns, and exchanges
+  //   if (selectedTransactionType === "all") {
+  //     filtered = [
+  //       ...(Array.isArray(sales) ? sales : []),
+  //       ...(Array.isArray(returns) ? returns : []),
+  //       ...(Array.isArray(exchanges) ? exchanges : []),
+  //     ]; // Combine all arrays into one
+  //   } else if (selectedTransactionType === "sales") {
+  //     filtered = Array.isArray(sales) ? [...sales] : [];
+  //   } else if (selectedTransactionType === "returns") {
+  //     filtered = Array.isArray(returns) ? [...returns] : [];
+  //   } else if (selectedTransactionType === "exchanges") {
+  //     filtered = Array.isArray(exchanges) ? [...exchanges] : [];
+  //   }
+
+  //   console.log("Combined Filtered Data (Before Filters):", filtered); // Log the combined array before applying filters
+
+  //   // Apply filters based on status
+  //   if (filterStatus !== "all") {
+  //     filtered = filtered.filter((order) => {
+  //       console.log("Order Status:", order.status); // Log each order's status before filtering by status
+  //       return order.status === filterStatus;
+  //     });
+  //   }
+
+  //   // Apply filters based on transaction type
+  //   if (filterType !== "all") {
+  //     filtered = filtered.filter((order) => {
+  //       console.log("Order Transaction Type:", order.transaction_type); // Log the transaction type of each order
+  //       return order.transaction_type === filterType;
+  //     });
+  //   }
+
+  //   // Apply filters based on category, and log order.category for each item
+  //   if (category !== "all") {
+  //     filtered = filtered.filter((order) => {
+  //       console.log("Order Object:", order); // Log the entire order object
+  //       console.log("Order Category:", order?.category); // Log the order category (if it exists)
+  //       if (!order.category) {
+  //         console.warn("Order missing category:", order); // Warn if the category field is missing
+  //         return false; // Skip the order if it doesn't have a category
+  //       }
+  //       return order.category === category;
+  //     });
+  //   }
+
+  //   // Apply filters based on date range
+  //   if (dateRange.startDate && dateRange.endDate) {
+  //     filtered = filtered.filter((order) => {
+  //       const orderDate = new Date(order.date).setHours(0, 0, 0, 0);
+  //       const startDate = new Date(dateRange.startDate).setHours(0, 0, 0, 0);
+  //       const endDate = new Date(dateRange.endDate).setHours(23, 59, 59, 999);
+  //       console.log(
+  //         "Order Date:",
+  //         order.date,
+  //         "Start Date:",
+  //         startDate,
+  //         "End Date:",
+  //         endDate
+  //       ); // Log date comparison details
+  //       return orderDate >= startDate && orderDate <= endDate;
+  //     });
+  //   }
+
+  //   // Log the filtered result
+  //   console.log("Filtered Sales After All Filters:", filtered);
+
+  //   // Update the state with the filtered results
+  //   setFilteredSales(filtered);
+  //   setSearchResults(filtered);
+  // }, [
+  //   filterStatus,
+  //   filterType,
+  //   category,
+  //   dateRange,
+  //   sales,
+  //   returns,
+  //   exchanges,
+  //   selectedTransactionType,
+  // ]);
+
+  // const applyFilters = useCallback(() => {
+  //   console.log("Selected Category Filter:", category);
+
+  //   let filtered = [];
+
+  //   console.log("Sales Array:", sales);
+  //   console.log("Returns Array:", returns);
+  //   console.log("Exchanges Array:", exchanges);
+
+  //   if (selectedTransactionType === "all") {
+  //     filtered = [
+  //       ...(Array.isArray(sales) ? sales : []),
+  //       ...(Array.isArray(returns) ? returns : []),
+  //       ...(Array.isArray(exchanges) ? exchanges : []),
+  //     ];
+  //   } else if (selectedTransactionType === "sales") {
+  //     filtered = Array.isArray(sales) ? [...sales] : [];
+  //   } else if (selectedTransactionType === "returns") {
+  //     filtered = Array.isArray(returns) ? [...returns] : [];
+  //   } else if (selectedTransactionType === "exchanges") {
+  //     filtered = Array.isArray(exchanges) ? [...exchanges] : [];
+  //   }
+
+  //   console.log("Combined Filtered Data (Before Filters):", filtered);
+
+  //   filtered = filtered.filter((order) => {
+  //     const matchesStatus = filterStatus === "all" || order.status === filterStatus;
+  //     const matchesTransactionType = filterType === "all" || order.transaction_type === filterType;
+  //     const matchesCategory = category === "all" || (order.category && order.category === category);
+  //     const matchesDateRange = !dateRange.startDate || !dateRange.endDate ||
+  //       (new Date(order.date) >= new Date(dateRange.startDate) && new Date(order.date) <= new Date(dateRange.endDate));
+
+  //     return matchesStatus && matchesTransactionType && matchesCategory && matchesDateRange;
+  //   });
+
+  //   console.log("Filtered Sales After All Filters:", filtered);
+
+  //   setFilteredSales(filtered);
+  //   setSearchResults(filtered);
+  // }, [
+  //   filterStatus,
+  //   filterType,
+  //   category,
+  //   dateRange,
+  //   sales,
+  //   returns,
+  //   exchanges,
+  //   selectedTransactionType,
+  // ]);
 
   useEffect(() => {
     applyFilters();
@@ -443,6 +387,8 @@ const Table = () => {
   //   }, {});
   // }, [searchResults, filteredSales]);
 
+  //working
+
   const groupedOrders = useMemo(() => {
     const salesData = searchResults.length > 0 ? searchResults : filteredSales;
     return salesData.reduce((acc, order) => {
@@ -458,6 +404,8 @@ const Table = () => {
           suppliedBy: order.supplied_by || "",
           customerImage: order.customer_image || logo,
           orderId: order.sales_id,
+          return_orderId: order.return_id,
+          exchange_orderId: order.exchange_id,
           date: order.date,
           methodOfPayment: order.bank_or_pos,
           transaction_type: order.transaction_type,
@@ -845,7 +793,7 @@ const Table = () => {
 
                                 <div className="customer-info">
                                   <div className="left">
-                                    <div className="orderid">
+                                    {/* <div className="orderid">
                                       <p>Order ID:</p>
                                       <div className="order-id">
                                         <span>
@@ -864,91 +812,57 @@ const Table = () => {
                                           }
                                         />
                                       </div>
-                                    </div>
+                                    </div> */}
 
-                                    {/* <div className="div">
-                                      <div className="status-dropdown">
-                                        <select
-                                          value={
-                                            groupedOrders[customerName][salesId]
-                                              .status
-                                          }
-                                          onChange={(e) => {
-                                            handleStatusChange(
-                                              customerName,
+                                    <div className="orderid">
+                                      <p>Order ID:</p>
+                                      <div className="order-id">
+                                        <span>
+                                          {/* Determine the order ID based on the transaction_type */}
+                                          {groupedOrders[customerName][salesId]
+                                            .transaction_type === "sales" &&
+                                            groupedOrders[customerName][
+                                              salesId
+                                            ].orderId?.substring(0, 8)}
+                                          {groupedOrders[customerName][salesId]
+                                            .transaction_type === "returns" &&
+                                            groupedOrders[customerName][
+                                              salesId
+                                            ].return_orderId?.substring(0, 8)}
+                                          {groupedOrders[customerName][salesId]
+                                            .transaction_type === "exchanges" &&
+                                            groupedOrders[customerName][
+                                              salesId
+                                            ].exchange_orderId?.substring(0, 8)}
+                                        </span>
+                                        <FontAwesomeIcon
+                                          icon={faCopy}
+                                          onClick={() => {
+                                            const orderId =
                                               groupedOrders[customerName][
                                                 salesId
-                                              ],
-                                              e.target.value,
-                                              selectedSupplier // Pass the supplier value
-                                            );
+                                              ].transaction_type === "order"
+                                                ? groupedOrders[customerName][
+                                                    salesId
+                                                  ].orderId
+                                                : groupedOrders[customerName][
+                                                    salesId
+                                                  ].transaction_type ===
+                                                  "return"
+                                                ? groupedOrders[customerName][
+                                                    salesId
+                                                  ].return_orderId
+                                                : groupedOrders[customerName][
+                                                    salesId
+                                                  ].exchange_orderId
+
+                                            handleCopyOrderId(orderId);
                                           }}
-                                        >
-                                          <option value="pending">
-                                            Pending
-                                          </option>
-                                          <option value="supplied">
-                                            Supplied
-                                          </option>
-                                        </select>
-                                      </div>
-
-                                      {groupedOrders[customerName][salesId]
-                                        .status !== "supplied" && ( // Check the status
-                                        <div className="formField">
-                                          <label
-                                            htmlFor="supplied_by"
-                                            className="label"
-                                          >
-                                            Supplied By
-                                          </label>
-                                          <select
-                                            name="supplied_by"
-                                            id="supplied_by"
-                                            value={selectedSupplier} // The supplier value you are managing in state
-                                            onChange={(e) =>
-                                              setSelectedSupplier(
-                                                e.target.value
-                                              )
-                                            } // Handle the change event
-                                            className="input"
-                                            required
-                                          >
-                                            <option value="">
-                                              Select a supplier
-                                            </option>
-                                            <option value="Cyprian">
-                                              Cyprian
-                                            </option>
-                                            <option value="Stelle">
-                                              Stelle
-                                            </option>
-                                            <option value="Juliana">
-                                              Juliana
-                                            </option>
-                                            <option value="Comfort">
-                                              Comfort
-                                            </option>
-                                          </select>
-                                        </div>
-                                      )}
-
-                                      <div className="supplied_">
-                                        <span>Supplied by:</span>
-                                        <p>
-                                          {
-                                            groupedOrders[customerName][salesId]
-                                              .suppliedBy
-                                          }
-                                        </p>
+                                        />
                                       </div>
                                     </div>
 
-                                    <div className="status">
-                                      <span>{groupedOrders[customerName][
-                                            salesId
-                                          ].status}</span>
-                                    </div> */}
+          
 
                                     <div className="div">
                                       {groupedOrders[customerName][salesId]

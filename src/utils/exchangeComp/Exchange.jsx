@@ -7,6 +7,7 @@ import CurrencyFormatter from "../currency/Currency";
 import Receipt from "../../utils/receipt/Receipt";
 import { useReactToPrint } from "react-to-print";
 import { format, parse } from "date-fns";
+import ConfirmationModal from "../Modal/ConfirmationModal";
 
 const ReturnExchange = () => {
   const {
@@ -78,7 +79,6 @@ const ReturnExchange = () => {
   console.log(stocks);
   useEffect(() => {
     fetchStocks();
-    
   }, [fetchStocks]);
 
   useEffect(() => {
@@ -189,7 +189,6 @@ const ReturnExchange = () => {
     setExchangeItems(newExchangeItems);
   };
 
-
   const validateForm = () => {
     const newErrors = {};
 
@@ -229,7 +228,90 @@ const ReturnExchange = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // const handleSubmit = async () => {
+  //   if (validateForm()) {
+  //     try {
+  //       // Add return data if there are return items
+  //       if (returnItems.length > 0) {
+  //         await addReturn({
+  //           customer,
+  //           items: returnItems,
+  //           total: returnTotal,
+  //         });
+  //       }
+
+  //       // Add exchange data if there are exchange items
+  //       if (exchangeItems.length > 0) {
+  //         await addExchange({
+  //           customer,
+  //           items: exchangeItems,
+  //           total: exchangeTotal,
+  //         });
+  //       }
+
+  //       // Clear the balance message
+  //       // setBalanceMessage("");
+
+  //       // Log customer and items data
+  //       console.log("Customer Information:", customer);
+  //       console.log("Return Items:", returnItems);
+  //       console.log("Exchange Items:", exchangeItems);
+  //       handlePrint();
+  //     } catch (error) {
+  //       console.error("Failed to process returns and/or exchanges:", error);
+  //     }
+  //   } else {
+  //     console.log("Form validation failed");
+  //   }
+  // };
+
+  // const handleSubmit = async () => {
+  //   const isConfirmed = window.confirm("Are you sure you want to submit the return and exchange?");
+  //   if (!isConfirmed) {
+  //     return; // Exit if the user cancels
+  //   }
+
+  //   if (validateForm()) {
+  //     try {
+  //       // Add return data if there are return items
+  //       if (returnItems.length > 0) {
+  //         await addReturn({
+  //           customer,
+  //           items: returnItems,
+  //           total: returnTotal,
+  //         });
+  //       }
+
+  //       // Add exchange data if there are exchange items
+  //       if (exchangeItems.length > 0) {
+  //         await addExchange({
+  //           customer,
+  //           items: exchangeItems,
+  //           total: exchangeTotal,
+  //         });
+  //       }
+
+  //       console.log("Customer Information:", customer);
+  //       console.log("Return Items:", returnItems);
+  //       console.log("Exchange Items:", exchangeItems);
+  //       handlePrint();
+  //     } catch (error) {
+  //       console.error("Failed to process returns and/or exchanges:", error);
+  //     }
+  //   } else {
+  //     console.log("Form validation failed");
+  //   }
+  // };
+
+  const [showModal, setShowModal] = useState(false);
+
   const handleSubmit = async () => {
+    setShowModal(true); // Show modal when submit is clicked
+  };
+
+  const handleConfirmSubmit = async () => {
+    setShowModal(false); // Close modal after confirmation
+
     if (validateForm()) {
       try {
         // Add return data if there are return items
@@ -249,23 +331,31 @@ const ReturnExchange = () => {
             total: exchangeTotal,
           });
         }
+        // Clear the inputs after successful submission
+        setCustomer({ customer_name: "", number: "", date: formattedDate });
+        setReturnItems([{ item: "", qty: "", amount_per_item: "" }]);
+        setExchangeItems([{ item: "", qty: "", amount_per_item: "" }]);
+        setReturnTotal(0);
+        setExchangeTotal(0);
+        setBalanceMessage("");
 
-       
+        // Print the receipt
+        handlePrint();
 
-        // Clear the balance message
-        // setBalanceMessage("");
-
-        // Log customer and items data
+        // Log data (optional)
         console.log("Customer Information:", customer);
         console.log("Return Items:", returnItems);
         console.log("Exchange Items:", exchangeItems);
-        handlePrint();
       } catch (error) {
         console.error("Failed to process returns and/or exchanges:", error);
       }
     } else {
       console.log("Form validation failed");
     }
+  };
+
+  const handleCancelSubmit = () => {
+    setShowModal(false); // Close modal if user cancels
   };
 
   return (
@@ -603,6 +693,20 @@ const ReturnExchange = () => {
         exchangeTotal={exchangeTotal}
         balanceMessage={balanceMessage}
       /> */}
+
+      {showModal && (
+        <ConfirmationModal
+        message="Are you sure you want to submit the return and exchange?"
+        onConfirm={handleConfirmSubmit}
+        onCancel={handleCancelSubmit}
+        customer={customer} // Pass customer details
+        returnItems={returnItems} // Pass return items
+        exchangeItems={exchangeItems} // Pass exchange items
+        returnTotal={returnTotal} // Pass return total
+        exchangeTotal={exchangeTotal} // Pass exchange total
+        balanceMessage={balanceMessage} // Pass balance message
+        />
+      )}
     </div>
   );
 };

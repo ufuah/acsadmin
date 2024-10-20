@@ -1,0 +1,96 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px; /* Increased max-width for better table spacing */
+    max-height: 80%; /* Limiting height for overflow handling */
+    overflow-y: auto; /* Allow scrolling if content overflows */
+    text-align: left; /* Align text to the left for better readability */
+  }
+  
+  .heading {
+    margin-bottom: 10px; /* Add margin for better spacing */
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .tr {
+    border-bottom: 1px solid #ddd; /* Add a bottom border to each row */
+  }
+  
+  .th,
+  .td {
+    padding: 10px; /* Add padding for better touch targets */
+    text-align: left;
+  }
+  
+  .th {
+    background-color: #f2f2f2; /* Light gray background for headers */
+    font-weight: bold; /* Bold text for headers */
+  }
+  
+  .td {
+    vertical-align: top; /* Align text to the top of the cell */
+  }
+  
+  .brand {
+    margin: 0; /* Reset margin for brand paragraph */
+  }
+  
+  .price {
+    display: flex;
+    align-items: center; /* Align items in the center */
+  }
+  
+  .amount {
+    font-weight: bold; /* Bold font for amount */
+  }
+  
+  .modalButtons {
+    display: flex;
+    justify-content: space-around; /* Space buttons evenly */
+    margin-top: 20px; /* Space above the buttons */
+  }
+  
+  .confirmButton,
+  .cancelButton {
+    padding: 10px 20px; /* Add padding to buttons */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Change cursor on hover */
+    font-weight: bold; /* Bold text for buttons */
+  }
+  
+  .confirmButton {
+    background-color: #28a745; /* Green background for confirm */
+    color: white; /* White text */
+  }
+  
+  .cancelButton {
+    background-color: #dc3545; /* Red background for cancel */
+    color: white; /* White text */
+  }
+  
+  .confirmButton:hover,
+  .cancelButton:hover {
+    opacity: 0.9; /* Slightly dim on hover for effect */
+  }
+  
