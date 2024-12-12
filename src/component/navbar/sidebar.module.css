@@ -18,7 +18,7 @@
     justify-content: flex-start;
     flex-direction: column;
     gap: 6px;
-    height: 486px;
+    height: max-content;
     -webkit-backdrop-filter: blur(25px) saturate(162%);
     backdrop-filter: blur(25px) saturate(162%);
     background-color: var(--backdrop-color);

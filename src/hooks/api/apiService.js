@@ -3,22 +3,22 @@ import Cookies from "js-cookie";
 import { apiConfig } from "./apiConfig"; // Adjust according to your file structure
 
 // Create an instance of axios
-const apiClient = axios.create({
-  baseURL: apiConfig.baseURL,
-  withCredentials: true, // Ensures cookies (like auth tokens) are sent with every request
-});
+// const apiClient = axios.create({
+//   baseURL: apiConfig.baseURL,
+//   withCredentials: true, // Ensures cookies (like auth tokens) are sent with every request
+// });
 
 // Add interceptors if needed (optional but useful for token handling)
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = Cookies.get("accessToken"); // Changed to accessToken
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`; // Add Bearer token to headers
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+// apiClient.interceptors.request.use(
+//   (config) => {
+//     const token = Cookies.get("accessToken"); // Changed to accessToken
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`; // Add Bearer token to headers
+//     }
+//     return config;
+//   },
+//   (error) => Promise.reject(error)
+// );
 
 // Optionally, you can add a response interceptor to handle errors globally
 // apiClient.interceptors.response.use(

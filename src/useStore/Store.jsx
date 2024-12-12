@@ -1,3 +1,8 @@
+"use client"
+
+
+
+
 import { create } from "zustand";
 import axios from "axios";
 // import { jwtDecode } from "jwt-decode"; // corrected import
@@ -6,10 +11,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
+
 // Axios interceptor to attach token in Cookies to the request headers
 axios.interceptors.request.use(
   (config) => {
-    const token = Cookies.get("accessToken"); // Changed to accessToken
+    const token = Cookies.get("jwt"); // Changed to accessToken
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -220,16 +226,48 @@ const useStore = create((set, get) => ({
     }
   },
 
-  deleteStock: async (id) => {
-    try {
-      await axios.delete(`${baseURL}/api/stocks/${id}/`);
-      set((state) => ({
-        stocks: state.stocks.filter((stock) => stock.id !== id),
-      }));
-    } catch (error) {
-      console.error("Failed to delete stock:", error);
-    }
-  },
+//   // Function to delete a stock by description (updated to use description directly)
+  deleteStock: async (description) => {
+  try {
+    // Make the DELETE request to the server with description
+    await axios.delete(`${baseURL}/api/stocks/${encodeURIComponent(description)}`);
+  } catch (error) {
+    console.error("Error deleting stock:", error);
+    throw new Error("Failed to delete stock");
+  }
+},
+
+
+// Function to delete a stock by description (updated to use description directly)
+// deleteStock: async (description) => {
+//   try {
+//     // Define custom headers (e.g., Authorization token)
+//     const headers = {
+//       'Authorization': `Bearer ${yourAuthToken}`, // Replace `yourAuthToken` with the actual token
+//       'Content-Type': 'application/json', // Adjust the content type as needed
+//     };
+
+//     // Make the DELETE request to the server with description and headers
+//     await axios.delete(`${baseURL}/api/stocks/${encodeURIComponent(description)}`, { headers });
+//   } catch (error) {
+//     console.error("Error deleting stock:", error);
+//     throw new Error("Failed to delete stock");
+//   }
+// },
+
+
+
+
+  // deleteStock: async (id) => {
+  //   try {
+  //     await axios.delete(`${baseURL}/api/stocks/${id}`);
+  //     set((state) => ({
+  //       stocks: state.stocks.filter((stock) => stock.id !== id),
+  //     }));
+  //   } catch (error) {
+  //     console.error("Failed to delete stock:", error);
+  //   }
+  // },
 
   fetchSales: async () => {
     const { networkSpeed } = get(); // Access networkSpeed from the state
@@ -546,42 +584,87 @@ const useStore = create((set, get) => ({
 
 
   /** =============================== CUSTOMER SECTION ============================ */
+  // login: async (username, password, onSuccess) => {
+  //   const { networkSpeed } = get(); // Access networkSpeed from the state
+  //   if (networkSpeed !== "Slow") {
+  //     try {
+  //       const response = await axios.post(
+  //         `${baseURL}/api/auth/login`,
+  //         { username, password },
+  //         { withCredentials: true } // Important for sending and receiving cookies
+  //       );
+
+  //       console.log("Login response:", response.data); // Log the response data
+
+  //       const { user } = response.data;
+
+  //       if (user) {
+  //         // Store user data (including role) in localStorage
+  //         localStorage.setItem(
+  //           "user",
+  //           JSON.stringify({ username: user.username, role: user.role })
+  //         );
+
+  //         // Update state with user and role
+  //         set({ user: user.username, role: user.role });
+
+  //         if (onSuccess) onSuccess(user.role);
+  //       } else {
+  //         throw new Error("Login failed. User or token not received.");
+  //       }
+  //     } catch (error) {
+  //       console.error("Login failed:", error.response?.data || error.message);
+  //       throw new Error("Login failed.");
+  //     }
+  //   } else {
+  //     console.warn("Network is too slow, delaying the sales data fetch.");
+  //   }
+  // },
+
   login: async (username, password, onSuccess) => {
     const { networkSpeed } = get(); // Access networkSpeed from the state
+    
+    // Check if the network speed is not "Slow" before proceeding with the login
     if (networkSpeed !== "Slow") {
       try {
+        // Send a POST request to the API with username, password, and credentials (for cookies)
         const response = await axios.post(
           `${baseURL}/api/auth/login`,
           { username, password },
-          { withCredentials: true } // Important for sending and receiving cookies
+          { withCredentials: true } // Ensure cookies are sent and received
         );
-
+  
         console.log("Login response:", response.data); // Log the response data
-
-        const { user } = response.data;
-
+  
+        const { user } = response.data; // Extract user from the response
+  
         if (user) {
-          // Store user data (including role) in localStorage
-          localStorage.setItem(
-            "user",
-            JSON.stringify({ username: user.username, role: user.role })
-          );
-
-          // Update state with user and role
+          // Store the user's username and role in localStorage
+          // localStorage.setItem(
+          //   "user",
+          //   JSON.stringify({ username: user.username, role: user.role })
+          // );
+  
+          // Update the state with the user's username and role
           set({ user: user.username, role: user.role });
-
+  
+          // If onSuccess callback is provided, call it with the user's role
           if (onSuccess) onSuccess(user.role);
         } else {
+          // If no user data or token is returned, throw an error
           throw new Error("Login failed. User or token not received.");
         }
       } catch (error) {
+        // Log and throw an error if the login request fails
         console.error("Login failed:", error.response?.data || error.message);
         throw new Error("Login failed.");
       }
     } else {
+      // If the network is slow, log a warning
       console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
+
 
   getCustomerDetails: async (customer_name) => {
     try {
@@ -596,6 +679,20 @@ const useStore = create((set, get) => ({
       return null;
     }
   },
+
+  getCustomer: async (page, pageSize = 18) => {
+    try {
+      const response = await axios.get(`${baseURL}/api/transactions/customers`, {
+        params: { page, pageSize } // Pass page and pageSize to the API
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching customer details:', error);
+      return [];
+    }
+  },
+  
+  
 
   logout: async () => {
     const { networkSpeed } = get(); // Access networkSpeed from the state
@@ -662,9 +759,9 @@ const useStore = create((set, get) => ({
       });
 
       // Log success if the token is refreshed
-      if (response.status === 200 && response.data.newAccessToken) {
+      if (response.status === 200 && response.data.accessToken) {
         // Update the new access token in Cookies
-        Cookies.set("accessToken", response.data.newAccessToken, {
+        Cookies.set("accessToken", response.data.accessToken, {
           expires: 1 / 96,
         }); // Set it to expire in 15 minutes (optional)
         console.log("Access token refreshed and updated in cookies");
@@ -676,10 +773,13 @@ const useStore = create((set, get) => ({
     }
   },
 
-  isAuthenticated: () => {
-    const user = localStorage.getItem("user"); // User info from localStorage
-    return !!user; // Both token and user data should be present
-  },
+  // isAuthenticated: () => {
+  //   if (typeof window !== 'undefined') {
+  //     const user = localStorage.getItem("user");
+  //     return !!user;  // Returns true if user exists in localStorage, false otherwise
+  //   }
+  //   return false;  // Fallback in case the code is run server-side
+  // },
 
   checkLock: async () => {
     const { networkSpeed } = get(); // Access networkSpeed from the state
@@ -698,13 +798,45 @@ const useStore = create((set, get) => ({
     }
   },
 
+  // checkLock: async () => {
+  //   const { networkSpeed } = get(); // Access networkSpeed from the state
+  //   const { user } = useAuth(); // Retrieve the accessToken from useAuth
+  
+  //   if (networkSpeed !== "Slow") {
+  //     try {
+  //       if (!accessToken) {
+  //         throw new Error("No access token available");
+  //       }
+  
+  //       // Define custom headers (e.g., Authorization token)
+  //       const headers = {
+  //         'Authorization': `Bearer ${user?.accessToken}`, // Use the accessToken from useAuth
+  //         'Content-Type': 'application/json', // Adjust the content type if needed
+  //       };
+  
+  //       // Make the GET request to check the lock status with headers
+  //       const response = await axios.get(`${baseURL}/api/auth/checklock`, {
+  //         headers, // Include headers with Authorization token
+  //         withCredentials: true, // Include credentials if needed
+  //       });
+  
+  //       set({ isLocked: response.data.isLocked }); // Expecting a Boolean from the backend
+  //     } catch (error) {
+  //       console.error("Failed to fetch lock status:", error);
+  //       // You can decide how to handle errors here
+  //     }
+  //   } else {
+  //     console.warn("Network is too slow, delaying the sales data fetch.");
+  //   }
+  // },
+
   toggleLock: async () => {
     const { networkSpeed } = get(); // Access networkSpeed from the state
     if (networkSpeed !== "Slow") {
       try {
         const response = await axios.post(
           `${baseURL}/api/auth/togglelock`,
-          {},
+         
           {
             withCredentials: true, // Ensures cookies are sent with the request
           }
@@ -718,6 +850,45 @@ const useStore = create((set, get) => ({
       console.warn("Network is too slow, delaying the sales data fetch.");
     }
   },
+
+
+//   toggleLock: async () => {
+//   const { networkSpeed } = get(); // Access networkSpeed from the state
+//   const { user } = useAuth();  // Retrieve the accessToken from useAuth
+
+//   if (networkSpeed !== "Slow") {
+//     try {
+//       if (!user.accessToken) {
+//         throw new Error("No access token available");
+//       }
+
+//       // Define custom headers (e.g., Authorization token)
+//       const headers = {
+//         'Authorization': `Bearer ${user?.accessToken}`, // Use the accessToken from useAuth
+//         'Content-Type': 'application/json', // Adjust the content type if needed
+//       };
+
+//       // Make the POST request to toggle the lock status with headers
+//       const response = await axios.post(
+//         `${baseURL}/api/auth/togglelock`,
+//         {}, // Assuming no body data is required
+//         {
+//           headers, // Include headers with Authorization token
+//           withCredentials: true, // Include credentials if needed
+//         }
+//       );
+
+//       // Update the lock status based on the response
+//       set({ isLocked: response.data.lock_status === "locked" });
+//     } catch (error) {
+//       console.error("Failed to toggle lock status:", error);
+//       // Handle errors accordingly
+//     }
+//   } else {
+//     console.warn("Network is too slow, delaying the sales data fetch.");
+//   }
+// },
+
 
   checkConnectionType: () => {
     if ("connection" in navigator) {

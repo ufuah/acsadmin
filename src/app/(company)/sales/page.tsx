@@ -1,12 +1,17 @@
 
 import React from "react";
 import Sales from "../../../utils/AddSales/Sales";
+import Protected from "@/src/ProtectedRoute/Protected";
 
-const Page = (props: any) => {
+
+
+const Page = () => {
 
   return (
     <div>
-      <Sales />
+      <Protected allowedRoles={['admin']}>
+        <Sales />
+      </Protected>
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./confirmationModal.module.css";
-import CurrencyFormatter from "../currency/Currency";
-; // Ensure to import this if you haven't
+import CurrencyFormatter from "../currency/Currency"; // Ensure to import this if you haven't
 
 const ConfirmationModal = ({ 
     message, 

@@ -1,4 +1,5 @@
 import AddStock from '@/src/utils/Addstock/AddStock'
+import Protected from '@/src/ProtectedRoute/Protected';
 import React from 'react'
 
 interface Props {
@@ -8,7 +9,9 @@ interface Props {
 const page = (props: Props) => {
     return (
         <div>
-             <AddStock/>
+        <Protected allowedRoles={['admin','manager']}>
+         <AddStock/>
+         </Protected>
         </div>
     )
 }

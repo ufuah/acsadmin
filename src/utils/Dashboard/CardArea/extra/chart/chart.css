@@ -1,0 +1,35 @@
+.content_area_chart {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.bar_chart {
+    width: 100%;
+    background-color: #cccccc;
+    padding: 16px 16px 6px 16px;
+    border-radius: 5px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+    position: relative;
+}
+
+.bar_chart_wrapper {
+    width: 100%;
+    height: 240px;
+
+}
+
+@media (max-width: 992px) {
+    .content_area_chart {
+        grid-template-columns: 100%;
+    }
+}
+
+@media (max-width: 992px) {
+  .bar_chart {
+    padding: 12px;
+  }
+}
+
+
+

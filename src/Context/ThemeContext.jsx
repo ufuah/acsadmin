@@ -75,94 +75,380 @@ export const ThemeContextProvider = ({ children }) => {
   );
 };
 
+
+
+
+// export const AuthContextProvider = ({ children }) => {
+//   const [user, setUser] = useState(null);
+//   const [accessToken, setAccessToken] = useState(null);
+//   const [isAuthenticated, setIsAuthenticated] = useState(false);
+//   const router = useRouter(); // Use router for redirection
+//   const { notification, showNotification } = useNotifications(); // Use notifications
+
+//   const handleLogin = async (inputs, userType) => {
+//     try {
+//       let loginFunction;
+//       switch (userType) {
+//         case "user":
+//           loginFunction = userLogin;
+//           break;
+//         case "storeOwner":
+//           loginFunction = storeOwnerLogin;
+//           break;
+//         case "logistics":
+//           loginFunction = logisticsLogin;
+//           break;
+//         default:
+//           throw new Error(`Invalid user type: ${userType}`);
+//       }
+
+//       const loginResponse = await loginFunction(inputs);
+     
+//       console.log(loginResponse.role);
+
+//        // Handle the login response
+//        if (loginResponse.success) {
+//         const { data } = loginResponse;
+//         const roles = data.roles;
+//         const username = data.username;
+//         const accessToken = data.accessToken;
+//         console.log(loginResponse.role);
+
+//         // Log successful login data
+//         console.log("Login successful, response data:", data);
+
+//         // Update context state
+//         setUser({ username, roles,accessToken });
+//         console.log("Auth state updated:", { username, roles, accessToken });
+//     } else {
+//         console.error("Login failed, server message:", loginResponse.message);
+//         throw new Error(loginResponse.message); // Handle unsuccessful login
+//     }
+      
+
+//       // Redirect based on role
+//       if (loginResponse.role === "admin") {
+//         router.push("/dashboard");
+//       } else {
+//         router.push("/sales");
+//       }
+//     } catch (error) {
+//       showNotification("Login failed. Please try again.", "error");
+//       console.error(`${userType} login error:`, error);
+//     }
+//   };
+
+//   const handleLogout = async () => {
+//     try {
+//       // Perform logout logic (e.g., clearing user data, tokens)
+//       setUser(null);
+//       setIsAuthenticated(false);
+//       router.push("/login");
+//     } catch (error) {
+//       console.error("Logout error:", error);
+//     }
+//   };
+
+//   useEffect(() => {
+//     // Check if user is already logged in from localStorage or session
+//     const storedUser = localStorage.getItem("user");
+//     if (storedUser) {
+//       setUser(JSON.parse(storedUser));
+//       setIsAuthenticated(true);
+//     }
+//   }, []);
+
+//   return (
+//     <AuthContext.Provider
+//       value={{
+//         user,
+//         isAuthenticated,
+//         handleLogin,
+//         handleLogout,
+//       }}
+//     >
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+
 export const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = UseStorage("user", null);
-  const [accessToken, setAccessToken] = UseStorage("accessToken", null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const router = useRouter();
-  const {notification, showNotification } = useNotifications();
+  // const { showNotification } = useNotifications();
 
-
-  const handleLogin = async (inputs, userType) => {
-    try {
-      let loginFunction;
-      switch (userType) {
-        case "user":
-          loginFunction = userLogin;
-          break;
-        case "storeOwner":
-          loginFunction = storeOwnerLogin;
-          break;
-        case "logistics":
-          loginFunction = logisticsLogin;
-          break;
-        default:
-          throw new Error(`Invalid user type: ${userType}`);
-      }
-
-      const userData = await loginFunction(inputs);
-      setUser(userData);
-      setIsAuthenticated(true);
-      router.push("/market");
-    } catch (error) {
-      showNotification("Login failed. Please try again.", "error");
-      console.error(`${userType} login error:`, error);
-    }
-  };
-
-
-  console.log(notification);
-
-
+  console.log("user info",user);
   
-  const handleLogout = async (userType) => {
-    try {
-      let outFunction;
+
+   // Logs the initial state of auth when the provider is mounted
+   useEffect(() => {
+    console.log("AuthContext mounted with initial state:", user);
+}, [user]);
+
+// const handleLogin = async (inputs, userType) => {
+//     console.log("Attempting login with inputs:", "and userType:", userType);
+
+//     try {
+//         let loginFunction;
+
+//         // Select the appropriate login function based on user type
+//         switch (userType) {
+//             case "user":
+//                 loginFunction = userLogin;
+//                 break;
+//             case "storeOwner":
+//                 loginFunction = storeOwnerLogin;
+//                 break;
+//             case "logistics":
+//                 loginFunction = logisticsLogin;
+//                 break;
+//             default:
+//                 const errorMessage = `Invalid user type: ${userType}`;
+//                 console.error(errorMessage);
+//                 throw new Error(errorMessage);
+//         }
+
+//         console.log("Login function selected for userType:", userType);
+
+//         // Call the selected login function with the inputs
+//         const loginResponse = await loginFunction(inputs);
+//         console.log("Login function response:", loginResponse);
+
+//         // Handle the login response
+//         if (loginResponse.success) {
+//             const { data } = loginResponse;
+//             const role = data.role;
+//             const username = data.username;
+//             const accessToken = data.accessToken;
+
+//             // Log successful login data
+//             console.log("Login successful, response data:", data);
+
+//             // Update context state
+//             setUser({ username, role,accessToken });
+//             console.log("Auth state updated:", { username, role,accessToken });
+//         } else {
+//             console.error("Login failed, server message:", loginResponse.message);
+//             throw new Error(loginResponse.message); // Handle unsuccessful login
+//         }
+//     } catch (error) {
+//         console.error("Login error:", error);
+//         return error.message; // Return the error message for further handling
+//     }
+// };
+
+// Logs any changes to the auth state
+
+const handleLogin = async (inputs, userType) => {
+  console.log("Attempting login with inputs:", inputs, "and userType:", userType);
+
+  try {
+      let loginFunction;
+
+      // Select the appropriate login function based on user type
       switch (userType) {
-        case "user":
-          outFunction = userLogout;
-          break;
-        case "storeOwner":
-          outFunction = storeOwnerLogout;
-          break;
-        case "logistics":
-          outFunction = logisticsLogout;
-          break;
-        default:
-          throw new Error(`Invalid user type: ${userType}`);
+          case "user":
+              loginFunction = userLogin;
+              break;
+          case "storeOwner":
+              loginFunction = storeOwnerLogin;
+              break;
+          case "logistics":
+              loginFunction = logisticsLogin;
+              break;
+          default:
+              const errorMessage = `Invalid user type: ${userType}`;
+              console.error(errorMessage);
+              throw new Error(errorMessage);
       }
 
-      await outFunction(accessToken);
-      showNotification(`Logout successful`, "warning");
-      setUser(null);
-      setAccessToken(null);
-      setIsAuthenticated(false);
-      router.push("/market");
-    } catch (error) {
-    
-      console.error(`${userType} logout error:`, error);
-    }
+      console.log("Login function selected for userType:", userType);
+
+      // Call the selected login function with the inputs
+      const loginResponse = await loginFunction(inputs);
+      console.log("Login function response:", loginResponse);
+
+      // Handle the login response
+      if (loginResponse.success) {
+          const { data } = loginResponse;
+          const role = data.role;
+          const username = data.username;
+          const accessToken = data.accessToken;
+
+          // Log successful login data
+          console.log("Login successful, response data:", data);
+
+          // Update context state
+          setUser({ username, role, accessToken });
+          console.log("Auth state updated:", { username, role, accessToken });
+
+          // Redirect based on the user's role
+          if (role === "admin") {
+              router.push("/dashboard"); // Redirect to admin dashboard
+          } else if (role === "manager") {
+              router.push("/stock"); // Redirect to stock management page
+          } else {
+              router.push("/sales"); // Default redirect for other users
+          }
+      } else {
+          console.error("Login failed, server message:", loginResponse.message);
+          throw new Error(loginResponse.message); // Handle unsuccessful login
+      }
+  } catch (error) {
+      console.error("Login error:", error);
+      return error.message; // Return the error message for further handling
+  }
+};
+
+
+
+
+useEffect(() => {
+    console.log("Auth state updated:", user);
+}, [user]);
+
+  // const handleLogin = async (inputs, userType) => {
+  //   try {
+  //     let loginFunction;
+  //     switch (userType) {
+  //       case "user":
+  //         loginFunction = userLogin;
+  //         break;
+  //       case "storeOwner":
+  //         loginFunction = storeOwnerLogin;
+  //         break;
+  //       case "logistics":
+  //         loginFunction = logisticsLogin;
+  //         break;
+  //       default:
+  //         throw new Error(`Invalid user type: ${userType}`);
+  //     }
+
+  //     const loginResponse = await loginFunction(inputs);
+
+  //     if (loginResponse.success) {
+  //       const { username, roles, accessToken } = loginResponse.data;
+
+  //       setUser({ username, roles, accessToken }); // Update context state
+  //       // localStorage.setItem("user", JSON.stringify({ username, roles, accessToken }));
+
+  //       // Redirect based on role
+  //       return null; // No error
+  //     } else {
+  //       throw new Error(loginResponse.message || "Login failed");
+  //     }
+  //   } catch (error) {
+  //     console.error(`${userType} login error:`, error);
+  //     return error.message;
+  //   }
+  // };
+
+  const handleLogout = () => {
+    setUser(null);
+    router.push("/login");
   };
 
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const storedToken = localStorage.getItem("accessToken");
-    if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-      setAccessToken(storedToken);
-      setIsAuthenticated(true);
-    }
-  }, [setUser, setAccessToken]);
+  // useEffect(() => {
+  //   const storedUser = localStorage.getItem("user");
+  //   if (storedUser) {
+  //     setUser(JSON.parse(storedUser));
+  //   }
+  // }, []);
 
   return (
-    <AuthContext.Provider
-      value={{ handleLogin, user, setUser, isAuthenticated, handleLogout }}
-    >
+    <AuthContext.Provider value={{ user, handleLogin, handleLogout, setUser }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
+
+
+
+
+
+
+
+
+
+
+
+// export const AuthContextProvider = ({ children }) => {
+//   const [user, setUser] = useState(null);
+//   const [isAuthenticated, setIsAuthenticated] = useState(false);
+//   const router = useRouter(); // Use router for redirection
+//   const { showNotification } = useNotifications(); // Use notifications
+
+//   const handleLogin = async (inputs, userType) => {
+//     try {
+//       let loginFunction;
+//       switch (userType) {
+//         case "user":
+//           loginFunction = userLogin;
+//           break;
+//         case "storeOwner":
+//           loginFunction = storeOwnerLogin;
+//           break;
+//         case "logistics":
+//           loginFunction = logisticsLogin;
+//           break;
+//         default:
+//           throw new Error(`Invalid user type: ${userType}`);
+//       }
+
+//       const userData = await loginFunction(inputs);
+//       setUser(userData);
+//       setIsAuthenticated(true);
+
+//       // Redirect based on role
+//       if (userData.role === "admin") {
+//         router.push("/dashboard");
+//       } else {
+//         router.push("/sales");
+//       }
+//     } catch (error) {
+//       showNotification("Login failed. Please try again.", "error");
+//       console.error(`${userType} login error:`, error);
+//     }
+//   };
+
+//   const handleLogout = async () => {
+//     try {
+//       // Perform logout logic (e.g., clearing user data, tokens)
+//       setUser(null);
+//       setIsAuthenticated(false);
+//       router.push("/login");
+//     } catch (error) {
+//       console.error("Logout error:", error);
+//     }
+//   };
+
+//   useEffect(() => {
+//     // Ensure code runs only on the client-side (browser)
+//     if (typeof window !== "undefined") {
+//       // Check if user is already logged in from localStorage or session
+//       const storedUser = localStorage.getItem("user");
+//       if (storedUser) {
+//         setUser(JSON.parse(storedUser));
+//         setIsAuthenticated(true);
+//       }
+//     }
+//   }, []);
+
+//   return (
+//     <AuthContext.Provider
+//       value={{
+//         user,
+//         isAuthenticated,
+//         handleLogin,
+//         handleLogout,
+//       }}
+//     >
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
 
 export const SubscriptionContextProvider = ({ children }) => {
   const [showSubscription, setShowSubscription] = useState(false);

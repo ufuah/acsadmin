@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/utils/calender/Calender.jsx", "src/useStore/Store.jsx", "src/app/stock/addstocks/page.jsx", "src/app/stock/page.jsx", "src/utils/exchangeandreturn/ExchangeReturn.jsx", "src/component/StockList/StockList.jsx", "src/utils/AddSales/Sales.tsx", "src/utils/Model/ModelBox/SalePreview.tsx", "src/app/loading.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/utils/calender/Calender.jsx", "src/useStore/Store.jsx", "src/app/(company)/stock/addstocks/page.jsx", "src/app/(company)/stock/page.jsx", "src/utils/exchangeandreturn/ExchangeReturn.jsx", "src/component/StockList/StockList.jsx", "src/utils/AddSales/Sales.jsx", "src/utils/Model/ModelBox/SalePreview.tsx", "src/app/loading.jsx", "src/app/(company)/exchange/page.jsx", "src/app/(company)/sales/page.jsx", "src/app/(company)/salesmanager/page.jsx", "src/app/page.jsx"],
   "exclude": ["node_modules"]
 }
