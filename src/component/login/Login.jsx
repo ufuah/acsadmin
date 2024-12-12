@@ -155,6 +155,10 @@ import { useRouter } from "next/navigation";
 import styles from "./login.module.css";
 import { useAuth } from "@/src/Context/ThemeContext";
 import { useNotification } from "@/src/Context/NotificationContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
+import logo from '../../../public/companyLogo.png';
+import Image from "next/image";
 
 const Login = () => {
   const router = useRouter();
@@ -163,6 +167,7 @@ const Login = () => {
 
   const [credentials, setCredentials] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -188,32 +193,54 @@ const Login = () => {
     }
   };
 
+  const handleShow = () => {
+    setShow(!show);
+  };
+
   return (
     <div className={styles.container}>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <h2 className={styles.heading}>Login</h2>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={credentials.username}
-          onChange={handleChange}
-          className={styles.input}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={credentials.password}
-          onChange={handleChange}
-          className={styles.input}
-          required
-        />
-        <button type="submit" className={styles.button} disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+      <div className={styles.background}>
+        <div className={styles.img}>
+          <div className={styles.mask}></div>
+          <Image src={logo} alt="e-palateOasis Logo" />
+        </div>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <h2 className={styles.heading}>Login</h2>
+
+          <div className={styles.input}>
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={credentials.username}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className={styles.input}>
+            <input
+              type={show ? "textterms" : "password"}
+              name="password"
+              placeholder="Password"
+              value={credentials.password}
+              onChange={handleChange}
+              required
+            />
+
+
+            <div className={styles.icon} onClick={handleShow}>
+              <FontAwesomeIcon icon={show ? faLockOpen : faLock} />
+            </div>
+          </div>
+
+
+          <button type="submit" className={styles.button} disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+      </div>
+
     </div>
   );
 };
