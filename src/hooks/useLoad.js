@@ -78,6 +78,7 @@
 
 
 
+import { useState } from "react";
 import { useAuth } from "../Context/ThemeContext";
 import { axiosInstance } from "../hooks/api/axios";
 
@@ -85,27 +86,9 @@ import { axiosInstance } from "../hooks/api/axios";
 
 const useLoad = () => {
   const { user } = useAuth(); // Access user from useAuth context
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-
-
-  // Function to delete stock
-  // const deleteStock = async (ids) => {
-
-  //   try {
-  //     await axiosInstance.post('/api/stocks/delete', {
-  //       data: { ids }, // Send the array of IDs in the request body
-  //       headers: {
-  //         Authorization: `Bearer ${user?.accessToken}`,
-  //         'Content-Type': 'application/json',
-  //       },
-  //       withCredentials: true,
-  //     });
-  //     console.log(`Stocks with IDs '${ids.join(', ')}' deleted successfully.`);
-  //   } catch (error) {
-  //     console.error("Error deleting stocks:", error);
-  //     throw new Error("Failed to delete stocks");
-  //   }
-  // };
 
   const deleteStock = async (ids) => {
     try {
@@ -126,52 +109,6 @@ const useLoad = () => {
     }
   };
 
-
-  // export const deleteStock = async (id) => {
-  //   try {
-  //     const response = await axiosInstance.delete(`/api/stocks`, {
-  //       params: { id }, // Send ID as query param
-  //       headers: {
-  //         'Authorization': `Bearer ${user?.accessToken}`,
-  //         'Content-Type': 'application/json',
-  //       },
-  //       withCredentials: true,
-  //     });
-  //     console.log(`Stock with ID '${id}' deleted successfully.`);
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error("Error deleting stock:", error);
-  //     throw new Error("Failed to delete stock");
-  //   }
-  // };
-
-
-
-  // const checkLock = async (set) => {
-  //   try {
-  //     console.log("Checking lock status...");
-  //     console.log("Headers being sent: ", {
-  //       'Authorization': `Bearer ${user?.accessToken}`,
-  //       'Content-Type': 'application/json',
-  //     });
-
-  //     const response = await axiosInstance.get(`/api/auth/checklock`, {
-  //       headers: {
-  //         'Authorization': `Bearer ${user?.accessToken}`,
-  //       'Content-Type': 'application/json',
-  //       },
-  //       withCredentials: true,
-  //     });
-
-  //     set({ isLocked: response.data.isLocked });
-  //     console.log("Lock status checked successfully:", response.data.isLocked);
-  //   } catch (error) {
-  //     console.error("Failed to fetch lock status:", error.response?.data || error.message);
-  //     if (error.response?.status === 403) {
-  //       console.error("Forbidden: Check token validity and role-based access.");
-  //     }
-  //   }
-  // };
 
 
   const checkLock = async (set) => {
@@ -198,12 +135,7 @@ const useLoad = () => {
   // Function to toggle lock status
   const toggleLock = async (set) => {
     try {
-      // const { networkSpeed } = set.get();
-      // if (networkSpeed === "Slow") {
-      //   console.warn("Network is too slow, delaying the lock status toggle.");
-      //   return;
-      // }
-      // const headers = getHeaders();
+
       const response = await axiosInstance.post(
         `/api/auth/togglelock`,
         {
@@ -222,10 +154,52 @@ const useLoad = () => {
     }
   };
 
+
+  // Fetch all users
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get("/api/users");
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Update user
+  const updateUser = async (userId, updatedData, onSuccess) => {
+    try {
+      await axiosInstance.put(`/api/users/${userId}`, updatedData);
+      alert("User updated successfully");
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
+
+  // Delete user
+  const deleteUser = async (userId, onSuccess) => {
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
+    try {
+      await axios.delete(`/api/users/${userId}`);
+      alert("User deleted successfully");
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
   return {
     deleteStock,
     checkLock,
     toggleLock,
+    users,
+    loading,
+    fetchUsers,
+    updateUser,
+    deleteUser,
   };
 };
 

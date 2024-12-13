@@ -24,6 +24,7 @@ import SalesReceipt from "../receipt/SalesReceipt";
 import SearchBox from "../searchExtr/searchbar";
 import "./table.css"; // Ensure your CSS is updated
 import CircleSpinner from "../LoadingComp/Circle/CircleSpinner";
+import { axiosInstance } from "../../hooks/api/axios";
 
 const Table = () => {
   const { notification, showNotification } = UseNotifications();
@@ -36,6 +37,10 @@ const Table = () => {
   const [selectedSale, setSelectedSale] = useState(null);
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const [sales, setSales] = useState([]);
+  const [returns, setReturns] = useState([]);
+  const [exchanges, setExchanges] = useState([]);
   const [dateRange, setDateRange] = useState({
     startDate: new Date(),
     endDate: addDays(new Date(), 7),
@@ -48,25 +53,46 @@ const Table = () => {
   const [selectedTransactionType, setSelectedTransactionType] = useState("all");
 
   const {
-    sales,
-    returns,
-    exchanges,
-    fetchExchanges,
-    fetchReturns,
-    fetchSales,
     updateSale,
     fetchSalesById,
   } = useStore((state) => ({
-    sales: state.sales,
-    returns: state.returns,
-    fetchReturns: state.fetchReturns,
-    exchanges: state.exchanges,
-    fetchExchanges: state.fetchExchanges,
-    fetchSales: state.fetchSales,
     updateSale: state.updateSale,
     fetchSalesById: state.fetchSalesById,
   }));
 
+  // Stable fetch functions
+  const fetchSales = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get(`/api/transactions/sales`);
+      console.log("Fetched Sales Data:", response.data);
+      setSales(response.data.sales);
+    } catch (error) {
+      console.error("Failed to fetch sales:", error.response?.data || error.message);
+    }
+  }, []);
+
+  const fetchReturns = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get(`/api/transactions/returns`);
+      console.log("Fetched Returns Data:", response.data);
+      setReturns(response.data.returns);
+    } catch (error) {
+      console.error("Failed to fetch returns:", error.response?.data || error.message);
+    }
+  }, []);
+
+  const fetchExchanges = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get(`/api/transactions/exchanges`);
+      console.log("Fetched Exchanges Data:", response.data);
+      setExchanges(response.data.exchanges);
+    } catch (error) {
+      console.error("Failed to fetch exchanges:", error.response?.data || error.message);
+    }
+  }, []);
+
+  // Memoize showNotification to avoid triggering unnecessary renders
+  const stableShowNotification = useCallback(showNotification, []);
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
   });
@@ -104,30 +130,67 @@ const Table = () => {
 
   
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true); // Start loading
+  //     try {
+  //       console.log("Fetching returns..."); // Add this log
+  //       await fetchSales(); // Fetch sales data
+  //       await fetchReturns(); // Fetch returns data
+  //       await fetchExchanges(); // Fetch exchanges data
+  
+  //       console.log("sales Data:", sales); // Ensure this line logs the data after fetching
+  //       console.log("Returns Data:", returns); // Ensure this line logs the data after fetching
+  //       console.log("exchange Data:", exchanges); // Ensure this line logs the data after fetching
+  //       showNotification("Data fetched successfully!", "success");
+  //     } catch (error) {
+  //       console.error("Failed to fetch data:", error);
+  //       showNotification("Failed to fetch data!", "error");
+  //     } finally {
+  //       setLoading(false); // Stop loading
+  //     }
+  //   };
+  //   fetchData();
+  // }, [fetchSales, fetchReturns, fetchExchanges, sales, returns, exchanges, showNotification]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     try {
+  //       console.log("Fetching all data...");
+  //       await fetchSales();
+  //       await fetchReturns();
+  //       await fetchExchanges();
+  //       stableShowNotification("Data fetched successfully!", "success");
+  //     } catch (error) {
+  //       console.error("Failed to fetch data:", error);
+  //       stableShowNotification("Failed to fetch data!", "error");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [fetchSales, fetchReturns, fetchExchanges, stableShowNotification]);
+
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // Start loading
+      setLoading(true);
       try {
-        console.log("Fetching returns..."); // Add this log
-        await fetchSales(); // Fetch sales data
-        await fetchReturns(); // Fetch returns data
-        await fetchExchanges(); // Fetch exchanges data
-  
-        console.log("sales Data:", sales); // Ensure this line logs the data after fetching
-        console.log("Returns Data:", returns); // Ensure this line logs the data after fetching
-        console.log("exchange Data:", exchanges); // Ensure this line logs the data after fetching
-        showNotification("Data fetched successfully!", "success");
+        await Promise.all([fetchSales(), fetchReturns(), fetchExchanges()]);
+        stableShowNotification("Data fetched successfully!", "success");
       } catch (error) {
-        console.error("Failed to fetch data:", error);
-        showNotification("Failed to fetch data!", "error");
+        console.error("Error fetching some data:", error);
+        stableShowNotification("Failed to fetch some data!", "error");
       } finally {
-        setLoading(false); // Stop loading
+        setLoading(false);
       }
     };
-    fetchData();
-  }, [fetchSales, fetchReturns, fetchExchanges, sales, returns, exchanges, showNotification]);
-
   
+    fetchData();
+  }, [fetchSales, fetchReturns, fetchExchanges, stableShowNotification]);
+  
+
   const applyFilters = useCallback(() => {
     // Initialize filtered with the appropriate records based on the selected transaction type
     let filtered = [];
