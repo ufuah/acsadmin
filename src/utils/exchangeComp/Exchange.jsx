@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import useStore from "../../useStore/Store";
 import styles from "./exchange.module.css";
 import CurrencyFormatter from "../currency/Currency";
@@ -8,6 +8,7 @@ import Receipt from "../../utils/receipt/Receipt";
 import { useReactToPrint } from "react-to-print";
 import { format, parse } from "date-fns";
 import ConfirmationModal from "../Modal/ConfirmationModal";
+import { useNotification } from "../../Context/NotificationContext";
 
 const ReturnExchange = () => {
   const {
@@ -29,6 +30,8 @@ const ReturnExchange = () => {
     // updateStock: state.updateStock, // Add this if you need stock updates later
   }));
 
+  const {showNotification } = useNotification();
+
   console.log("Return ID:", returnId);
   console.log("Exchange ID:", exchangeId);
 
@@ -40,6 +43,7 @@ const ReturnExchange = () => {
   //   });
   // };
 
+  const stableShowNotification = useCallback(showNotification, []);
   const now = new Date();
   const formattedDate = format(now, "dd/MM/yyyy"); // "16/09/2024"
 
@@ -342,15 +346,19 @@ const ReturnExchange = () => {
         // Print the receipt
         handlePrint();
 
+        showNotification("Exchange and Return successful", "success");
+
         // Log data (optional)
         console.log("Customer Information:", customer);
         console.log("Return Items:", returnItems);
         console.log("Exchange Items:", exchangeItems);
       } catch (error) {
+        showNotification("Failed to process returns and/or exchanges:", "error");
         console.error("Failed to process returns and/or exchanges:", error);
       }
     } else {
       console.log("Form validation failed");
+      showNotification("Form validation failed", "error");
     }
   };
 

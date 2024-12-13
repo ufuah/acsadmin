@@ -16,7 +16,6 @@ import { useReactToPrint } from "react-to-print";
 import logo from "../../../public/logo2.jpg";
 import useStore from "../../useStore/Store";
 import { generatePdf } from "../../utils/GeneratePdf/generatePdf";
-import UseNotifications from "../../utils/Middlewares/Notifications/UseNotifications";
 import Notification from "../../utils/Middlewares/Notifications/notification/Notification";
 import CurrencyFormatter from "../../utils/currency/Currency";
 import Calendar from "../calender/Calender";
@@ -25,9 +24,10 @@ import SearchBox from "../searchExtr/searchbar";
 import "./table.css"; // Ensure your CSS is updated
 import CircleSpinner from "../LoadingComp/Circle/CircleSpinner";
 import { axiosInstance } from "../../hooks/api/axios";
+import { useNotification } from "@/src/Context/NotificationContext";
 
 const Table = () => {
-  const { notification, showNotification } = UseNotifications();
+  const {showNotification } = useNotification();
   const [expandedCustomer, setExpandedCustomer] = useState(null);
   const [filteredSales, setFilteredSales] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
@@ -430,7 +430,7 @@ const Table = () => {
   // A loading fallback UI
   const LoadingIndicator = () => (
     <div className="loading">
-      <span>Loading...</span>
+      < CircleSpinner/>
     </div>
   );
 
@@ -460,7 +460,6 @@ const Table = () => {
 
   return (
     <div className="container">
-      <Notification notification={notification} />
       <div className="header_table">
         <span>Sales Management</span>
       </div>

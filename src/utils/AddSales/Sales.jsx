@@ -17,6 +17,7 @@ import { useNotification } from "@/src/Context/NotificationContext";
 
 
 export default function AddSale() {
+
   const now = new Date();
   const formattedDate = format(now, "yyyy-MM-dd"); // "2024-10-02"
 
@@ -202,7 +203,7 @@ export default function AddSale() {
       if (response.error) {
         showNotification(response.error, "error");
       } else {
-        showNotification(response.message, "success");
+        showNotification(response.message,"sales add success.", "success");
         setShowPreview(false);
 
         if (printRef.current) {
