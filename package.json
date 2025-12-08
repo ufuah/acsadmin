@@ -13,6 +13,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "axios": "^1.7.4",
+    "chart.js": "^4.4.7",
     "cookie": "^0.6.0",
     "date-fns": "^3.6.0",
     "file-saver": "^2.0.5",
@@ -28,6 +29,7 @@
     "react-date-range": "^2.0.1",
     "react-dom": "^19.2.1",
     "react-to-print": "^2.15.1",
+    "recharts": "^2.14.0",
     "sharp": "^0.33.5",
     "zustand": "^4.5.5"
   },

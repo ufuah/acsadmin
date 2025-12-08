@@ -1,4 +1,4 @@
-.notification {
+/* .notification {
     position: fixed;
     top: 10%;
     left: 50%;
@@ -40,4 +40,193 @@
 
 .notification.show {
     opacity: 1;
-}
+} */
+
+
+
+
+
+
+.notification {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    padding: 12px 10px;
+    margin-bottom: 12px;
+    color: #fff;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping for narrow screens */
+    align-items: center;
+    border-radius: 8px;
+    background-image: linear-gradient(to right, #3498db55, #22242f 30%);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    animation: show_toast 0.6s ease forwards, hide_toast 0.6s ease forwards 5s;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    z-index: 1000;
+  }
+  
+  .notification.success {
+    background-image: linear-gradient(to right, #0abf3055, #22242f 30%);
+  }
+  
+  .notification.error {
+    background-image: linear-gradient(to right, #f24d4c55, #22242f 30%);
+  }
+  
+  .notification.warning {
+    background-image: linear-gradient(to right, #e9bd0c55, #22242f 30%);
+  }
+  
+  .notification.info {
+    background-image: linear-gradient(to right, #3498db55, #22242f 30%);
+  }
+
+
+  .container {
+    width: 100%;
+    display: flex;
+     align-items: center;
+     justify-content: space-between;
+  }
+
+  .box {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+  }
+  
+  .icon {
+    color: #efefef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem; /* Relative units for consistency */
+    margin-right: 10px;
+  }
+  
+  .message p {
+    margin: 0;
+    font-size: 1rem;
+    flex: 1; /* Expands to take up available space */
+    color: #efefef;
+  }
+  
+  .close {
+    margin-left: auto;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+  }
+  
+  .close:hover {
+    opacity: 1;
+  }
+  
+
+  .progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    animation: timeOut 6s linear forwards;
+    animation-fill-mode: forwards;
+  }
+  
+  .progress.success {
+    background-color: var(--main-brand-color); /* Green for success */
+  }
+  
+  .progress.error {
+    background-color: #f24d4c; /* Red for error */
+  }
+  
+  .progress.warning {
+    background-color: #e9bd0c; /* Yellow for warning */
+  }
+  
+  .progress.info {
+    background-color: #3498db; /* Blue for info */
+  }
+  
+  /* Keyframes for showing and hiding */
+  @keyframes show_toast {
+    0% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes hide_toast {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+  }
+  
+  @keyframes timeOut {
+    to {
+      width: 0%;
+    }
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .notification {
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+  
+    .icon {
+      font-size: 1.2rem;
+    }
+  
+    .message p {
+      font-size: 0.9rem;
+    }
+  
+    .close {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .notification {
+      padding: 8px;
+      font-size: 0.8rem;
+      flex-direction: column; /* Stack content vertically on small screens */
+      text-align: center;
+    }
+  
+    .icon {
+      font-size: 1rem;
+      margin-bottom: 8px; /* Space below the icon */
+    }
+  
+    .message p {
+      font-size: 0.85rem;
+    }
+  
+    .close {
+      font-size: 0.8rem;
+    }
+    .notification {
+      top: 30px;
+      right: 30px;
+      padding: 12px 10px;
+      margin-bottom: 12px;
+      width: 100%;
+      max-width: 300px;
+    }
+  }
+  

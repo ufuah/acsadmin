@@ -1,0 +1,165 @@
+/* .container {
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .th, .td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .emptyMessage {
+    font-size: 18px;
+    color: #777;
+    text-align: center;
+  }
+   */
+
+
+   .container {
+    padding: 16px;
+    max-height: max-content; /* Set a fixed height for the container */
+    overflow-y: auto; /* Allow vertical scrolling */
+  }
+
+  
+  .title {
+    font-size: 24px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .copyMessage {
+    text-align: center;
+    color: green;
+    margin-bottom: 10px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .th,
+  .td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .td {
+    white-space: nowrap;
+  }
+  
+  .iconButton,
+  .messageButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 16px;
+  }
+  
+  .iconButton:hover,
+  .messageButton:hover {
+    color: #007bff;
+  }
+  
+  .emptyMessage {
+    text-align: center;
+    font-size: 16px;
+    color: #888;
+  }
+
+
+  .loadingMessage {
+    text-align: center;
+    font-size: 16px;
+    color: #007bff;
+    margin-top: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .table,
+    .thead,
+    .tbody,
+    .tr,
+    .th,
+    .td {
+      display: block;
+      width: 100%;
+    }
+  
+    .th {
+      display: none;
+    }
+  
+    .td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+    }
+  
+    .td:before {
+      content: attr(data-label);
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+  }
+  
+
+
+@media (max-width: 768px) {
+    .table,
+    .thead,
+    .tbody,
+    .tr,
+    .th,
+    .td {
+      display: block;
+      width: 100%;
+    }
+  
+    .th {
+      display: none;
+    }
+  
+    .td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+    }
+  
+    .td:before {
+      content: attr(data-label);
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+  }

@@ -3,11 +3,14 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import Sidebar from "../component/navbar/Sidebar";
 import Mood from "../utils/modeSwitch/mode/Mode";
-import { ThemeContextProvider } from "../Context/ThemeContext";
+import { AuthContextProvider, ThemeContextProvider } from "../Context/ThemeContext";
 import Lock from "../utils/modeSwitch/companyLock/Lock";
-import ProtectedRoute from "../ProtectedRoute/Protected";
-import LockProvider from "../Lockprovider/LockProvider"; 
 import Network from '../utils/Network/Network'
+import { NotificationContextProvider } from "../Context/NotificationContext";
+import { PersistProvider } from '../Context/PersistLogin'
+import { Suspense } from "react";
+import Loading from "../component/Loading/Loading";
+
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -25,15 +28,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={outfit.className}>
-        <ProtectedRoute>
+        <AuthContextProvider>
           <ThemeContextProvider>
-            <Sidebar />
-            <Mood />
-            <Lock />
-            <Network/>
-            {children}
+            <PersistProvider>
+              <NotificationContextProvider>
+                <Network />
+                <Suspense fallback={<Loading />}>
+                {children}
+                </Suspense>
+              </NotificationContextProvider>
+            </PersistProvider>
           </ThemeContextProvider>
-        </ProtectedRoute>
+        </AuthContextProvider>
+
       </body>
     </html>
   );

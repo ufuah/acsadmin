@@ -3,19 +3,28 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import useStore from "../useStore/Store";
+import { useAuth } from "../Context/ThemeContext";
+import CircleSpinner from "../utils/LoadingComp/Circle/CircleSpinner";
+import useLoad from "../hooks/useLoad";
 
 const LockProvider = ({ children }) => {
-  const {
-    isLocked,
-    checkLock,
-    isAuthenticated,
-    role, // Include role to determine user access
-  } = useStore((state) => ({
-    isLocked: state.isLocked,
-    checkLock: state.checkLock,
-    isAuthenticated: state.isAuthenticated,
-    role: state.role, // Accessing the user role
-  }));
+  // const {
+  //   isLocked,
+  //   checkLock,
+  //   isAuthenticated,
+  //   role, // Include role to determine user access
+  // } = useStore((state) => ({
+  //   isLocked: state.isLocked,
+  //   checkLock: state.checkLock,
+  //   isAuthenticated: state.isAuthenticated,
+  //   role: state.role, // Accessing the user role
+  // }));
+
+  const {  checkLock, isLocked} = useLoad();
+
+  const { user } = useAuth();
+
+  
 
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -39,10 +48,10 @@ const LockProvider = ({ children }) => {
   useEffect(() => {
     if (!loading) {
       // Check if the user is authenticated
-      if (!isAuthenticated()) {
+      if (!user?.role) {
         console.log("User not authenticated. Redirecting to /login.");
         router.push("/login"); // Redirect to the login page if not authenticated
-      } else if (isLocked && role !== "admin") {
+      } else if (isLocked && user?.role !== "admin") {
         // If the system is locked and the user is not an admin
         console.log("Redirecting to /locked because the system is locked for non-admin users.");
         router.push("/locked"); // Redirect to the locked page
@@ -51,11 +60,11 @@ const LockProvider = ({ children }) => {
         console.log("Access granted, rendering protected content.");
       }
     }
-  }, [isLocked, loading, router, isAuthenticated, role]);
+  }, [isLocked, loading, router, user?.role]);
 
   if (loading) {
     // Display loading state until the lock check completes
-    return <div>Loading...</div>; // You can replace this with a spinner or custom loading UI
+    return <div><CircleSpinner/></div>; // You can replace this with a spinner or custom loading UI
   }
 
   // If no redirection occurred, render the protected content

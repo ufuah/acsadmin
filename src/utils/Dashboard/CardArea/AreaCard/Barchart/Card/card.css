@@ -1,0 +1,81 @@
+.area-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 16px;
+    backdrop-filter: blur(25px) saturate(162%);
+    background-color: var(--backdrop-color);
+    border: 1px solid var(--backdrop-solid);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+
+}
+
+.info-title {
+    color: #ebebeb;
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+
+.info-values {
+    color: #ebebeb;
+    font-weight: 700;
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.info-text {
+    color: #ebebeb;
+    font-weight: 500;
+}
+
+
+.recharts-default-tooltip {
+    padding: 4px 8px !important;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px;
+    border-radius: 4px;
+    background-color: var(--main-brand-color);
+    z-index: 100;
+}
+
+.recharts-tooltip-item-list {
+    * {
+        color: #ebebeb !important;
+        font-size: 14px;
+        font-family: inherit !important;
+        opacity: 0.9;
+        z-index: 100;
+    }
+}
+
+@media (max-width: 576px) {
+    .area-card {
+        width: 350px;
+        padding: 10px;
+    }
+
+
+    .info-title {
+        color: #ebebeb;
+        font-size: 16px;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+}
+
+
+@media (max-width: 400px) {
+    .area-card {
+        width: 330px;
+        padding: 10px;
+    }
+
+    .info-title {
+        color: #ebebeb;
+        font-size: 16px;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+}

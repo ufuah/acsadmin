@@ -1,11 +1,11 @@
 import React from 'react'
-import Loading from '../component/Loading/Loading'
+import CircleSpinner from '../utils/LoadingComp/Circle/CircleSpinner'
 
 
 const loading = () => {
   return (
     <div>
-      <Loading/>
+      <CircleSpinner/>
     </div>
   )
 }

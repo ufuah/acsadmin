@@ -1,0 +1,240 @@
+/* .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modalContent {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+  }
+  
+  .modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .modalHeader h2 {
+    margin: 0;
+  }
+  
+  .closeIcon {
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.3s ease;
+  }
+  
+  .closeIcon:hover {
+    color: #e74c3c;
+  }
+  
+  .stockList {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+  }
+  
+  .stockItem {
+    margin: 8px 0;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .closeButton {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+  }
+  
+  .closeButton:hover {
+    background: #c0392b;
+  }
+   */
+
+
+
+
+/* 
+.stockBox {
+    cursor: pointer;
+    background-color: #ffcc00;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 60%;
+    max-height: 80%;
+    overflow-y: auto;
+  }
+  
+
+  .modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .closeIcon {
+    cursor: pointer;
+    font-size: 20px;
+  }
+  
+  .stockList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .stockItem {
+    margin: 5px 0;
+  }
+  
+  .closeButton {
+    background-color: #ff0000;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .closeButton:hover {
+    background-color: #cc0000;
+  }
+   */
+
+
+
+
+/* Initial style for the small box */
+
+.container {
+    position: fixed;
+    top: 58px;
+    left: 81px;
+}
+
+.stockBox {
+    background-color: #f5c542;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-block;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Style for hiding the small box when modal is shown */
+.hideBox {
+    opacity: 0;
+    transform: scale(0.8);
+    /* Optional: Scale down the box for a smooth exit */
+    pointer-events: none;
+    /* Disable click events while the modal is open */
+}
+
+/* Modal styles */
+.modal {
+    width: max-content;
+    height: max-content;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    transition: opacity 0.3s ease-in-out;
+}
+
+
+.stockItem span {
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+
+
+.modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 281px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.closeIcon {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.stockList {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.stockItem {
+    margin-bottom: 10px;
+}
+
+.closeButton {
+    background-color: #f5c542;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    display: block;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.closeButton:hover {
+    background-color: #e5b136;
+}

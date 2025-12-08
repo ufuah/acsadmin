@@ -1,0 +1,98 @@
+
+.btn {
+    position: relative;
+    width: 300px;
+    height: 80px;
+    background: #fff;
+    border-radius: 50px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), inset 0 0 2px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    overflow: hidden;
+    user-select: none;
+    transition: 0.3s;
+  }
+  
+  .btn:not(.clicked):active {
+    transform: scale(0.9);
+  }
+  
+  .outer,
+  .inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: aqua;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 600;
+    z-index: 5;
+    transition: 0.2s;
+  }
+  
+  .btn.clicked .outer {
+    transform-origin: left;
+    transform: scale(0);
+  }
+  
+  .inner {
+    background: #fff;
+    z-index: 4;
+  }
+  
+  .inner input {
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    background: none;
+    padding: 0 5px;
+    pointer-events: none;
+  }
+  
+  .inner input::-webkit-slider-thumb {
+    position: relative;
+    appearance: none;
+    height: 70px;
+    width: 70px;
+    background: url(../../../public/thumb.png);
+    border-radius: 50%;
+    cursor: grab;
+    pointer-events: auto;
+    z-index: 4;
+  }
+  
+  .inner .range-txt {
+    position: absolute;
+    font-size: 17px;
+    margin-left: 50px;
+    color: #888;
+    z-index: 3;
+  }
+  
+  .btn.confirmed .inner {
+    transform: scale(0);
+  }
+  
+  .final {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    font-size: 22px;
+    font-weight: 500;
+    background: green;
+    color: #fff;
+    border-radius: 50px;
+    transform: translateX(100%);
+    transition: 0.3s;
+  }
+  
+  .btn.confirmed .final {
+    transform: translateX(0);
+  } 
+
+
