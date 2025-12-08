@@ -8,7 +8,7 @@ interface Props {
 const page = (props: Props) => {
     return (
         <div>
-             <AddStock/>
+         <AddStock/>
         </div>
     )
 }
