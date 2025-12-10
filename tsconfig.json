@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -10,7 +14,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -18,9 +22,33 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
-    }
+      "@/*": [
+        "./*"
+      ]
+    },
+    "target": "ES2017"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/utils/calender/Calender.jsx", "src/useStore/Store.jsx", "src/app/(company)/stock/addstocks/page.jsx", "src/app/(company)/stock/page.jsx", "src/utils/exchangeandreturn/ExchangeReturn.jsx", "src/component/StockList/StockList.jsx", "src/utils/AddSales/Sales.jsx", "src/utils/Model/ModelBox/SalePreview.tsx", "src/app/loading.jsx", "src/app/(company)/exchange/page.jsx", "src/app/(company)/sales/page.jsx", "src/app/(company)/salesmanager/page.jsx", "src/app/page.jsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/utils/calender/Calender.jsx",
+    "src/useStore/Store.jsx",
+    "src/app/(company)/stock/addstocks/page.jsx",
+    "src/app/(company)/stock/page.jsx",
+    "src/utils/exchangeandreturn/ExchangeReturn.jsx",
+    "src/component/StockList/StockList.jsx",
+    "src/utils/AddSales/Sales.jsx",
+    "src/utils/Model/ModelBox/SalePreview.tsx",
+    "src/app/loading.jsx",
+    "src/app/(company)/exchange/page.jsx",
+    "src/app/(company)/sales/page.jsx",
+    "src/app/(company)/salesmanager/page.jsx",
+    "src/app/page.jsx",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

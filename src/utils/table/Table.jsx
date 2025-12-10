@@ -188,92 +188,8 @@ const Table = () => {
     };
   
     fetchData();
-<<<<<<< HEAD
-  }, [fetchSales, fetchReturns, fetchExchanges]);
-
-  // useEffect(() => {
-  //   const testFetchReturns = async () => {
-  //     try {
-  //       const returnsData = await fetchReturns();
-  //       console.log("Fetched Returns Data:", returnsData); // Log the raw return data here
-  //     } catch (error) {
-  //       console.error("Error fetching returns:", error);
-  //     }
-  //   };
-  //   testFetchReturns();
-  // }, []);
-
-  // const applyFilters = useCallback(() => {
-  //   console.log("Category:", category); // Log the category for debugging
-  //   let filtered = []; // Initialize filtered as an empty array
-
-  //   // If "all" is selected, combine all records from sales, returns, and exchanges
-  //   if (selectedTransactionType === "all") {
-  //     filtered = [
-  //       ...(Array.isArray(sales) ? sales : []),
-  //       ...(Array.isArray(returns) ? returns : []),
-  //       ...(Array.isArray(exchanges) ? exchanges : []),
-  //     ]; // Combine all arrays into one
-  //   } else if (selectedTransactionType === "sales") {
-  //     filtered = Array.isArray(sales) ? [...sales] : [];
-  //   } else if (selectedTransactionType === "returns") {
-  //     filtered = Array.isArray(returns) ? [...returns] : [];
-  //   } else if (selectedTransactionType === "exchanges") {
-  //     filtered = Array.isArray(exchanges) ? [...exchanges] : [];
-  //   }
-
-  //   // Apply filters based on status
-  //   if (filterStatus !== "all") {
-  //     filtered = filtered.filter((order) => order.status === filterStatus);
-  //   }
-
-  //   // Apply filters based on transaction type
-  //   if (filterType !== "all") {
-  //     filtered = filtered.filter(
-  //       (order) => order.transaction_type === filterType
-  //     );
-  //   }
-
-  //   // Apply filters based on category
-  //   // if (category !== "all") {
-  //   //   console.log("Order Category:", order.category); // Log the category of each order
-  //   //   filtered = filtered.filter((order) => order.category === category);
-  //   // }
-
-  //   if (category !== "all") {
-  //     filtered = filtered.filter((order) => {
-  //       console.log("Order Category:", order.category); // Log the category of each order
-  //       return order.category === category;
-  //     });
-  //   }
-
-  //   // Apply filters based on date range
-  //   if (dateRange.startDate && dateRange.endDate) {
-  //     filtered = filtered.filter((order) => {
-  //       const orderDate = new Date(order.date).setHours(0, 0, 0, 0);
-  //       const startDate = new Date(dateRange.startDate).setHours(0, 0, 0, 0);
-  //       const endDate = new Date(dateRange.endDate).setHours(23, 59, 59, 999);
-  //       return orderDate >= startDate && orderDate <= endDate;
-  //     });
-  //   }
-
-  //   // Update the state with the filtered results
-  //   setFilteredSales(filtered);
-  //   setSearchResults(filtered);
-  // }, [
-  //   filterStatus,
-  //   filterType,
-  //   category,
-  //   dateRange,
-  //   sales,
-  //   returns,
-  //   exchanges,
-  //   selectedTransactionType,
-  // ]);
-=======
   }, [fetchSales, fetchReturns, fetchExchanges, stableShowNotification]);
   
->>>>>>> 18ed2f5d6df20b3a431a7d4de6c1999c750a0b71
 
   const applyFilters = useCallback(() => {
     // Initialize filtered with the appropriate records based on the selected transaction type
@@ -811,12 +727,6 @@ const Table = () => {
                         ))}
                       </div>
                     ))}
-<<<<<<< HEAD
-
-                </>
-              )}
-=======
->>>>>>> 18ed2f5d6df20b3a431a7d4de6c1999c750a0b71
             </Suspense>
           </div>
         </div>
